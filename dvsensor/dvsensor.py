@@ -13,10 +13,7 @@ License: MIT License
 
 import os
 import sys
-import csv
 import argparse
-import Bio
-import numpy as np
 from lib.locate import *
 from lib.generate import *
 
