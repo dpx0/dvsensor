@@ -69,3 +69,4 @@ with open(file, 'w', newline="\n") as f:            #Save as .csv
     mywriter.writerows(towrite)
 
 #print(loc)                                         #debug stuff
+
