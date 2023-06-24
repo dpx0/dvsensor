@@ -13,9 +13,7 @@ License: MIT License
 
 import os
 import sys
-import argparse
-from lib.locate import *
-from lib.generate import *
+from argparse import ArgumentParser
 
 
 TRIPLETS = ({"CCA", "GCA", "UCA", "CAA", "CUA", "ACA"})
@@ -80,7 +78,7 @@ def main(args):
 		
 
 if __name__ == "__main__":
-	parser = argparse.ArgumentParser(description="")
+	parser = ArgumentParser(description="")
 	parser.add_argument("mode", choices= ["locate", "generate", "all"])
 	parser.add_argument("input",
 						help="path to cDNA input file in FASTA format")
