@@ -1,17 +1,26 @@
-# Author: Maximilian Leo Huber
+# Authors: 
+#   Maximilian Leo Huber  <huber.maximilian.leo@gmail.com>
+#   Saint Fischer         <...>
+#   Daniel Prib           <bytes@mailbox.org>
 # Date:   20.06.2023
+# Dependencies: biopython (1.81)
+# Licence: MIT License
 
 import argparse
-from Bio.Blast import NCBIWWW
-from Bio import SeqIO
 import os
 import time
 import csv
 import math
 from datetime import date
+import pathlib
+import tempfile
+from Bio.Blast.Applications import NcbiblastnCommandline
+from Bio import SeqIO
 
 # get starting time of program
 program_start_time = time.time()
+
+current_path = str(pathlib.Path(__file__).parent.resolve()) + '/'
 
 # read in arguments, not with sys.argv but with the fancy python thingy
 # input: .csv file with all triplets
@@ -26,6 +35,7 @@ program_start_time = time.time()
 # TODO (low priority) check if file has correct extension
 # TODO (low priority) implement rest of the flags
 
+print("Parsing arguments...")
 parser = argparse.ArgumentParser(description='Input file and flags')
 parser.add_argument('-i', required=True, dest='file_path', metavar="FILE", help='file path of the input file (must be a .csv)')
 parser.add_argument('-rna', required=True, dest='mrna_path', metavar="FILE", help='mRNA sequence to be scored')
@@ -33,44 +43,52 @@ parser.add_argument('-o', required=True, dest='output_path', metavar="DIR", help
 #parser.add_argument('-n', '--name', action='store_const', dest='output_name', help='name of the output file (without extension)', nargs=1)
 args = parser.parse_args()
 
-if not os.path.exists(args.file_path):
-    parser.error("The file %s does not exist!" % arg)
+check_file_path = current_path + args.file_path
+print(check_file_path)
+if not os.path.exists(check_file_path):
+    parser.error("The file does not exist!")
 
-if not os.path.exists(args.file_path):
-     os.makedirs(args.file_path)
+if not os.path.exists(current_path + args.output_path):
+     os.makedirs(current_path + args.output_path)
     
 area_length = 100
 half_length = math.ceil(area_length / 2)
 
-db = SeqIO.index("GRCh38_latest_rna.fna", "fasta")
-
 triplet_score = []
 location_score = []
 
+blastx_exe = str(current_path) + "/ncbi-blast-2.14.0+/bin/blastx"
+humann_mrna = str(current_path) + "/GRCh38_latest_rna.fna"
+today = date.today()
+
+print("Blasting...")
 with open(str(args.file_path), 'r') as csv_file:
-    with open(str(args.mrna_path), 'r') as mrna:
+    with open(str(args.mrna_path), 'r') as mrna_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         file_counter = 0
+        mrna = mrna_file.read()
         for row in csv_reader:
-            
             if row[0] == "INDEX":
                 continue
-
-            today = date.today()
+            
+            output_file_name = str(current_path) + str(args.output_path) + "br_" + str(today) + "_" + str(file_counter) + ".xml"
 
             triplet_area = ""
             # TODO (max): test later
             #if len(row[0]) > half_length and len(row[0]) < len(mrna) - half_length:
+            
             left_index = int(row[0]) - half_length
             right_index = int(row[0]) + half_length
             triplet_area = mrna[left_index:right_index]
-            
-            result_handle = NCBIWWW.qblast("blastx", "refseq_rna", triplet_area, db)
-            
-            output_file_name = str(args.output_path) + "br_" + str(today) + "_" + str(file_counter) + ".xml"
 
-            with open(output_file_name, "w") as output_handle:
-                output_handle.write(result_handle.read())
+            query_file = tempfile.NamedTemporaryFile(delete=False)
+            query_file.write(triplet_area.encode())
+            query_file.close()
+
+            
+            print("Blasting line: " + str(file_counter))
+            blastx_cline = NcbiblastnCommandline(cmd=blastx_exe,query=query_file.name,subject=humann_mrna,out=output_file_name,outfmt=5)
+            blastx_cline()
 
             file_counter = file_counter + 1
 
