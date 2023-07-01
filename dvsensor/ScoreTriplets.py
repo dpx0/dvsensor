@@ -1,10 +1,5 @@
-# Authors: 
-#   Maximilian Leo Huber  <huber.maximilian.leo@gmail.com>
-#   Saint Fischer         <...>
-#   Daniel Prib           <bytes@mailbox.org>
+# Author: Maximilian Leo Huber
 # Date:   20.06.2023
-# Dependencies: biopython (1.81)
-# Licence: MIT License
 
 import argparse
 import os
@@ -52,13 +47,13 @@ if not os.path.exists(current_path + args.output_path):
      os.makedirs(current_path + args.output_path)
     
 area_length = 100
-half_length = math.ceil(area_length / 2)
+half_length = math.ceil(area_length / 2) + 1
 
 triplet_score = []
 location_score = []
 
 blastx_exe = str(current_path) + "/ncbi-blast-2.14.0+/bin/blastx"
-humann_mrna = str(current_path) + "/GRCh38_latest_rna.fna"
+human_mrna = str(current_path) + "GRCh38_latest_rna.fna"
 today = date.today()
 
 print("Blasting...")
@@ -67,6 +62,11 @@ with open(str(args.file_path), 'r') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         file_counter = 0
         mrna = mrna_file.read()
+
+        if mrna[0] == '>':
+            mrna = mrna[mrna.find('\n'):]
+            print("removed header line")
+
         for row in csv_reader:
             if row[0] == "INDEX":
                 continue
@@ -80,14 +80,18 @@ with open(str(args.file_path), 'r') as csv_file:
             left_index = int(row[0]) - half_length
             right_index = int(row[0]) + half_length
             triplet_area = mrna[left_index:right_index]
+            if (len(triplet_area) < area_length):
+                print("not long enough")
+                continue
+                
+            print(triplet_area)
 
             query_file = tempfile.NamedTemporaryFile(delete=False)
             query_file.write(triplet_area.encode())
             query_file.close()
-
             
             print("Blasting line: " + str(file_counter))
-            blastx_cline = NcbiblastnCommandline(cmd=blastx_exe,query=query_file.name,subject=humann_mrna,out=output_file_name,outfmt=5)
+            blastx_cline = NcbiblastnCommandline(cmd=blastx_exe,query=query_file.name,subject=human_mrna,out=output_file_name,outfmt=5)
             blastx_cline()
 
             file_counter = file_counter + 1
