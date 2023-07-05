@@ -29,66 +29,59 @@ def main(args):
 	if os.path.exists(args.output) and os.path.isfile(args.output):
 		log_err(f"output: file {args.output} already exists")
 
-	if args.mode in ("locate", "all"):
-		exclude = set(args.exclude)
-		for tr in exclude:
-			if tr not in TRIPLETS:
-				log_err(f"exclude: unknown triplet {tr} " +
-						"(options: CCA, GCA, UCA, CAA, CUA, ACA)")
+	exclude = set(args.exclude)
+	for tr in exclude:
+		if tr not in TRIPLETS:
+			log_err(f"exclude: unknown triplet {tr} " +
+					"(options: CCA, GCA, UCA, CAA, CUA, ACA)")
 
-		triplets = TRIPLETS - exclude
-		if not triplets:
-			log_err("exclude: at least one triplet is required")
+	triplets = TRIPLETS - exclude
+	if not triplets:
+		log_err("exclude: at least one triplet is required")
 
-		if not args.regions:
-			regions = REGIONS
-		else:
-			regions = set(args.regions)
-			for rg in regions:
-				if rg not in REGIONS:
-					log_err(f"[error]  regions: unknown region {rg} " +
-							"(options: 5UTR, CDS, 3UTR)")
+	if not args.regions:
+		regions = REGIONS
+	else:
+		regions = set(args.regions)
+		for rg in regions:
+			if rg not in REGIONS:
+				log_err(f"[error]  regions: unknown region {rg} " +
+						"(options: 5UTR, CDS, 3UTR)")
 
-		try:
-			locateResults = locate.locate_triplets(args.input, triplets, regions)
-			tripletEntries = []
-			for region in locateResults:
-				for entry in locateResults[region]:
-					tripletEntries.append([region, *entry])
-			tripletEntries.sort(key=lambda entr: entr[1])
+	try:
+		locateResults = locate.locate_triplets(args.input, triplets, regions)
+		tripletEntries = []
+		for region in locateResults:
+			for entry in locateResults[region]:
+				tripletEntries.append([region, *entry])
+		tripletEntries.sort(key=lambda entr: entr[1])
 
-		except (IOError, OSError) as err:
-			log_err("could not read file '" + args.input + "': " + err.strerror)
+	except (IOError, OSError) as err:
+		log_err("could not read file '" + args.input + "': " + err.strerror)
 
-		if args.mode == "locate":
-			try:
-				write_csv(args.output, ["REGION", "POS", "TRIPLET"], tripletEntries)
+	try:
+		write_csv(args.output, ["REGION", "POS", "TRIPLET"], tripletEntries)
 
-			except (IOError, OSError) as err:
-				log_err("could not write to file '" + args.output + "': " + err.strerror)
+	except (IOError, OSError) as err:
+		log_err("could not write to file '" + args.output + "': " + err.strerror)
 
-	if args.mode in ("generate", "all"):
-		if args.ntleft <= 0:
-			log_err("ntleft: must be greater than 0")
-		if args.ntright <= 0:
-			log_err("ntright: must be greater than 0")
-		# TODO: process --blast parameter
+	if args.ntleft <= 0:
+		log_err("ntleft: must be greater than 0")
+	if args.ntright <= 0:
+		log_err("ntright: must be greater than 0")
+	# TODO: process --blast parameter
 
-		if args.mode == "generate":
-			tripletEntries = generate.read_input(args.input)
+	generateResults = generate.generate_sensor_sequences(tripletEntries,
+														 args.ntleft, args.ntright)
+	try:
+		generate.write_output(args.output, generateResults)
 
-		generateResults = generate.generate_sensor_sequences(tripletEntries,
-															 args.ntleft, args.ntright)
-		try:
-			generate.write_output(args.output, generateResults)
-
-		except (IOError, OSError) as err:
-			log_err("could not write to file '" + args.output + "': " + err.strerror)
+	except (IOError, OSError) as err:
+		log_err("could not write to file '" + args.output + "': " + err.strerror)
 
 
 if __name__ == "__main__":
 	parser = ArgumentParser(description="")
-	parser.add_argument("mode", choices=["locate", "generate", "all"])
 	parser.add_argument("input", help="path to cDNA input file in FASTA format")
 	parser.add_argument("output", help="path to output file in CSV format")
 	# parser.add_argument("-q", "--quiet", help="disable printing to standard output", action="store_true")

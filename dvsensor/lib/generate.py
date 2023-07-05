@@ -14,6 +14,7 @@ MS2_HAIRPIN = "ACATGAGGATCACCCATGT"
 
 def generate_sensor_sequences(triplets, ntleft, ntright):
 
+	print(triplets)
 	print("generate")
 
 	return triplets
