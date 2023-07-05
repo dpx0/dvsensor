@@ -28,25 +28,32 @@ def locate_triplets(input_file, triplets, regions):
 	stopPos = min([p for p in allStops if (p > startPos and (p - startPos) % 3 == 0)])
 
 	results = {region: [] for region in regions}
-
 	for triplet in triplets:
 		positions = [match.start() for match in re.finditer(triplet, inputSeq)]
 
 		for pos in positions:
 			if pos < startPos:
-				if '5UTR' in regions: results['5UTR'].append((pos, triplet))
+				if '5UTR' in regions:
+					results['5UTR'].append((pos, triplet))
 
 			elif pos > stopPos:
-				if '3UTR' in regions: results['3UTR'].append((pos, triplet))
+				if '3UTR' in regions:
+					results['3UTR'].append((pos, triplet))
 
-			elif 'CDS' in regions: results['CDS'].append((pos, triplet))
+			elif 'CDS' in regions:
+				results['CDS'].append((pos, triplet))
 
 	return results
 
 
 def write_output(output_file, results):
 
-	pass
+	with open(output_file, "w") as fp:
+		csvwriter = writer(fp, dialect='excel', delimiter=',')
+		csvwriter.writerow(["REGION", "POS", "TRIPLET"])
+		for region in results:
+			for entry in results[region]:
+				csvwriter.writerow([region, *entry])
 
 
 

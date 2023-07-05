@@ -88,6 +88,11 @@ def main(args):
 		print("<debug> ntright: ", args.ntright)
 
 
+def log_err(msg):
+	print('[error] ', msg)
+	sys.exit(1)
+
+
 if __name__ == "__main__":
 	parser = ArgumentParser(description="")
 	parser.add_argument("mode", choices=["locate", "generate", "all"])
@@ -117,7 +122,3 @@ if __name__ == "__main__":
 	# TODO: add additional parameters for BLAST-querying (e.g. path to local database)
 	main(parser.parse_args())
 
-
-def log_err(msg):
-	print('[error] ', msg)
-	sys.exit(1)
