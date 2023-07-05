@@ -12,9 +12,11 @@ License: MIT License
 """
 
 import os
-import sys
 from argparse import ArgumentParser
+from lib.utils import log_err
 import lib.locate as locate
+import lib.generate as generate
+
 
 TRIPLETS = ({"CCA", "GCA", "UCA", "CAA", "CUA", "ACA"})
 REGIONS = ({"5UTR", "CDS", "3UTR"})
@@ -67,10 +69,16 @@ def main(args):
 			log_err("ntright: must be greater than 0")
 		# TODO: process --blast parameter
 
+		if args.mode == "generate":
+			locateResults = generate.read_input(args.input)
 
-def log_err(msg):
-	print('[error] ', msg)
-	sys.exit(1)
+		generateResults = generate.generate_sensor_sequences(locateResults,
+															 args.ntleft, args.ntright)
+		try:
+			generate.write_output(args.output, generateResults)
+
+		except (IOError, OSError) as err:
+			log_err("could not write to file '" + args.output + "': " + err.strerror)
 
 
 if __name__ == "__main__":
@@ -78,6 +86,7 @@ if __name__ == "__main__":
 	parser.add_argument("mode", choices=["locate", "generate", "all"])
 	parser.add_argument("input", help="path to cDNA input file in FASTA format")
 	parser.add_argument("output", help="path to output file in CSV format")
+	# parser.add_argument("-q", "--quiet", help="disable printing to standard output", action="store_true")
 	locateArgs = parser.add_argument_group("locate")
 	locateArgs.add_argument("--exclude", type=str, nargs="+", default=[],
 							action="extend", metavar="triplets",

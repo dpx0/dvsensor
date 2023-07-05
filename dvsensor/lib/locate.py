@@ -10,7 +10,7 @@ License: MIT License
 """
 
 from Bio import SeqIO
-from csv import writer
+from lib.utils import write_csv
 import re
 
 
@@ -48,15 +48,12 @@ def locate_triplets(input_file, triplets, regions):
 
 def write_output(output_file, results):
 
-	with open(output_file, "w") as fp:
-		csvwriter = writer(fp, dialect='excel', delimiter=',')
-		csvwriter.writerow(["REGION", "POS", "TRIPLET"])
-		entries = []
-		for region in results:
-			for entry in results[region]:
-				entries.append([region, *entry])
-		entries.sort(key=lambda entr: entr[1])
+	entries = []
+	for region in results:
+		for entry in results[region]:
+			entries.append([region, *entry])
+	entries.sort(key=lambda entr: entr[1])
+	write_csv(output_file, ["REGION", "POS", "TRIPLET"], entries)
 
-		for entry in entries:
-			csvwriter.writerow(entry)
+
 
