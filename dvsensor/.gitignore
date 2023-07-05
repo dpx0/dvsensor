@@ -2,6 +2,6 @@
 *.pyo
 __pycache__/
 .idea/
-test/
+test/out/
 test.py
 temp.py
