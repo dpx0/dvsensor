@@ -24,8 +24,8 @@ def main(args):
 	if not os.path.exists(args.input) or not os.path.isfile(args.input):
 		log_err(f"input: file {args.input} not found")
 
-	## if os.path.exists(args.output) and os.path.isfile(args.output):
-		## log_err(f"output: file {args.output} already exists")
+	if os.path.exists(args.output) and os.path.isfile(args.output):
+		log_err(f"output: file {args.output} already exists")
 
 	if args.mode in ("locate", "all"):
 		exclude = set(args.exclude)
@@ -47,36 +47,25 @@ def main(args):
 					log_err(f"[error]  regions: unknown region {rg} " +
 							"(options: 5UTR, CDS, 3UTR)")
 
-	if args.mode in ("generate", "all"):
-		if args.ntleft <= 0:
-			log_err("ntleft: must be greater than 0")
-		if args.ntright <= 0:
-			log_err("ntright: must be greater than 0")
-	# TODO: process --blast parameter
-
-	if args.mode == "locate":
 		try:
 			locateResults = locate.locate_triplets(args.input, triplets, regions)
 
 		except (IOError, OSError) as err:
 			log_err("could not read file '" + args.input + "': " + err.strerror)
 
-		try:
-			locate.write_output(args.output, locateResults)
+		if args.mode == "locate":
+			try:
+				locate.write_output(args.output, locateResults)
 
-		except (IOError, OSError) as err:
-			log_err("could not write to file '" + args.output + "': " + err.strerror)
+			except (IOError, OSError) as err:
+				log_err("could not write to file '" + args.output + "': " + err.strerror)
 
-	elif args.mode == "generate":
-		# TODO: implement 'generate' mode
-		print("<debug> ntleft: ", args.ntleft)
-		print("<debug> ntright: ", args.ntright)
-	else:
-		# TODO: implement 'all' mode
-		print("<debug> triplets: ", triplets)
-		print("<debug> regions : ", regions)
-		print("<debug> ntleft: ", args.ntleft)
-		print("<debug> ntright: ", args.ntright)
+	if args.mode in ("generate", "all"):
+		if args.ntleft <= 0:
+			log_err("ntleft: must be greater than 0")
+		if args.ntright <= 0:
+			log_err("ntright: must be greater than 0")
+		# TODO: process --blast parameter
 
 
 def log_err(msg):

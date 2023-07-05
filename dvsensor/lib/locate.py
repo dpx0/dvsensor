@@ -55,7 +55,7 @@ def write_output(output_file, results):
 		for region in results:
 			for entry in results[region]:
 				entries.append([region, *entry])
-		entries.sort(key=lambda entry: entry[1])
+		entries.sort(key=lambda entr: entr[1])
 
 		for entry in entries:
 			csvwriter.writerow(entry)
