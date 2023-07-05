@@ -55,17 +55,8 @@ def main(args):
 	# TODO: process --blast parameter
 
 	if args.mode == "locate":
-		# TODO: implement 'locate' mode
-		print("<debug> triplets: ", triplets)
-		print("<debug> regions : ", regions)
-
 		try:
 			locateResults = locate.locate_triplets(args.input, triplets, regions)
-			for key in locateResults:
-				print(key + ":")
-
-				for res in locateResults[key]:
-					print("\t" , res)
 
 		except (IOError, OSError) as err:
 			log_err("could not read file '" + args.input + "': " + err.strerror)
