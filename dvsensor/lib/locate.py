@@ -1,72 +1,52 @@
+"""
+Authors:
+	Daniel Prib      		<bytes@mailbox.org>
+	Maximilian Leo Huber    <...>
+	Saint Fischer 	 		<...>
+Version: 1.0
+Python Version: 3.11.3
+Dependencies: biopython (1.81), numpy (1.25.0)
+License: MIT License
+"""
+
 from Bio import SeqIO
-from Bio import Seq
-import csv
-import argparse
-
-parser = argparse.ArgumentParser(description='Process .FASTA single DNA/RNA into possible DART VADER targets') #übergabe der Argumente
-parser.add_argument('filename')
-args = parser.parse_args()
-
-inp = args.filename
-data = SeqIO.read(inp, "fasta")
-file = data.id + ".csv" #output
-
-target = data.seq
-target = target.transcribe() #if dna is given: dna to rna
-w_seq = target #working seq we will cut this
-
-tripplets = ["CCA", "GCA", "UCA", "CAA"]
-lfind = -3                                          #Found Index will be added to lfind and 3. for the first loop it dot need the +3 so we offset with -3. This is bc we cut the working sequenz and the cut length need to be readded to new found index
+from csv import writer
+import re
 
 
+def locate_triplets(input_file, triplets, regions):
 
-towrite = [["INDEX", "LOCATION", "TRIPPLET"],]
+	inputSeq = str(SeqIO.read(input_file, "fasta").seq.transcribe())  # assume cDNA as input sequence
+	startPos = inputSeq.find("AUG")
 
-def findlocs(w_seq):
-    loc = []                                        #Looking for 5UTR, ORF, 3UTR
-    loc.append(w_seq.find("AUG"))                   #Find startcodon
-    a = w_seq.find("UAA")                           #Find stoppcodon
-    if a < w_seq.find("UGA"):
-        a = w_seq.find("UGA")
-    if a < w_seq.find("UAG"):
-        a = w_seq.find("UAG")
-    loc.append(a)
-    return(loc)
+	# find all potential stopcodons
+	allStops = []
+	for c in ("UAA", "UAG", "UGA"):
+		allStops.extend([match.start() for match in re.finditer(c, inputSeq)])
 
-loc = findlocs(target)
+	# filter in-frame stopcodons and choose the first occurence
+	stopPos = min([p for p in allStops if (p > startPos and (p - startPos) % 3 == 0)])
 
-def searchhits(w_seq, tripplet, lfind):             #Search input for first tripplet and append index to list. cut already searched part and repeat
-    #print(len(w_seq))                              #debug stuff
-    #print(w_seq)                                   #debug stuff
-    find = w_seq.find(tripplet)
-    if find != -1:
-        lfind = lfind + 3 + find                     #Find out if found index is before the first start codon or before the first stop codon
-        if lfind < loc[0]:
-            towrite.append([lfind, "5UTR", tripplet])
-        else:
-            if lfind < loc[1]:
-                towrite.append([lfind, "ORF", tripplet])
-            else:
-                towrite.append([lfind, "3UTR", tripplet])
+	results = {region: [] for region in regions}
 
+	for triplet in triplets:
+		positions = [match.start() for match in re.finditer(triplet, inputSeq)]
 
-        #print(w_seq[find:(find+3)])                #debug stuff
+		for pos in positions:
+			if pos < startPos:
+				if '5UTR' in regions: results['5UTR'].append((pos, triplet))
 
-        w_seq = w_seq[find+3::]                     #Cut searched part from the list. Biopython.find only returns index of first match in Sequence ig. Thats why we cut and add found index + lfind
-        searchhits(w_seq, tripplet, lfind)          #Recursion
+			elif pos > stopPos:
+				if '3UTR' in regions: results['3UTR'].append((pos, triplet))
+
+			elif 'CDS' in regions: results['CDS'].append((pos, triplet))
+
+	return results
 
 
+def write_output(output_file, results):
+
+	pass
 
 
-for trip in tripplets:                              #For each definded tripplet we can run searchits
-    searchhits(w_seq, trip, lfind)
-    w_seq = target
-    lfind = -3
-
-
-with open(file, 'w', newline="\n") as f:            #Save as .csv
-    mywriter = csv.writer(f, dialect='excel', delimiter=',')
-    mywriter.writerows(towrite)
-
-#print(loc)                                         #debug stuff
 

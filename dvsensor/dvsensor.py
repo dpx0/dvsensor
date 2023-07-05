@@ -14,6 +14,7 @@ License: MIT License
 import os
 import sys
 from argparse import ArgumentParser
+import lib.locate as locate
 
 TRIPLETS = ({"CCA", "GCA", "UCA", "CAA", "CUA", "ACA"})
 REGIONS = ({"5UTR", "CDS", "3UTR"})
@@ -21,24 +22,21 @@ REGIONS = ({"5UTR", "CDS", "3UTR"})
 
 def main(args):
 	if not os.path.exists(args.input) or not os.path.isfile(args.input):
-		print(f"input: file {args.input} not found")
-		sys.exit(1)
+		log_err(f"input: file {args.input} not found")
 
 	if os.path.exists(args.output) and os.path.isfile(args.output):
-		print(f"output: file {args.output} already exists")
-		sys.exit(1)
+		log_err(f"output: file {args.output} already exists")
 
 	if args.mode in ("locate", "all"):
 		exclude = set(args.exclude)
 		for tr in exclude:
 			if tr not in TRIPLETS:
-				print(f"exclude: unknown triplet {tr} " +
-					  "(options: CCA, GCA, UCA, CAA, CUA, ACA)")
-				sys.exit(1)
+				log_err(f"exclude: unknown triplet {tr} " +
+						"(options: CCA, GCA, UCA, CAA, CUA, ACA)")
+
 		triplets = TRIPLETS - exclude
 		if not triplets:
-			print("exclude: at least one triplet is required")
-			sys.exit(1)
+			log_err("exclude: at least one triplet is required")
 
 		if not args.regions:
 			regions = REGIONS
@@ -46,23 +44,38 @@ def main(args):
 			regions = set(args.regions)
 			for rg in regions:
 				if rg not in REGIONS:
-					print(f"regions: unknown region {rg} " +
-						  "(options: 5UTR, CDS, 3UTR)")
-					sys.exit(1)
+					log_err(f"[error]  regions: unknown region {rg} " +
+							"(options: 5UTR, CDS, 3UTR)")
 
 	if args.mode in ("generate", "all"):
 		if args.ntleft <= 0:
-			print("ntleft: must be greater than 0")
-			sys.exit(1)
+			log_err("ntleft: must be greater than 0")
 		if args.ntright <= 0:
-			print("ntright: must be greater than 0 ")
-			sys.exit(1)
+			log_err("ntright: must be greater than 0")
 	# TODO: process --blast parameter
 
 	if args.mode == "locate":
 		# TODO: implement 'locate' mode
 		print("<debug> triplets: ", triplets)
 		print("<debug> regions : ", regions)
+
+		try:
+			locateResults = locate.locate_triplets(args.input, triplets, regions)
+			for key in locateResults:
+				print(key + ":")
+
+				for res in locateResults[key]:
+					print("\t" , res)
+
+		except (IOError, OSError) as err:
+			log_err("could not read file '" + args.input + "': " + err.strerror)
+
+		try:
+			locate.write_output(args.output, locateResults)
+
+		except (IOError, OSError) as err:
+			log_err("could not write to file '" + args.output + "': " + err.strerror)
+
 	elif args.mode == "generate":
 		# TODO: implement 'generate' mode
 		print("<debug> ntleft: ", args.ntleft)
@@ -103,3 +116,8 @@ if __name__ == "__main__":
 	# TODO: add help text for --blast parameter
 	# TODO: add additional parameters for BLAST-querying (e.g. path to local database)
 	main(parser.parse_args())
+
+
+def log_err(msg):
+	print('[error] ', msg)
+	sys.exit(1)
