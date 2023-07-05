@@ -51,9 +51,12 @@ def write_output(output_file, results):
 	with open(output_file, "w") as fp:
 		csvwriter = writer(fp, dialect='excel', delimiter=',')
 		csvwriter.writerow(["REGION", "POS", "TRIPLET"])
+		entries = []
 		for region in results:
 			for entry in results[region]:
-				csvwriter.writerow([region, *entry])
+				entries.append([region, *entry])
+		entries.sort(key=lambda entry: entry[1])
 
-
+		for entry in entries:
+			csvwriter.writerow(entry)
 

@@ -24,8 +24,8 @@ def main(args):
 	if not os.path.exists(args.input) or not os.path.isfile(args.input):
 		log_err(f"input: file {args.input} not found")
 
-	if os.path.exists(args.output) and os.path.isfile(args.output):
-		log_err(f"output: file {args.output} already exists")
+	## if os.path.exists(args.output) and os.path.isfile(args.output):
+		## log_err(f"output: file {args.output} already exists")
 
 	if args.mode in ("locate", "all"):
 		exclude = set(args.exclude)
