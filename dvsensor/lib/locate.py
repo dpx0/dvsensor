@@ -10,7 +10,6 @@ License: MIT License
 """
 
 from Bio import SeqIO
-from lib.utils import write_csv
 import re
 
 
@@ -44,16 +43,6 @@ def locate_triplets(input_file, triplets, regions):
 				results['CDS'].append((pos, triplet))
 
 	return results
-
-
-def write_output(output_file, results):
-
-	entries = []
-	for region in results:
-		for entry in results[region]:
-			entries.append([region, *entry])
-	entries.sort(key=lambda entr: entr[1])
-	write_csv(output_file, ["REGION", "POS", "TRIPLET"], entries)
 
 
 

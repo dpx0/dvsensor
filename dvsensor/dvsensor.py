@@ -13,7 +13,7 @@ License: MIT License
 
 import os
 from argparse import ArgumentParser
-from lib.utils import log_err
+from lib.utils import log_err, write_csv
 import lib.locate as locate
 import lib.generate as generate
 
@@ -51,13 +51,18 @@ def main(args):
 
 		try:
 			locateResults = locate.locate_triplets(args.input, triplets, regions)
+			tripletEntries = []
+			for region in locateResults:
+				for entry in locateResults[region]:
+					tripletEntries.append([region, *entry])
+			tripletEntries.sort(key=lambda entr: entr[1])
 
 		except (IOError, OSError) as err:
 			log_err("could not read file '" + args.input + "': " + err.strerror)
 
 		if args.mode == "locate":
 			try:
-				locate.write_output(args.output, locateResults)
+				write_csv(args.output, ["REGION", "POS", "TRIPLET"], tripletEntries)
 
 			except (IOError, OSError) as err:
 				log_err("could not write to file '" + args.output + "': " + err.strerror)
@@ -70,9 +75,9 @@ def main(args):
 		# TODO: process --blast parameter
 
 		if args.mode == "generate":
-			locateResults = generate.read_input(args.input)
+			tripletEntries = generate.read_input(args.input)
 
-		generateResults = generate.generate_sensor_sequences(locateResults,
+		generateResults = generate.generate_sensor_sequences(tripletEntries,
 															 args.ntleft, args.ntright)
 		try:
 			generate.write_output(args.output, generateResults)
