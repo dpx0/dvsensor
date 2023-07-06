@@ -1,3 +1,15 @@
+"""
+Authors:
+	Daniel Prib      		<bytes@mailbox.org>
+	Maximilian Leo Huber    <...>
+	Saint Fischer 	 		<...>
+Version: 1.0
+Python Version: 3.11.3
+Dependencies: biopython (1.81), numpy (1.25.0)
+License: MIT License
+"""
+
+
 import sys
 import csv
 
