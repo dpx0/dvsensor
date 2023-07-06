@@ -49,21 +49,20 @@ def main(args):
 						"(options: 5UTR, CDS, 3UTR)")
 
 	try:
-		locateResults = locate.locate_triplets(args.input, triplets, regions)
-		tripletEntries = []
-		for region in locateResults:
-			for entry in locateResults[region]:
-				tripletEntries.append([region, *entry])
-		tripletEntries.sort(key=lambda entr: entr[1])
+		inputSeq, locateResults = locate.locate_triplets(args.input, triplets, regions)
 
 	except (IOError, OSError) as err:
 		log_err("could not read file '" + args.input + "': " + err.strerror)
 
-	try:
-		write_csv(args.output, ["REGION", "POS", "TRIPLET"], tripletEntries)
+	tripletEntries = []
+	for region in locateResults:
+		for entry in locateResults[region]:
+			# disregard triplets with incomplete sensor sequence
+			if entry[0] - args.ntleft < 0 or entry[0] + 3 + args.ntright > len(inputSeq):
+				continue
+			tripletEntries.append([region, *entry])
 
-	except (IOError, OSError) as err:
-		log_err("could not write to file '" + args.output + "': " + err.strerror)
+	tripletEntries.sort(key=lambda entr: entr[1])
 
 	if args.ntleft <= 0:
 		log_err("ntleft: must be greater than 0")
@@ -71,10 +70,13 @@ def main(args):
 		log_err("ntright: must be greater than 0")
 	# TODO: process --blast parameter
 
-	generateResults = generate.generate_sensor_sequences(tripletEntries,
+	generateResults = generate.generate_sensor_sequences(inputSeq, tripletEntries,
 														 args.ntleft, args.ntright)
+
 	try:
-		generate.write_output(args.output, generateResults)
+		write_csv(args.output,
+				  ["REGION", "POS", "TRIPLET", "RANGE", "SENSOR(5->3)", "TRIGGER(3->5)"],
+				  generateResults)
 
 	except (IOError, OSError) as err:
 		log_err("could not write to file '" + args.output + "': " + err.strerror)

@@ -42,7 +42,7 @@ def locate_triplets(input_file, triplets, regions):
 			elif 'CDS' in regions:
 				results['CDS'].append((pos, triplet))
 
-	return results
+	return inputSeq, results
 
 
 
