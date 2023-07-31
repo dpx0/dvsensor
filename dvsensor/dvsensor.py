@@ -75,8 +75,8 @@ def main(args):
 	
 	try:
 		write_csv(args.output,
-				  ["REGION", "POS", "TRIPLET", "RANGE", "SENSOR(5->3)", "TRIGGER(3->5)",
-				   "TRIGGER(5->3)", "STOP_EDITS"],
+				  ["REGION", "POS", "TRIPLET", "RANGE", "SENSOR (5->3)",
+				   "TRIGGER (3->5)", "TRIGGER (5->3)", "STOP EDITS", "SENSOR %GC"],
 				  generateResults)
 
 	except (IOError, OSError) as err:

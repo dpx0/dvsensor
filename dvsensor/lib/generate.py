@@ -34,8 +34,12 @@ def generate_sensor_sequences(sequence, triplets, ntleft, ntright):
 						process_part(upstreamRC, 'RIGHT')).back_transcribe()
 
 		triggerSeq = Seq(sequence[start:stop]).back_transcribe()[::-1]
-		entry.extend([str(start) + "-" + str(stop), str(sensorSeq), str(triggerSeq),
-					  str(triggerSeq[::-1]), nStopEdits])
+		entry.extend([str(start) + "-" + str(stop),  # RANGE
+					  str(sensorSeq),  # SENSOR (5->3)
+					  str(triggerSeq),  # TRIGGER (3->5)
+					  str(triggerSeq[::-1]),  # TRIGGER (5->3)
+					  nStopEdits,  # STOP EDITS
+					  gc_content(sensorSeq)])  # SENSOR %GC
 
 	return triplets
 
@@ -63,3 +67,10 @@ def process_part(seq, side):
 
 	return seq[::-1]
 
+
+def gc_content(sequence):
+
+	ngc = 0
+	for b in sequence:
+		if b == 'C' or b == 'G': ngc += 1
+	return (ngc / len(sequence)) * 100
