@@ -73,4 +73,4 @@ def gc_content(sequence):
 	ngc = 0
 	for b in sequence:
 		if b == 'C' or b == 'G': ngc += 1
-	return (ngc / len(sequence)) * 100
+	return round((ngc / len(sequence)) * 100, 1)
