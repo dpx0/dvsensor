@@ -33,7 +33,7 @@ def generate_sensor_sequences(sequence, triplets, ntleft, ntright):
 						"UAG" +
 						process_part(upstreamRC, 'RIGHT')).back_transcribe()
 
-		triggerSeq = Seq(sequence[start:stop]).back_transcribe()[::-1]  # 3'-> 5'
+		triggerSeq = Seq(sequence[start:stop]).back_transcribe()[::-1]
 		entry.extend([str(start) + "-" + str(stop), str(sensorSeq), str(triggerSeq),
 					  str(triggerSeq[::-1]), nStopEdits])
 

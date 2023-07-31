@@ -11,7 +11,7 @@ License: MIT License
 
 from Bio import SeqIO
 import re
-
+#
 
 def locate_triplets(input_file, triplets, regions):
 
