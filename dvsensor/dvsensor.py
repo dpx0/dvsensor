@@ -3,7 +3,7 @@
 """
 Authors:
 	Daniel Prib      		<bytes@mailbox.org>
-	Maximilian Leo Huber    <...>
+	Maximilian Leo Huber    	<huber.maximilian.leo@gmail.com>
 	Saint Fischer 	 		<...>
 Version: 1.0
 Python Version: 3.11.3
@@ -11,11 +11,14 @@ Dependencies: biopython (1.81), numpy (1.25.0)
 License: MIT License
 """
 
+
 import os
 from argparse import ArgumentParser
 from lib.utils import log_err, write_csv
 import lib.locate as locate
 import lib.generate as generate
+import lib.blast_and_score as blast_and_score
+import time
 
 
 TRIPLETS = ({"CCA", "GCA", "UCA", "CAA", "CUA", "ACA"})
@@ -81,9 +84,15 @@ def main(args):
 
 	except (IOError, OSError) as err:
 		log_err("could not write to file '" + args.output + "': " + err.strerror)
+		
+	blast_and_score.blast_and_score(args.output, args.input)
 
 
 if __name__ == "__main__":
+
+	# get starting time of program
+	program_start_time = time.time()
+
 	parser = ArgumentParser(description="")
 	parser.add_argument("input", help="path to cDNA input file in FASTA format")
 	parser.add_argument("output", help="path to output file in CSV format")
@@ -111,4 +120,10 @@ if __name__ == "__main__":
 	# TODO: add help text for --blast parameter
 	# TODO: add additional parameters for BLAST-querying (e.g. path to local database)
 	main(parser.parse_args())
+	
+	
+	# diagnostics
+	program_end_time = time.time()
+	final_time = program_end_time - program_start_time
+	print("Program finished! It took " + str(final_time) + " seconds to finish")
 
