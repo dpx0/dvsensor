@@ -1,40 +1,36 @@
 import os
 import csv
+import xml.etree.cElementTree as et
 
 # blast and score
-def blast_and_score(csv_file, full_seq, mrna, area_length, outpath):
-    mrna = mrna_file.read()
-    file_counter = 0
-
-    # remove header line
-    if mrna[0] == '>':        
-        mrna = mrna[mrna.find('\n'):]
-        print("removed header line")
+def blast_and_score(csv_file, mrna_file):  
+    csv_file_opened = open(csv_file, "r+")
+    csv = csv_file_opened.readlines()
+    csv_file_opened.close()
     
+    file_counter = 0
+    first_row = True
+
+    if not os.path.isdir("blastresults/"):
+        os.system("mkdir blastresults/")
+
+    csv_copy = csv
+    csv_copy[0] = csv_copy[0][:-1] + ",MISMATCHES,BLASTHITS\n"
+
     # blast all triplets
-    for row in csv_file:
-        # skip column names
-        if row[0] == "INDEX":
+    for Index in range(len(csv)):
+        if first_row:
+            first_row = False
             continue
         
-        # get triplet area
-        half_length = area_length / 2   
-         
-        left_index = int(row[0]) - half_length
-        right_index = int(row[0]) + half_length
-        
-        # if any triplet area goes out of bounds, skip
-        if left_index < 0 or right_index >= len(full_seq):
-        	continue
-        
-        triplet_area = full_seq[left_index:right_index]
+        cells = csv[Index].split(',')
 
         tmpfile = open("tmpfileblast.fasta", "w")
-        tmpfile.write(str(triplet_area))
+        tmpfile.write(cells[6])
         tmpfile.close()
-            
-        output_file_name = outpath + "/br_" + str(file_counter) + ".xml"
-        command = "ncbi-blast-2.14.0+/bin/blastn -query tmpfileblast.fasta -subject " + mrna + " -out " + output_file_name + " -outfmt 5"
+        
+        output_file_name = "blastresults/br_" + str(file_counter) + ".xml"
+        command = "ncbi-blast-2.14.0+/bin/blastn -query tmpfileblast.fasta -subject " + mrna_file + " -out " + output_file_name + " -outfmt 5"
         os.system(command)
         file_counter = file_counter + 1
 
@@ -43,24 +39,26 @@ def blast_and_score(csv_file, full_seq, mrna, area_length, outpath):
         root = xml_file.getroot()
 
         # count mismatches of all triplet areas
-        biggest_diff = -1
+        blast_hits = 0
+        smallest_diff = 2147483647
         for diff in root.iter('Hsp_midline'):
+            blast_hits = blast_hits + 1
+            
+            if smallest_diff == 0:
+                continue 
+            
             copycount = diff.text.count('|')
             numOfMismatches = len(diff.text) - copycount
             
-            # if a perfect alignment has been found, skip this triplet area
-            if numOfMismatches == 0:
-            	biggest_diff = -1
-            	break
-            
             # if an alignment with more mismatches has been found, set it as the biggest difference
-            if biggest_diff < numOfMismatches:
-                biggest_diff = numOfMismatches
+            if smallest_diff > numOfMismatches:
+                smallest_diff = numOfMismatches
         
-        # Skip triplet areas which have perfect alignments
-        if biggest_diff == -1:
-        	continue
+        csv_copy[Index] = csv[Index][:-1] + "," + str(smallest_diff) + "," + str(blast_hits) + "\n"
         
-        csv_file.append(current_score)
+    csv_file_opened = open(csv_file, "w")
+    for row in csv_copy:
+    	csv_file_opened.write(row)
+    csv_file_opened.close()
 
     os.system("rm tmpfileblast.fasta")
