@@ -126,4 +126,3 @@ if __name__ == "__main__":
 	program_end_time = time.time()
 	final_time = program_end_time - program_start_time
 	print("Program finished! It took " + str(final_time) + " seconds to finish")
-
