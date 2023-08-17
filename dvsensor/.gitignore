@@ -3,6 +3,6 @@
 __pycache__/
 .idea/
 test/
-draft/test.py
-draft/data/
+old/test.py
+old/data/
 temp.py
