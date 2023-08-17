@@ -2,6 +2,7 @@
 *.pyo
 __pycache__/
 .idea/
-test/out/
-test.py
+test/
+draft/test.py
+draft/data/
 temp.py
