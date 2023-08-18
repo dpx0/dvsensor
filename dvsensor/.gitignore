@@ -4,7 +4,6 @@ __pycache__/
 .idea/
 venv/
 test/
-prototype/
 old/test.py
 old/data/
 test.py
