@@ -20,7 +20,7 @@ class WebView:
 		self.router = Router()
 		self.pages = {}
 
-	def open_page(self, page, **kwargs) -> None:
+	def open_page(self, page: str, **kwargs) -> None:
 		page_builder = self.pages.get(page)
 		self.router.content.clear()
 		if page_builder:
@@ -29,7 +29,7 @@ class WebView:
 			self.show_error(f"page {page} does not exist")
 
 	@staticmethod
-	def show_error(message):
+	def show_error(message: str) -> None:
 		ui.label(f"error: {message}")
 
 	def build_pages(self) -> None:
