@@ -5,7 +5,7 @@ class Controller:
 		self.model = model
 		self.view = view
 
-	def process_input_sequence(self, sequence: str) -> None:
+	def process_fasta_sequence(self, sequence: str) -> None:
 		self.view.open_page('options', sequence=sequence)
 
 	def generate_sensors(self) -> None:

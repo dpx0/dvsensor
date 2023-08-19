@@ -21,3 +21,4 @@ def back_button(previous_page: str, view):
 				   color=f'{Colors.ACCENT}'
 				   ).props(f'no-caps flat round size=md'):
 		ui.image("/assets/img-back01.png").classes('m-1')
+
