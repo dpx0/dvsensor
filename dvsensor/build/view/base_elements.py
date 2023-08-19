@@ -15,7 +15,7 @@ def footer() -> None:
 		ui.label('FOOTER')
 
 
-def back_button(previous_page: str, view):
+def back_button(previous_page: str, view) -> None:
 	with ui.button('',
 				   on_click=lambda: view.router.open(view.pages[previous_page]),
 				   color=f'{Colors.ACCENT}'

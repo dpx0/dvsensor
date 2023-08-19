@@ -5,12 +5,12 @@ by falkoschindler, see https://github.com/zauberzeug/nicegui/tree/main/examples/
 
 from nicegui import ui
 from .router import Router
-from .start_page import build as _build_start_page
-from .input_page import build as _build_input_page
-from .options_page import build as _build_options_page
-from .results_page import build as _build_results_page
-from .edit_page import build as _build_edit_page
-from .docs_page import build as _build_docs_page
+from .pages.start_page import build as _build_start_page
+from .pages.input_page import build as _build_input_page
+from .pages.options_page import build as _build_options_page
+from .pages.results_page import build as _build_results_page
+from .pages.edit_page import build as _build_edit_page
+from .pages.docs_page import build as _build_docs_page
 
 
 class WebView:

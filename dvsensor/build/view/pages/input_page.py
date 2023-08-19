@@ -2,8 +2,8 @@ import sys
 sys.path.append('..')
 
 from nicegui import ui, events
-from .base_elements import header, footer, back_button
-from .style import Colors, set_colors
+from ..base_elements import header, footer, back_button
+from ..style import Colors, set_colors
 import utils
 
 
