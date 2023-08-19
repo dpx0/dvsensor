@@ -1,5 +1,5 @@
 """
-This code was taken from the nicegui example 'Single Page App' by falkoschindler,
+This code was taken from the nicegui example 'Single Page App' by falkoschindler and slightly modified,
 see https://github.com/zauberzeug/nicegui/tree/main/examples/single_page_app
 """
 
@@ -23,7 +23,7 @@ class Router:
             return func
         return decorator
 
-    def open(self, target: Union[Callable, str]) -> None:
+    def open(self, target: Union[Callable, str], **kwargs) -> None:
         if isinstance(target, str):
             path = target
             builder = self.routes[target]
@@ -38,7 +38,7 @@ class Router:
                         history.pushState({{page: "{path}"}}, "", "{path}");
                     }}
                 ''', respond=False)
-                result = builder()
+                result = builder(**kwargs)
                 if isinstance(result, Awaitable):
                     await result
         self.content.clear()

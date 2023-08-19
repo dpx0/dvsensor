@@ -5,13 +5,10 @@ class Controller:
 		self.model = model
 		self.view = view
 
-	def open_input_page(self) -> None:
-		self.view.open_page('input')
-
-	def process_input_sequence(self, sequence) -> None:
+	def process_input_sequence(self, sequence: str) -> None:
 		self.view.open_page('options', sequence=sequence)
 
-	def generate_sensors(self):
+	def generate_sensors(self) -> None:
 		self.view.open_page('results')
 
 

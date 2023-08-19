@@ -10,6 +10,7 @@ from .input_page import build as _build_input_page
 from .options_page import build as _build_options_page
 from .results_page import build as _build_results_page
 from .edit_page import build as _build_edit_page
+from .docs_page import build as _build_docs_page
 
 
 class WebView:
@@ -22,9 +23,9 @@ class WebView:
 
 	def open_page(self, page: str, **kwargs) -> None:
 		page_builder = self.pages.get(page)
-		self.router.content.clear()
+
 		if page_builder:
-			page_builder(**kwargs)
+			self.router.open(page_builder, **kwargs)
 		else:
 			self.show_error(f"page {page} does not exist")
 
@@ -42,6 +43,11 @@ class WebView:
 			def build_start_page(**kwargs) -> None:
 				_build_start_page(self, **kwargs)
 			self.pages['start'] = build_start_page
+
+			@self.router.add('/docs')
+			def build_docs_page(**kwargs) -> None:
+				_build_docs_page(self, **kwargs)
+			self.pages['docs'] = build_docs_page
 
 			@self.router.add('/input')
 			def build_input_page(**kwargs) -> None:
@@ -63,4 +69,4 @@ class WebView:
 				_build_edit_page(self, **kwargs)
 			self.pages['edit'] = build_edit_page
 
-			self.router.frame().classes('w-full p-4 bg-gray-100')
+			self.router.frame().classes('w-full')
