@@ -51,7 +51,7 @@ def show_invalid_fasta_error() -> None:
 	with ui.dialog() as dialog, ui.card():
 		ui.label('This is not a FASTA sequence').classes('text-lg self-center font-mono')
 		ui.label('Please upload a file in FASTA format or').classes('text-lg self-center font-mono')
-		ui.label('manually enter a equence').classes('text-lg self-center font-mono')
+		ui.label('manually enter a sequence').classes('text-lg self-center font-mono')
 		ui.button('OK', on_click=dialog.close).classes('w-full self-center text-sm font-mono')
 	dialog.open()
 
