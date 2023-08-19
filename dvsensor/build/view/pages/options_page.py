@@ -11,6 +11,6 @@ def build(view, **kwargs) -> None:
 	ui.label(f'View reference {id(view)}')
 	ui.label(kwargs.get('sequence'))
 	ui.button('Go',
-			  on_click=lambda: view.controller.generate_sensors()).classes('w-32')
+			  on_click=lambda: ...).classes('w-32')
 
 	footer()

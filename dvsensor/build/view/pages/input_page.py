@@ -1,34 +1,31 @@
 import sys
 sys.path.append('..')
 
-from nicegui import ui, events
+from nicegui import ui
 from ..base_elements import header, footer, back_button
 from ..style import Colors, set_colors
-import utils
 
 
 MAX_INPUT_LEN: int = 200_000  # 200 kb (for comparison, the human titin TTN-018 transcript is ~109 kb long)
 
 
-def handle_file_upload(upload: events.UploadEventArguments, view) -> None:
+def handle_seq_file_upload(upload, view) -> None:
 	try:
-		content: str = upload.content.read().decode('UTF-8')
+		view.controller.handle_seq_file_upload(upload)
 	except UnicodeDecodeError:
 		show_file_decode_error()
-		return
-	seq = utils.read_fasta_string(content)
-	if seq is not None:
-		view.controller.process_fasta_sequence(seq)
-	else:
+	except ValueError:  # raised when Bio.SeqIO.read(...) can't parse a string as a FASTA record
 		show_invalid_fasta_error()
 
 
-def handle_manual_input(input: str, view) -> None:
-	seq = utils.read_fasta_string(input)
-	if seq is not None:
-		view.controller.process_fasta_sequence(seq)
-	else:
+def handle_manual_seq_input(input_str: str, view) -> None:
+	try:
+		view.controller.handle_manual_seq_input(input_str)
+	except ValueError:  # raised when Bio.SeqIO.read(...) can't parse a string as a FASTA record
 		show_invalid_fasta_error()
+
+
+# TODO: relocate show_... functions into a dialog box function in base_elements
 
 
 def show_file_size_error() -> None:
@@ -67,7 +64,7 @@ def build(view, **kwargs) -> None:
 				with ui.row().classes('w-full justify-center'):
 					ui.label('Upload a FASTA file').classes('text-center text-lg font-mono')
 					ui.image('/assets/img-file.png').classes('w-7 h-7')
-				ui.upload(on_upload=lambda upload: handle_file_upload(upload, view),
+				ui.upload(on_upload=lambda upload: handle_seq_file_upload(upload, view),
 						  on_rejected=show_file_size_error,
 						  max_file_size=MAX_INPUT_LEN,
 						  max_files=1).classes('w-full mt-10')
@@ -84,9 +81,7 @@ def build(view, **kwargs) -> None:
 				sequence_input = ui.textarea(label='FASTA Sequence', placeholder='>NM_005228.5 EGFR...',
 										  validation={'Input too long': lambda value: len(value) < MAX_INPUT_LEN}
 										  ).classes('w-full')
-				ui.button('continue', on_click=lambda: handle_manual_input(sequence_input.value, view)
+				ui.button('continue',
+						  on_click=lambda: handle_manual_seq_input(sequence_input.value, view)
 						  ).classes('w-2/3 self-center h-10 font-mono')
 	footer()
-
-
-

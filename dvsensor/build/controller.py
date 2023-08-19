@@ -1,3 +1,5 @@
+import utils
+
 
 class Controller:
 
@@ -5,10 +7,17 @@ class Controller:
 		self.model = model
 		self.view = view
 
-	def process_fasta_sequence(self, sequence: str) -> None:
-		self.view.open_page('options', sequence=sequence)
+	def handle_seq_file_upload(self, upload) -> None:
+		input_str: str = upload.content.read().decode('UTF-8')
+		seq_record = utils.read_fasta_string(input_str)
+		print(seq_record)
+		self.view.open_page('options', sequence=input_str)
 
-	def generate_sensors(self) -> None:
-		self.view.open_page('results')
+	def handle_manual_seq_input(self, input_str: str) -> None:
+		seq_record = utils.read_fasta_string(input_str)
+		print(seq_record)
+		self.view.open_page('options', sequence=input_str)
+
+
 
 
