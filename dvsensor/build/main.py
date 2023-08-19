@@ -13,7 +13,7 @@ class App:
 		self.view.controller = self.controller
 
 		self.root_path = os.path.abspath(os.path.dirname(__file__))
-		ng.app.add_static_files("/assets", self.root_path + "/assets")
+		ng.app.add_static_files('/assets', self.root_path + '/assets')
 
 		ng.app.on_startup(self.on_startup)
 		ng.app.on_shutdown(self.on_shutdown)
@@ -52,5 +52,5 @@ def main() -> None:
 	app.start()
 
 
-if __name__ in {"__main__", "__mp_main__"}:
+if __name__ in {'__main__', '__mp_main__'}:
 	main()

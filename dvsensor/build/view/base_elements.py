@@ -20,5 +20,15 @@ def back_button(previous_page: str, view) -> None:
 				   on_click=lambda: view.router.open(view.pages[previous_page]),
 				   color=f'{Colors.ACCENT}'
 				   ).props(f'no-caps flat round size=md'):
-		ui.image("/assets/img-back01.png").classes('m-1')
+		ui.image('/assets/img-back01.png').classes('m-1')
 
+
+def show_dialog_box(message_lines: str | list[str], button_text: str = 'OK'):
+	if type(message_lines) == str:
+		message_lines = [message_lines]
+
+	with ui.dialog() as dialog, ui.card():
+		for msg in message_lines:
+			ui.label(msg).classes('text-lg self-center font-mono')
+		ui.button(button_text, on_click=dialog.close).classes('w-full self-center text-sm font-mono')
+	dialog.open()

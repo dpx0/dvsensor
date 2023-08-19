@@ -2,7 +2,7 @@ import sys
 sys.path.append('..')
 
 from nicegui import ui
-from ..base_elements import header, footer, back_button
+from ..base_elements import header, footer, back_button, show_dialog_box
 from ..style import Colors, set_colors
 
 
@@ -11,46 +11,41 @@ MAX_INPUT_LEN: int = 200_000  # 200 kb (for comparison, the human titin TTN-018 
 
 def handle_seq_file_upload(upload, view) -> None:
 	try:
-		view.controller.handle_seq_file_upload(upload)
+		user_input: str = upload.content.read().decode('UTF-8')
+		view.controller.handle_fasta_seq_input(user_input)
 	except UnicodeDecodeError:
 		show_file_decode_error()
 	except ValueError:  # raised when Bio.SeqIO.read(...) can't parse a string as a FASTA record
 		show_invalid_fasta_error()
 
 
-def handle_manual_seq_input(input_str: str, view) -> None:
+def handle_manual_seq_input(user_input: str, view) -> None:
 	try:
-		view.controller.handle_manual_seq_input(input_str)
+		view.controller.handle_fasta_seq_input(user_input)
 	except ValueError:  # raised when Bio.SeqIO.read(...) can't parse a string as a FASTA record
 		show_invalid_fasta_error()
 
 
-# TODO: relocate show_... functions into a dialog box function in base_elements
-
-
 def show_file_size_error() -> None:
-	with ui.dialog() as dialog, ui.card():
-		ui.label('This file is too large').classes('text-lg self-center font-mono')
-		ui.label(f'Maximum file size: {int(MAX_INPUT_LEN/1000)} KB').classes('text-lg self-center font-mono')
-		ui.button('OK', on_click=dialog.close).classes('w-full self-center text-sm font-mono')
-	dialog.open()
+	show_dialog_box([
+		'This file is too large',
+		f'Maximum file size: {int(MAX_INPUT_LEN / 1000)} KB'
+	])
 
 
 def show_file_decode_error() -> None:
-	with ui.dialog() as dialog, ui.card():
-		ui.label('This file could not be read').classes('text-lg self-center font-mono')
-		ui.label(f'Please upload a file in FASTA format').classes('text-lg self-center font-mono')
-		ui.button('OK', on_click=dialog.close).classes('w-full self-center text-sm font-mono')
-	dialog.open()
+	show_dialog_box([
+		'This file could not be read',
+		'Please upload a file in FASTA format'
+	])
 
 
 def show_invalid_fasta_error() -> None:
-	with ui.dialog() as dialog, ui.card():
-		ui.label('This is not a FASTA sequence').classes('text-lg self-center font-mono')
-		ui.label('Please upload a file in FASTA format or').classes('text-lg self-center font-mono')
-		ui.label('manually enter a sequence').classes('text-lg self-center font-mono')
-		ui.button('OK', on_click=dialog.close).classes('w-full self-center text-sm font-mono')
-	dialog.open()
+	show_dialog_box([
+		'This is not a FASTA sequence',
+		'Please upload a file in FASTA format or',
+		'manually enter a sequence'
+	])
 
 
 def build(view, **kwargs) -> None:
@@ -69,7 +64,7 @@ def build(view, **kwargs) -> None:
 						  max_file_size=MAX_INPUT_LEN,
 						  max_files=1).classes('w-full mt-10')
 
-		ui.label("or"
+		ui.label('or'
 				 ).classes('text-2xl font-semibold self-center pl-6 pr-6 font-mono'
 				 ).style(f'color: {Colors.ACCENT}')
 
