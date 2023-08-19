@@ -1,6 +1,3 @@
-import sys
-sys.path.append('..')
-
 from nicegui import ui
 from ..base_elements import header, footer, back_button, show_dialog_box
 from ..style import Colors, set_colors
@@ -42,7 +39,7 @@ def show_file_decode_error() -> None:
 
 def show_invalid_fasta_error() -> None:
 	show_dialog_box([
-		'This is not a FASTA sequence',
+		'This is not a single-record', 'FASTA sequence',
 		'Please upload a file in FASTA format or',
 		'manually enter a sequence'
 	])

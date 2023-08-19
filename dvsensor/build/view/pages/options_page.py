@@ -7,10 +7,7 @@ def build(view, **kwargs) -> None:
 	set_colors()
 	header()
 
-	ui.label('Welcome to the Options Page')
-	ui.label(f'View reference {id(view)}')
-	ui.label(kwargs.get('sequence'))
-	ui.button('Go',
-			  on_click=lambda: ...).classes('w-32')
+	if view.model.sequence_record is None:
+		return
 
 	footer()
