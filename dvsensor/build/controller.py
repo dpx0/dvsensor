@@ -11,4 +11,3 @@ class Controller:
 		seq_record = utils.read_fasta_string(user_input)
 		self.model.load_sequence_record(seq_record)
 		self.view.open_page('metainf')
-
