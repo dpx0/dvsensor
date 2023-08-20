@@ -1,7 +1,6 @@
 from nicegui import ui
 from ..base_elements import header, footer, back_button
-from ..style import Colors, set_colors
-import collections
+from ..style import set_colors
 
 
 def build(view, **kwargs) -> None:
@@ -18,7 +17,7 @@ def build(view, **kwargs) -> None:
 
 	regions_default_settings = {'5UTR': False, 'CDS': False, '3UTR': True}
 
-	with ui.row().classes('w-full justify-center mt-8'):
+	with ui.row().classes('w-full justify-center'):
 		with ui.card().classes('no-shadow border-[1px] rounded-xl p-8 w-5/6 h-auto w-full'):
 			with ui.row().classes('w-full place-content-center space-x-32'):
 
@@ -57,7 +56,31 @@ def build(view, **kwargs) -> None:
 				with ui.column().classes('place-content-center'):
 					ui.label('BLAST').classes('text-center text-lg font-mono font-semibold')
 
+					# TODO: implement options for BLAST
+
 				with ui.column().classes('place-content-center'):
 					ui.label('Signal Peptide').classes('text-center text-lg font-mono font-semibold')
 
+					# TODO: implement options for signal peptide prediction
+
+			ui.button('run analysis',
+					  on_click=lambda: view.controller.start_sequence_analysis(
+						  triplet_settings={
+							  'CCA': cca_checkbox.value,
+							  'GCA': gca_checkbox.value,
+							  'UCA': uca_checkbox.value,
+							  'CAA': caa_checkbox.value,
+							  'CUA': cua_checkbox.value,
+							  'ACA': aca_checkbox.value,
+							  'CCU': ccu_checkbox.value,
+							  'CGA': cga_checkbox.value,
+							  'CCC': ccc_checkbox.value
+						  },
+						  regions_settings={
+							  '5UTR': r5utr_checkbox.value,
+							  'CDS': rCDS_checkbox.value,
+							  '3UTR': r3utr_checkbox.value
+						  }
+					  )
+					  ).classes('w-2/3 self-center h-10 font-mono mt-6')
 	footer()

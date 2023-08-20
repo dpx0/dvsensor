@@ -11,3 +11,6 @@ class Controller:
 		seq_record = utils.read_fasta_string(user_input)
 		self.model.load_sequence_record(seq_record)
 		self.view.open_page('metainf')
+
+	def start_sequence_analysis(self, triplet_settings, regions_settings):
+		self.view.open_page('results')
