@@ -61,9 +61,9 @@ def build(view, **kwargs) -> None:
 						  max_file_size=MAX_INPUT_LEN,
 						  max_files=1).classes('w-full mt-10')
 
-		ui.label('or'
-				 ).classes('text-2xl font-semibold self-center pl-6 pr-6 font-mono'
-				 ).style(f'color: {Colors.ACCENT}')
+		ui.label('or')\
+			.classes('text-2xl font-semibold self-center pl-6 pr-6 font-mono')\
+			.style(f'color: {Colors.ACCENT}')
 
 		with ui.card().classes('no-shadow border-[1px] rounded-xl p-8 w-2/5 h-64'):
 			with ui.column().classes('w-full'):
@@ -71,9 +71,10 @@ def build(view, **kwargs) -> None:
 					ui.label('Enter a FASTA sequence').classes('text-center text-lg font-mono')
 					ui.image('/assets/img-clipboard.png').classes('w-7 h-7')
 				sequence_input = ui.textarea(label='FASTA Sequence', placeholder='>NM_005228.5 EGFR...',
-										  validation={'Input too long': lambda value: len(value) < MAX_INPUT_LEN}
-										  ).classes('w-full')
+											 validation={'Input too long': lambda value: len(value) < MAX_INPUT_LEN})\
+					.classes('w-full')
 				ui.button('continue',
-						  on_click=lambda: handle_manual_seq_input(sequence_input.value, view)
-						  ).classes('w-2/3 self-center h-10 font-mono')
+						  on_click=lambda: handle_manual_seq_input(sequence_input.value, view))\
+					.classes('w-2/3 self-center h-10 font-mono')
+
 	footer()

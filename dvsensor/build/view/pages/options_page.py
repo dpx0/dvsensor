@@ -22,34 +22,46 @@ def build(view, **kwargs) -> None:
 			with ui.row().classes('w-full place-content-center justify-around'):
 
 				with ui.column().classes('place-content-center'):
-					ui.label('Target triplets'
-							 ).classes('text-center text-lg font-mono font-semibold')
+					ui.label('Target triplets')\
+						.classes('text-center text-lg font-mono font-semibold')
+
 					cca_checkbox = ui.checkbox('CCA').classes('text-base font-mono')
 					cca_checkbox.value = triplet_default_settings['CCA']
+
 					gca_checkbox = ui.checkbox('GCA').classes('text-base font-mono')
 					gca_checkbox.value = triplet_default_settings['GCA']
+
 					uca_checkbox = ui.checkbox('UCA').classes('text-base font-mono')
 					uca_checkbox.value = triplet_default_settings['UCA']
+
 					caa_checkbox = ui.checkbox('CAA').classes('text-base font-mono')
 					caa_checkbox.value = triplet_default_settings['CAA']
+
 					cua_checkbox = ui.checkbox('CUA').classes('text-base font-mono')
 					cua_checkbox.value = triplet_default_settings['CUA']
+
 					aca_checkbox = ui.checkbox('ACA').classes('text-base font-mono')
 					aca_checkbox.value = triplet_default_settings['ACA']
+
 					ccu_checkbox = ui.checkbox('CCU').classes('text-base font-mono')
 					ccu_checkbox.value = triplet_default_settings['CCU']
+
 					cga_checkbox = ui.checkbox('CGA').classes('text-base font-mono')
 					cga_checkbox.value = triplet_default_settings['CGA']
+
 					ccc_checkbox = ui.checkbox('CCC').classes('text-base font-mono')
 					ccc_checkbox.value = triplet_default_settings['CCC']
 
 				with ui.column().classes('place-content-center'):
-					ui.label('Target regions'
-							 ).classes('text-center text-lg font-mono font-semibold')
+					ui.label('Target regions')\
+						.classes('text-center text-lg font-mono font-semibold')
+
 					r5utr_checkbox = ui.checkbox("5'-UTR").classes('text-base font-mono')
 					r5utr_checkbox.value = regions_default_settings['5UTR']
+
 					rCDS_checkbox = ui.checkbox("CDS").classes('text-base font-mono')
 					rCDS_checkbox.value = regions_default_settings['CDS']
+
 					r3utr_checkbox = ui.checkbox("3'-UTR").classes('text-base font-mono')
 					r3utr_checkbox.value = regions_default_settings['3UTR']
 
@@ -81,6 +93,6 @@ def build(view, **kwargs) -> None:
 							  'CDS': rCDS_checkbox.value,
 							  '3UTR': r3utr_checkbox.value
 						  }
-					  )
-					  ).classes('w-2/3 self-center h-10 font-mono mt-6')
+					  )).classes('w-2/3 self-center h-10 font-mono mt-6')
+
 	footer()
