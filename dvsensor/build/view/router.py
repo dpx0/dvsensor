@@ -1,5 +1,6 @@
 """
-This code was taken from the nicegui example 'Single Page App' by falkoschindler and slightly modified,
+This code was taken from the nicegui example 'Single Page App' by falkoschindler and
+slightly modified (changes indicated by (+) ),
 see https://github.com/zauberzeug/nicegui/tree/main/examples/single_page_app
 """
 
@@ -23,10 +24,12 @@ class Router:
             return func
         return decorator
 
+    # + keyword arguments can be passed to builder functions, see below
     def open(self, target: Union[Callable, str], **kwargs) -> None:
         if isinstance(target, str):
             path = target
-            builder = self.routes[target]
+            # + always redirect to start page if requested page does not exist
+            builder = self.routes.get(target, self.routes['/'])
         else:
             path = {v: k for k, v in self.routes.items()}[target]
             builder = target
@@ -38,6 +41,7 @@ class Router:
                         history.pushState({{page: "{path}"}}, "", "{path}");
                     }}
                 ''', respond=False)
+                # + builder functions are called with optional keyword arguments
                 result = builder(**kwargs)
                 if isinstance(result, Awaitable):
                     await result
