@@ -36,13 +36,8 @@ def build(view, **kwargs) -> None:
 				{'headerName': '%GC', 'field': 'percent_gc'},
 				{'headerName': '# Stop Codon Edits', 'field': 'n_stop_edits'},
 				{'headerName': 'off-targets', 'field': 'off_targets'},
-				{'headerName': '', 'field': 'buttons'}
 			],
-			'rowData': [
-				{'name': 'Alice', 'age': 18, 'parent': 'David'},
-				{'name': 'Bob', 'age': 21, 'parent': 'Eve'},
-				{'name': 'Carol', 'age': 42, 'parent': 'Frank'},
-			],
+			'rowData': [],
 			'rowSelection': 'multiple',
 		}, theme='alpine-dark').classes('w-full')
 
