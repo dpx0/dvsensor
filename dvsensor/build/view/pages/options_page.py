@@ -19,7 +19,7 @@ def build(view, **kwargs) -> None:
 
 	with ui.row().classes('w-full justify-center'):
 		with ui.card().classes('no-shadow border-[1px] rounded-xl p-8 w-5/6 h-auto w-full'):
-			with ui.row().classes('w-full place-content-center space-x-32'):
+			with ui.row().classes('w-full place-content-center justify-around'):
 
 				with ui.column().classes('place-content-center'):
 					ui.label('Target triplets'

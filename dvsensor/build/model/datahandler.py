@@ -1,5 +1,3 @@
-
-
 class RNADataHandler:
 
 	def __init__(self) -> None:

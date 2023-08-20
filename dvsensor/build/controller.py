@@ -12,5 +12,5 @@ class Controller:
 		self.model.load_sequence_record(seq_record)
 		self.view.open_page('metainf')
 
-	def start_sequence_analysis(self, triplet_settings, regions_settings):
+	def start_sequence_analysis(self, triplet_settings: dict, regions_settings: dict) -> None:
 		self.view.open_page('results')
