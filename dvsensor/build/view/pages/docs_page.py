@@ -34,17 +34,10 @@ def read_docfiles(docfiles: list[str]) -> list[tuple[int, str, str]]:
 
 
 def build(view, **kwargs) -> None:
+	view.controller.clear_job()
 	set_colors()
 	header()
 	back_button('start', view)
-
-	# columns = [
-	# 	{'name': 'index', 'label': 'Index', 'field': 'index', 'required': True, 'align': 'left'},
-	# 	{'name': 'title', 'label': 'Title', 'field': 'title', 'required': True, 'align': 'left'}
-	# ]
-
-	#for i in range(200):
-		#rows.append({'name': 'Alice', 'age': 18}, )
 
 	docs = read_docfiles(find_docfiles())
 	print(docs)

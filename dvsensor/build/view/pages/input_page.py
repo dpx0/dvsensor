@@ -46,6 +46,7 @@ def show_invalid_fasta_error() -> None:
 
 
 def build(view, **kwargs) -> None:
+	view.controller.clear_job()
 	set_colors()
 	header()
 	back_button('start', view)

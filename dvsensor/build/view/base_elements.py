@@ -16,11 +16,11 @@ def footer() -> None:
 		ui.label('FOOTER')
 
 
-def back_button(previous_page: str, view, on_click: Optional[Callable] = None) -> None:
+def back_button(previous_page: str, view, on_click: Optional[Callable] = None, **kwargs) -> None:
 	def _on_click():
 		if on_click:
 			on_click()
-		view.router.open(view.pages[previous_page])
+		view.router.open(view.pages[previous_page], **kwargs)
 
 	with ui.button('',
 				   on_click=_on_click,

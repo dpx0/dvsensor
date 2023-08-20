@@ -6,10 +6,11 @@ from ..style import set_colors
 def build(view, **kwargs) -> None:
 	set_colors()
 	header()
-	if not view.model.has_record_data:
+	if not view.controller.page_allowed(kwargs):
 		view.show_error('page not available')
 		return
-	back_button('metainf', view, on_click=lambda: view.model.reload_sequence_record())
+	back_button('metainf', view, on_click=lambda: view.model.reload_sequence_record(),
+				job_id=kwargs.get('job_id'))
 
 	triplet_default_settings = {'CCA': True, 'GCA': True, 'UCA': True,
 								'CAA': True, 'CUA': False, 'ACA': False,

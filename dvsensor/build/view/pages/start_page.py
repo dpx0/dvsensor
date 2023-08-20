@@ -4,6 +4,7 @@ from ..style import Colors, set_colors
 
 
 def build(view, **kwargs) -> None:
+	view.controller.clear_job()
 	set_colors()
 	header()
 

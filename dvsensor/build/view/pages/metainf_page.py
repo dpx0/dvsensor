@@ -6,7 +6,7 @@ from ..style import set_colors
 def build(view, **kwargs) -> None:
 	set_colors()
 	header()
-	if not view.model.has_record_data:
+	if not view.controller.page_allowed(kwargs):
 		view.show_error('page not available')
 		return
 	back_button('input', view, on_click=lambda: view.model.clear())
@@ -38,7 +38,7 @@ def build(view, **kwargs) -> None:
 					description_input.bind_value(view.model, 'record_description')
 
 				ui.button('ok',
-						  on_click=lambda: view.open_page('options'))\
+						  on_click=lambda: view.open_page('options', job_id=kwargs.get('job_id')))\
 					.classes('w-2/3 self-center h-10 font-mono mt-6')
 
 	footer()

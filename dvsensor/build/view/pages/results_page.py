@@ -6,9 +6,9 @@ from ..style import Colors, set_colors
 def build(view, **kwargs) -> None:
 	set_colors()
 	header()
-	#if not view.model.has_record_data:
-		#view.show_error('page not available')
-		#return
+	if not view.controller.page_allowed(kwargs):
+		view.show_error('page not available')
+		return
 
 	with ui.column().classes('w-full'):
 
