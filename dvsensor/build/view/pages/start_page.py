@@ -16,7 +16,7 @@ def build(view, **kwargs) -> None:
 				.props(f'no-caps text-color=primary')\
 				.classes("rounded-xl p-8 w-1/4 h-64"):
 			with ui.column():
-				ui.label('Design sensors for an mRNA transcript').classes('text-xl font-mono')
+				ui.label('Generate sensors for an mRNA transcript').classes('text-xl font-mono')
 				ui.image("/assets/img-rna01.png").classes('w-1/4 h-1/4 mt-6 self-center')
 
 		with ui.button('', on_click=lambda: ..., color=f'{Colors.FOREGROUND}')\

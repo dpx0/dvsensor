@@ -1,4 +1,4 @@
-from nicegui import ui
+from nicegui import ui, background_tasks
 from ..base_elements import header, footer
 from ..style import Colors, set_colors
 from functools import partial
@@ -30,6 +30,37 @@ def set_status_cancelled(spinner, status_text, cancel_button, export_button):
 	status_text.style(replace=f'color: {Colors.RED}')
 
 
+async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_start, sensor_end, transcript_len):
+	print(box_5UTR.id)
+	await ui.run_javascript(f'''
+	var offsets_box_5UTR = getElement({box_5UTR.id}).getBoundingClientRect();
+	var offsets_box_3UTR = getElement({box_3UTR.id}).getBoundingClientRect();
+	var ideog_top = offsets_box_5UTR.top;
+	var ideog_bottom = offsets_box_5UTR.bottom;
+	var ideog_left = offsets_box_5UTR.left;
+	var ideog_right = offsets_box_3UTR.right;
+
+	if (getElement("sensor_window") == undefined) {{	
+		var div = document.createElement("div");
+		div.id = "sensor_window"
+		
+		div.style = "background-color: rgba(239,68,68,.4)";
+		div.style.border = "medium solid #ef4444"
+		
+		div.style.position = "absolute";
+		div.style.top = ideog_top + 'px';
+		div.style.height = ideog_bottom - ideog_top + 'px';
+			
+		document.body.appendChild(div);
+	}} else {{
+		var div = getElement("sensor_window");
+	}}
+	div.style.left = ideog_left + ((ideog_right - ideog_left) * ({sensor_start / transcript_len})) + 'px';
+	div.style.width = ((ideog_right - ideog_left) * ({sensor_start / transcript_len})) + 
+	((ideog_right - ideog_left) * ({(sensor_end - sensor_start) / transcript_len})) + 'px'; 
+	''')
+
+
 def build(view, **kwargs) -> None:
 	set_colors()
 	header()
@@ -50,7 +81,6 @@ def build(view, **kwargs) -> None:
 					.classes('text-center text-lg font-mono font-semibold')\
 					.style(f'color: {Colors.FOREGROUND}')
 
-				# min % for label: ~10%
 				len_5UTR = 261
 				len_CDS = 3633
 				len_3UTR = 6011
@@ -62,18 +92,21 @@ def build(view, **kwargs) -> None:
 
 				# ----- target ideogram
 				with ui.row().classes('w-full gap-0 pt-8'):
-					with ui.column().classes().style(f'width: {percent_5UTR}%'):
 
+					box_5UTR = ui.column().classes().style(f'width: {percent_5UTR}%')
+					with box_5UTR:
 						with ui.element('div').classes('w-full bg-stone-500'):
 							ui.label(f"""{"5'-UTR" if percent_5UTR >= 10 else '*'}""")\
 								.classes('text-center font-semibold')
 
-					with ui.column().classes().style(f'width: {percent_CDS}%'):
+					box_CDS = ui.column().classes().style(f'width: {percent_CDS}%')
+					with box_CDS:
 						with ui.element('div').classes('w-full bg-yellow-500'):
 							ui.label(f"{'CDS' if percent_CDS >= 10 else '*'}")\
 								.classes('text-center font-semibold')
 
-					with ui.column().classes().style(f'width: {percent_3UTR}%'):
+					box_3UTR = ui.column().classes().style(f'width: {percent_3UTR}%')
+					with box_3UTR:
 						with ui.element('div').classes('w-full bg-indigo-500'):
 							ui.label(f"""{"3'-UTR" if percent_3UTR >= 10 else '*'}""")\
 								.classes('text-center font-semibold')
@@ -161,7 +194,7 @@ def build(view, **kwargs) -> None:
 																			 cancel_button, export_button)))\
 				.props('color=red-10').classes('self-center')
 
-
-
+		ui.button('TEST',
+				  on_click=lambda: update_ideogram_sensor_window(box_5UTR, box_3UTR, 262, 3633, 9905))
 
 	footer()
