@@ -1,4 +1,4 @@
-from nicegui import ui, background_tasks
+from nicegui import ui
 from ..base_elements import header, footer
 from ..style import Colors, set_colors
 from functools import partial
@@ -14,7 +14,7 @@ def update_progress(progress_bar, progress_label, step: float) -> float:
 	return progress_bar.value
 
 
-def set_status_finished(spinner, status_text, cancel_button, export_button):
+def set_status_finished(spinner, status_text, cancel_button, export_button) -> None:
 	spinner.visible = False
 	cancel_button.visible = False
 	export_button.visible = True
@@ -22,7 +22,7 @@ def set_status_finished(spinner, status_text, cancel_button, export_button):
 	status_text.style(replace=f'color: {Colors.GREEN}')
 
 
-def set_status_cancelled(spinner, status_text, cancel_button, export_button):
+def set_status_cancelled(spinner, status_text, cancel_button, export_button) -> None:
 	spinner.visible = False
 	cancel_button.visible = False
 	export_button.visible =  True
@@ -30,8 +30,11 @@ def set_status_cancelled(spinner, status_text, cancel_button, export_button):
 	status_text.style(replace=f'color: {Colors.RED}')
 
 
-async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_start, sensor_end, transcript_len):
-	print(box_5UTR.id)
+async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
+										transcript_len: int) -> None:
+	sensor_start, sensor_end = sensor_range.split('-')
+	sensor_start = int(sensor_start)
+	sensor_end = int(sensor_end)
 	await ui.run_javascript(f'''
 	var offsets_box_5UTR = getElement({box_5UTR.id}).getBoundingClientRect();
 	var offsets_box_3UTR = getElement({box_3UTR.id}).getBoundingClientRect();
@@ -40,18 +43,22 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_start, sensor
 	var ideog_left = offsets_box_5UTR.left;
 	var ideog_right = offsets_box_3UTR.right;
 	var ideog_len = ideog_right - ideog_left;
-	if (getElement("sensor_window") == undefined) {{	
+	
+	if (document.getElementById("sensor_window") == undefined) {{	
 		var div = document.createElement("div");
 		div.id = "sensor_window"
+		
 		div.style = "background-color: rgba(239,68,68,.4)";
 		div.style.border = "medium solid #ef4444"
 		div.style.position = "absolute";
 		div.style.top = ideog_top + 'px';
 		div.style.height = ideog_bottom - ideog_top + 'px';
+		
 		document.body.appendChild(div);
 	}} else {{
-		var div = getElement("sensor_window");
+		var div = document.getElementById("sensor_window");
 	}}
+	
 	div.style.left = ideog_left + (ideog_len * ({sensor_start / transcript_len})) + 'px';
 	div.style.width =  (ideog_len * ({(sensor_end - sensor_start) / transcript_len})) + 'px';
 	''')
@@ -107,6 +114,7 @@ def build(view, **kwargs) -> None:
 							ui.label(f"""{"3'-UTR" if percent_3UTR >= 10 else '*'}""")\
 								.classes('text-center font-semibold')
 
+				# -----
 				with ui.row().classes('w-full justify-center gap-x-28'):
 					ui.label(f"5'-UTR: {len_5UTR} bp")\
 						.classes('text-center text-sm font-mono') \
@@ -162,12 +170,17 @@ def build(view, **kwargs) -> None:
 				{'headerName': 'Region', 'field': 'region'},
 				{'headerName': 'Range', 'field': 'range'},
 				{'headerName': '%GC', 'field': 'percent_gc'},
-				{'headerName': '# In-frame stop codons', 'field': 'n_stop_codons'},
+				{'headerName': 'In-frame stop codons', 'field': 'n_stop_codons'},
 				{'headerName': 'Off-targets', 'field': 'off_targets'},
 			],
 			'rowData': [],
 			'rowSelection': 'multiple',
-		}, theme='alpine-dark').classes('w-full grow')
+		}, theme='alpine-dark')\
+			.classes('w-full grow')\
+			.on('rowSelected',
+				 lambda event: update_ideogram_sensor_window(
+				 	box_5UTR, box_3UTR, event.args['data']['range'], len_tot)
+				if event.args['selected'] else None)
 
 		task_control_functions = view.controller.task_controller.start_analysis_task(
 			ui_control_functions={
@@ -189,8 +202,5 @@ def build(view, **kwargs) -> None:
 														set_status_cancelled(spinner, status_text,
 																			 cancel_button, export_button)))\
 				.props('color=red-10').classes('self-center')
-
-		ui.button('TEST',
-				  on_click=lambda: update_ideogram_sensor_window(box_5UTR, box_3UTR, 3895, 9905, 9905))
 
 	footer()

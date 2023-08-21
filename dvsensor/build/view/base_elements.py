@@ -4,16 +4,20 @@ from typing import Callable, Optional
 
 
 def header() -> None:
-	with ui.header().style(f'background-color: {Colors.BACKGROUND}'
-						   ).classes('items-center justify-between'):
+	header = ui.header()\
+		.style(f'background-color: {Colors.BACKGROUND}')\
+		.classes('items-center justify-between')
+
+	with header:
 		ui.label('DVSensor v1.0')\
 			.classes('text-2xl font-semibold tracking-wide font-mono')\
 			.style(f'color: {Colors.ACCENT}')
 
 
-def footer() -> None:
+def footer(home_button=False) -> None:
 	with ui.footer().style(f'background-color: {Colors.BACKGROUND}'):
-		ui.label('FOOTER')
+		if home_button:
+			...
 
 
 def back_button(previous_page: str, view, on_click: Optional[Callable] = None, **kwargs) -> None:

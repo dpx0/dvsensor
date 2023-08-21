@@ -65,19 +65,35 @@ class TaskController:
 		update_progress = ui_control_functions['update_progress']
 		set_status_finished = ui_control_functions['set_status_finished']
 
-		data = [{'position': new_id,
-			 'triplet': new_id,
-			 'region': new_id,
-			 'range': new_id,
-			 'percent_gc': new_id,
-			 'n_stop_codons': new_id,
-			 'off_targets': new_id}
-				for new_id in range(50)]
+		# data = [{'position': new_id,
+		# 	 'triplet': new_id,
+		# 	 'region': new_id,
+		# 	 'range': new_id,
+		# 	 'percent_gc': new_id,
+		# 	 'n_stop_codons': new_id,
+		# 	 'off_targets': new_id}
+		# 		for new_id in range(50)]
+
+		data = [
+			{'position': '7127',
+			 'triplet': 'CCA',
+			 'region': '3UTR',
+			 'range': '7079-7178',
+			 'percent_gc': '52,8%',
+			 'n_stop_codons': '0',
+			 'off_targets': '0'},
+			{'position': '5788',
+			 'triplet': 'CCA',
+			 'region': '3UTR',
+			 'range': '5740-5839',
+			 'percent_gc': '51,2%',
+			 'n_stop_codons': '0',
+			 'off_targets': '0'},
+		]
 
 		progress_step = 1.0 / len(data)
-
 		while True:
-			await asyncio.sleep(1)
+			await asyncio.sleep(2)
 			if not data:
 				break
 			add_rows([data.pop()])

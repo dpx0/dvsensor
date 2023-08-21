@@ -48,7 +48,6 @@ def show_invalid_fasta_error() -> None:
 def build(view, **kwargs) -> None:
 	view.controller.task_controller.clear_task()
 	set_colors()
-	header()
 	back_button('start', view)
 
 	with ui.row().classes('w-full justify-center mt-24'):
