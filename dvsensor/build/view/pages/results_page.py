@@ -39,25 +39,21 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_start, sensor
 	var ideog_bottom = offsets_box_5UTR.bottom;
 	var ideog_left = offsets_box_5UTR.left;
 	var ideog_right = offsets_box_3UTR.right;
-
+	var ideog_len = ideog_right - ideog_left;
 	if (getElement("sensor_window") == undefined) {{	
 		var div = document.createElement("div");
 		div.id = "sensor_window"
-		
 		div.style = "background-color: rgba(239,68,68,.4)";
 		div.style.border = "medium solid #ef4444"
-		
 		div.style.position = "absolute";
 		div.style.top = ideog_top + 'px';
 		div.style.height = ideog_bottom - ideog_top + 'px';
-			
 		document.body.appendChild(div);
 	}} else {{
 		var div = getElement("sensor_window");
 	}}
-	div.style.left = ideog_left + ((ideog_right - ideog_left) * ({sensor_start / transcript_len})) + 'px';
-	div.style.width = ((ideog_right - ideog_left) * ({sensor_start / transcript_len})) + 
-	((ideog_right - ideog_left) * ({(sensor_end - sensor_start) / transcript_len})) + 'px'; 
+	div.style.left = ideog_left + (ideog_len * ({sensor_start / transcript_len})) + 'px';
+	div.style.width =  (ideog_len * ({(sensor_end - sensor_start) / transcript_len})) + 'px';
 	''')
 
 
@@ -86,8 +82,8 @@ def build(view, **kwargs) -> None:
 				len_3UTR = 6011
 				len_tot = len_5UTR + len_CDS + len_3UTR
 
-				percent_5UTR = round(len_5UTR / len_tot, 2) * 100
-				percent_CDS = round(len_CDS / len_tot, 2) * 100
+				percent_5UTR = len_5UTR / len_tot * 100
+				percent_CDS = len_CDS / len_tot * 100
 				percent_3UTR = 100.0 - (percent_5UTR + percent_CDS)
 
 				# ----- target ideogram
@@ -195,6 +191,6 @@ def build(view, **kwargs) -> None:
 				.props('color=red-10').classes('self-center')
 
 		ui.button('TEST',
-				  on_click=lambda: update_ideogram_sensor_window(box_5UTR, box_3UTR, 262, 3633, 9905))
+				  on_click=lambda: update_ideogram_sensor_window(box_5UTR, box_3UTR, 3895, 9905, 9905))
 
 	footer()
