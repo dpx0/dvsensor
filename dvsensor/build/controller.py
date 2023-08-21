@@ -10,50 +10,58 @@ class Controller:
 	def __init__(self, model, view) -> None:
 		self.model = model
 		self.view = view
-		self.current_job_id: Optional[str] = None
-		self.current_analysis_job = None
-
-	def init_new_job(self) -> str:
-		job_id = str(uuid.uuid4())
-		self.current_job_id = job_id
-		return job_id
-
-	def clear_job(self):
-		self.current_job_id = None
-		self.cancel_analysis_job()
+		self.task_controller = TaskController(self)
 
 	def page_allowed(self, page_kwargs: dict) -> bool:
-		if not page_kwargs.get('job_id') or not self.current_job_id or \
-				page_kwargs.get('job_id') != self.current_job_id:
+		if not page_kwargs.get('task_id') or not self.task_controller.current_task_id or \
+				page_kwargs.get('task_id') != self.task_controller.current_task_id:
 			return False
 		return True
 
 	def handle_fasta_seq_input(self, user_input: str) -> None:
 		seq_record = utils.read_fasta_string(user_input)
 		self.model.load_sequence_record(seq_record)
-		job_id = self.init_new_job()
-		print(f'new job: {job_id}')
-		self.view.open_page('metainf', job_id=job_id)
+		task_id = self.task_controller.init_new_task()
+		print(f'new task: {task_id}')
+		self.view.open_page('metainf', task_id=task_id)
 
-	def init_analysis_job(self, triplet_settings: dict, regions_settings: dict) -> None:
-		self.view.open_page('results', job_id=self.current_job_id)
 
-	def start_analysis_job(self, ui_control_functions: dict[str, Callable]) -> dict[str, Callable]:
-		print('starting analysis job...')
-		self.current_analysis_job = background_tasks.create(self.analysis_job(ui_control_functions))
-		job_control_functions: dict[str, Callable] = {
-			'cancel_job': self.cancel_analysis_job
+class TaskController:
+
+	def __init__(self, controller: Controller) -> None:
+
+		self.controller: Controller = controller
+		self.current_task_id: Optional[str] = None
+		self.current_analysis_task = None
+
+	def init_new_task(self) -> str:
+		task_id = str(uuid.uuid4())
+		self.current_task_id = task_id
+		return task_id
+
+	def clear_task(self):
+		self.current_task_id = None
+		self.cancel_analysis_task()
+
+	def init_analysis_task(self, settings) -> None:
+		self.controller.view.open_page('results', task_id=self.current_task_id)
+
+	def start_analysis_task(self, ui_control_functions: dict[str, Callable]) -> dict[str, Callable]:
+		print('starting analysis task...')
+		self.current_analysis_task = background_tasks.create(self.analysis_task(ui_control_functions))
+		task_control_functions: dict[str, Callable] = {
+			'cancel_task': self.cancel_analysis_task
 		}
 
-		return job_control_functions
+		return task_control_functions
 
-	def cancel_analysis_job(self):
-		if self.current_analysis_job:
-			print('canceling analysis job!')
-			self.current_analysis_job.cancel()
-			self.current_analysis_job = None
+	def cancel_analysis_task(self) -> None:
+		if self.current_analysis_task:
+			print('canceling analysis task!')
+			self.current_analysis_task.cancel()
+			self.current_analysis_task = None
 
-	async def analysis_job(self, ui_control_functions):
+	async def analysis_task(self, ui_control_functions) -> None:
 		add_rows = ui_control_functions['add_rows']
 		update_progress = ui_control_functions['update_progress']
 

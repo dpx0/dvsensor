@@ -38,7 +38,7 @@ def build(view, **kwargs) -> None:
 					description_input.bind_value(view.model, 'record_description')
 
 				ui.button('ok',
-						  on_click=lambda: view.open_page('options', job_id=kwargs.get('job_id')))\
+						  on_click=lambda: view.open_page('options', task_id=kwargs.get('task_id')))\
 					.classes('w-2/3 self-center h-10 font-mono mt-6')
 
 	footer()

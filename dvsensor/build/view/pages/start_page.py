@@ -4,7 +4,7 @@ from ..style import Colors, set_colors
 
 
 def build(view, **kwargs) -> None:
-	view.controller.clear_job()
+	view.controller.task_controller.clear_task()
 	set_colors()
 	header()
 
@@ -27,7 +27,7 @@ def build(view, **kwargs) -> None:
 				ui.image("/assets/img-rna01db.png").classes('w-1/3 h-1/3 mt-6 self-center')
 
 		with ui.button('',
-					   on_click=lambda: view.router.open(view.pages['docs']),
+					   on_click=lambda: view.router.open(view.pages['documentation']),
 					   color=f'{Colors.FOREGROUND}')\
 				.props(f'no-caps text-color=primary')\
 				.classes("rounded-xl p-8 w-1/4 h-64"):

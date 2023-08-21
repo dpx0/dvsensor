@@ -34,7 +34,7 @@ def read_docfiles(docfiles: list[str]) -> list[tuple[int, str, str]]:
 
 
 def build(view, **kwargs) -> None:
-	view.controller.clear_job()
+	view.controller.task_controller.clear_task()
 	set_colors()
 	header()
 	back_button('start', view)

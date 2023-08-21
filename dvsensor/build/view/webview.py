@@ -46,10 +46,10 @@ class WebView:
 				_build_start_page(self, **kwargs)
 			self.pages['start'] = build_start_page
 
-			@self.router.add('/docs')
+			@self.router.add('/documentation')
 			def build_docs_page(**kwargs) -> None:
 				_build_docs_page(self, **kwargs)
-			self.pages['docs'] = build_docs_page
+			self.pages['documentation'] = build_docs_page
 
 			@self.router.add('/input')
 			def build_input_page(**kwargs) -> None:

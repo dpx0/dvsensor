@@ -52,11 +52,11 @@ def build(view, **kwargs) -> None:
 			'rowSelection': 'multiple',
 		}, theme='alpine-dark').classes('w-full grow')
 
-		job_control_functions = view.controller.start_analysis_job(ui_control_functions={
+		task_control_functions = view.controller.task_controller.start_analysis_task(ui_control_functions={
 			'add_rows': partial(add_rows, sensors_table),
 			'update_progress': partial(update_progress, progress_bar, progress_label)
 		})
 
-		ui.button('CANCEL', on_click=job_control_functions['cancel_job'])
+		ui.button('CANCEL', on_click=task_control_functions['cancel_task'])
 
 	footer()

@@ -10,7 +10,7 @@ def build(view, **kwargs) -> None:
 		view.show_error('page not available')
 		return
 	back_button('metainf', view, on_click=lambda: view.model.reload_sequence_record(),
-				job_id=kwargs.get('job_id'))
+				task_id=kwargs.get('task_id'))
 
 	triplet_default_settings = {'CCA': True, 'GCA': True, 'UCA': True,
 								'CAA': True, 'CUA': False, 'ACA': False,
@@ -77,8 +77,8 @@ def build(view, **kwargs) -> None:
 					# TODO: implement options for signal peptide prediction
 
 			ui.button('run analysis',
-					  on_click=lambda: view.controller.init_analysis_job(
-						  triplet_settings={
+					  on_click=lambda: view.controller.task_controller.init_analysis_task({
+						  'triplet_settings': {
 							  'CCA': cca_checkbox.value,
 							  'GCA': gca_checkbox.value,
 							  'UCA': uca_checkbox.value,
@@ -89,11 +89,11 @@ def build(view, **kwargs) -> None:
 							  'CGA': cga_checkbox.value,
 							  'CCC': ccc_checkbox.value
 						  },
-						  regions_settings={
+						  'regions_settings': {
 							  '5UTR': r5utr_checkbox.value,
 							  'CDS': rCDS_checkbox.value,
 							  '3UTR': r3utr_checkbox.value
 						  }
-					  )).classes('w-2/3 self-center h-10 font-mono mt-6')
+			})).classes('w-2/3 self-center h-10 font-mono mt-6')
 
 	footer()
