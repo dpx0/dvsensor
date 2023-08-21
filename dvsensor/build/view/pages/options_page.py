@@ -77,7 +77,7 @@ def build(view, **kwargs) -> None:
 					# TODO: implement options for signal peptide prediction
 
 			ui.button('run analysis',
-					  on_click=lambda: view.controller.start_sequence_analysis(
+					  on_click=lambda: view.controller.init_analysis_job(
 						  triplet_settings={
 							  'CCA': cca_checkbox.value,
 							  'GCA': gca_checkbox.value,
