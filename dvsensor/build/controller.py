@@ -52,32 +52,32 @@ class TaskController:
 		task_control_functions: dict[str, Callable] = {
 			'cancel_task': self.cancel_analysis_task
 		}
-
 		return task_control_functions
 
 	def cancel_analysis_task(self) -> None:
 		if self.current_analysis_task:
-			print('canceling analysis task!')
+			print('cancelling analysis task...')
 			self.current_analysis_task.cancel()
 			self.current_analysis_task = None
 
 	async def analysis_task(self, ui_control_functions) -> None:
 		add_rows = ui_control_functions['add_rows']
 		update_progress = ui_control_functions['update_progress']
+		set_status_finished = ui_control_functions['set_status_finished']
 
 		data = [{'position': new_id,
 			 'triplet': new_id,
 			 'region': new_id,
 			 'range': new_id,
 			 'percent_gc': new_id,
-			 'n_stop_edits': new_id,
+			 'n_stop_codons': new_id,
 			 'off_targets': new_id}
-				for new_id in range(100)]
+				for new_id in range(50)]
 
 		progress_step = 1.0 / len(data)
 
 		while True:
-			await asyncio.sleep(2)
+			await asyncio.sleep(1)
 			if not data:
 				break
 			add_rows([data.pop()])
@@ -86,6 +86,8 @@ class TaskController:
 			print(progress)
 			if round(progress * 100) >= 100:
 				print("FINISHED")
+				set_status_finished()
+				self.current_analysis_task = None
 				break
 
 

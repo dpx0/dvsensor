@@ -16,6 +16,11 @@ class RNADataHandler:
 		self.record_description = ""
 		self.has_record_data = False
 
+	@property
+	def sequence_length(self):
+		if self.sequence:
+			return len(self.sequence)
+
 	def reload_sequence_record(self) -> None:
 		self.load_sequence_record(self.init_sequence_record)
 
