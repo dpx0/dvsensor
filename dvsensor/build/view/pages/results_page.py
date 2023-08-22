@@ -1,5 +1,5 @@
 from nicegui import ui
-from ..base_elements import header, footer
+from ..base_elements import header, footer, home_button
 from ..style import Colors, set_colors
 from functools import partial
 
@@ -114,7 +114,6 @@ def build(view, **kwargs) -> None:
 							ui.label(f"""{"3'-UTR" if percent_3UTR >= 10 else '*'}""")\
 								.classes('text-center font-semibold')
 
-				# -----
 				with ui.row().classes('w-full justify-center gap-x-28'):
 					ui.label(f"5'-UTR: {len_5UTR} bp")\
 						.classes('text-center text-sm font-mono') \
@@ -126,20 +125,20 @@ def build(view, **kwargs) -> None:
 						.classes('text-center text-sm font-mono')\
 						.style(f'color: {Colors.FOREGROUND}')
 
-			# ----- target information
+			# ----- additional information
 			with ui.column().classes('1/4'):
 				ui.label(f'Total transcript length: {view.model.sequence_length} bp')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
-				ui.label(f"5'-UTR length: {view.model.sequence_length} bp")\
+				ui.label(f"Signal Peptide: ")\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
-				ui.label(f'CDS length: {view.model.sequence_length} bp')\
+				ui.label(f'Target sites analyzed: x / y')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
-				ui.label(f"3'-UTR length: {view.model.sequence_length} bp")\
-					.classes('text-center text-sm font-mono')\
-					.style(f'color: {Colors.FOREGROUND}')
+				#ui.label(f"3'-UTR length: {view.model.sequence_length} bp")\
+					#.classes('text-center text-sm font-mono')\
+					#.style(f'color: {Colors.FOREGROUND}')
 
 			# ----- status + control elements
 			status_box = ui.column().classes('w-1/3 flex justify-between place-content-center')
@@ -203,4 +202,5 @@ def build(view, **kwargs) -> None:
 																			 cancel_button, export_button)))\
 				.props('color=red-10').classes('self-center')
 
+	home_button(view)
 	footer()

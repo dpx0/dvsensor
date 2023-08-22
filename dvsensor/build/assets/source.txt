@@ -6,4 +6,4 @@ img-clipboard   :  https://www.flaticon.com/free-icon/paste_2782958
 img-file        :  https://www.flaticon.com/free-icon/document_2258853
 img-home        :  https://www.flaticon.com/free-icon/home_263115
 img-back01      :  https://www.flaticon.com/free-icon/arrow_507257
-img-back02      :  https://www.flaticon.com/free-icon/back-button_93634
+img-home        :  https://www.flaticon.com/free-icon/home_263115
