@@ -67,7 +67,8 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
 
 def build(view, **kwargs) -> None:
 	set_colors()
-	if not view.controller.page_allowed(kwargs):
+	header()
+	if not view.page_allowed(kwargs):
 		view.show_error('page not available')
 		return
 
@@ -203,3 +204,4 @@ def build(view, **kwargs) -> None:
 				.props('color=red-10').classes('self-center')
 
 	home_button(view)
+	footer()

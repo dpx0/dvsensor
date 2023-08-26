@@ -87,4 +87,5 @@ def build(view, **kwargs) -> None:
 		open_doc_entry(1, docs, text_area)
 
 	ui.separator().props('dark')
+	footer()
 

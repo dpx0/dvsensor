@@ -6,7 +6,7 @@ from ..style import set_colors
 def build(view, **kwargs) -> None:
 	set_colors()
 	header()
-	if not view.controller.page_allowed(kwargs):
+	if not view.page_allowed(kwargs):
 		view.show_error('page not available')
 		return
 	back_button('metainf', view, on_click=lambda: view.model.reload_sequence_record(),

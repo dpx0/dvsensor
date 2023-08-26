@@ -30,6 +30,12 @@ class WebView:
 		else:
 			self.show_error(f"page {page} does not exist")
 
+	def page_allowed(self, page_kwargs: dict) -> bool:
+		if not page_kwargs.get('task_id') or not self.controller.task_controller.current_task_id or \
+				page_kwargs.get('task_id') != self.controller.task_controller.current_task_id:
+			return False
+		return True
+
 	def show_error(self, message: str) -> None:
 		ui.label(f"error: {message}").style(f'color: {Colors.RED}')
 		ui.button('go to main menu', on_click=lambda: self.open_page('start'))

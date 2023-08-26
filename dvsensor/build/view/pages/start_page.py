@@ -35,4 +35,4 @@ def build(view, **kwargs) -> None:
 				ui.label('Help and Documentation').classes('text-xl font-mono')
 				ui.image("/assets/img-book01.png").classes('w-1/3 h-1/3 mt-6 self-center')
 
-		footer()
+	footer()

@@ -12,12 +12,6 @@ class Controller:
 		self.view = view
 		self.task_controller = TaskController(self)
 
-	def page_allowed(self, page_kwargs: dict) -> bool:
-		if not page_kwargs.get('task_id') or not self.task_controller.current_task_id or \
-				page_kwargs.get('task_id') != self.task_controller.current_task_id:
-			return False
-		return True
-
 	def handle_fasta_seq_input(self, user_input: str) -> None:
 		seq_record = utils.read_fasta_string(user_input)
 		self.model.load_sequence_record(seq_record)
