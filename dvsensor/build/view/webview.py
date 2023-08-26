@@ -9,7 +9,6 @@ from .pages.start_page import build as _build_start_page
 from .pages.input_page import build as _build_input_page
 from .pages.options_page import build as _build_options_page
 from .pages.results_page import build as _build_results_page
-from .pages.edit_page import build as _build_edit_page
 from .pages.docs_page import build as _build_docs_page
 from .pages.metainf_page import build as _build_metainf_page
 from .style import Colors
@@ -70,10 +69,5 @@ class WebView:
 			def build_results_page(**kwargs) -> None:
 				_build_results_page(self, **kwargs)
 			self.pages['results'] = build_results_page
-
-			@self.router.add('/edit')
-			def build_edit_page(**kwargs) -> None:
-				_build_edit_page(self, **kwargs)
-			self.pages['edit'] = build_edit_page
 
 			self.router.frame().classes('w-full')

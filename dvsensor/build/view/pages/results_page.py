@@ -47,6 +47,7 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
 	if (document.getElementById("sensor_window") == undefined) {{	
 		var div = document.createElement("div");
 		div.id = "sensor_window"
+		div.className = "non-ng"
 		
 		div.style = "background-color: rgba(239,68,68,.4)";
 		div.style.border = "medium solid #ef4444"
@@ -66,7 +67,6 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
 
 def build(view, **kwargs) -> None:
 	set_colors()
-	header()
 	if not view.controller.page_allowed(kwargs):
 		view.show_error('page not available')
 		return
@@ -203,4 +203,3 @@ def build(view, **kwargs) -> None:
 				.props('color=red-10').classes('self-center')
 
 	home_button(view)
-	footer()

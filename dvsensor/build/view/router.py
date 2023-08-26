@@ -36,7 +36,11 @@ class Router:
 
         async def build() -> None:
             with self.content:
+                # + added code to remove all non-nicegui content (e.g. the sensor window on the results page)
                 await ui.run_javascript(f'''
+                    var toRemove = document.getElementsByClassName("non-ng");
+                    console.log(toRemove);
+                    Array.from(toRemove).forEach((element, i) => element.parentNode.removeChild(element));
                     if (window.location.pathname !== "{path}") {{
                         history.pushState({{page: "{path}"}}, "", "{path}");
                     }}

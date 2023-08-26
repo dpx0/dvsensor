@@ -88,5 +88,3 @@ def build(view, **kwargs) -> None:
 
 	ui.separator().props('dark')
 
-	footer()
-
