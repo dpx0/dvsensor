@@ -78,6 +78,7 @@ def build(view, **kwargs) -> None:
 
 			ui.button('run analysis',
 					  on_click=lambda: view.controller.start_task({
+						  'type': 'single',
 						  'triplet_settings': {
 							  'CCA': cca_checkbox.value,
 							  'GCA': gca_checkbox.value,

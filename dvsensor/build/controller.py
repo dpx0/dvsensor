@@ -33,7 +33,6 @@ class Controller:
 
 		def __setattr__(self, key: str, value):
 			if hasattr(self, 'controller'):
-				print(f'setting {key}={value}')
 				setattr(self.controller.current_task.model, key, value)
 			else:
 				super().__setattr__(key, value)
