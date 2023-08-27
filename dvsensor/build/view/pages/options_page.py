@@ -9,7 +9,7 @@ def build(view, **kwargs) -> None:
 	if not view.page_allowed(kwargs):
 		view.show_error('page not available')
 		return
-	back_button('metainf', view, on_click=lambda: view.model.reload_sequence_record(),
+	back_button('metainf', view, on_click=lambda: view.controller.revert_model_changes(),
 				task_id=kwargs.get('task_id'))
 
 	triplet_default_settings = {'CCA': True, 'GCA': True, 'UCA': True,
@@ -77,7 +77,7 @@ def build(view, **kwargs) -> None:
 					# TODO: implement options for signal peptide prediction
 
 			ui.button('run analysis',
-					  on_click=lambda: view.controller.task_controller.init_analysis_task({
+					  on_click=lambda: view.controller.start_task({
 						  'triplet_settings': {
 							  'CCA': cca_checkbox.value,
 							  'GCA': gca_checkbox.value,

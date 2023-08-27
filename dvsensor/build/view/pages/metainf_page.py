@@ -22,20 +22,20 @@ def build(view, **kwargs) -> None:
 					ui.label('Name')\
 						.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 					name_input = ui.input().classes('text-center text-base font-mono font-semibold')
-					name_input.value = view.model.record_name
-					name_input.bind_value(view.model, 'record_name')
+					name_input.value = view.controller.query_model('record_name')
+					name_input.bind_value(view.controller.model_interface, 'record_name')
 
 					ui.label('ID')\
 						.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 					id_input = ui.input().classes('text-center text-base font-mono font-semibold')
-					id_input.value = view.model.record_id
-					id_input.bind_value(view.model, 'record_id')
+					id_input.value = view.controller.query_model('record_id')
+					id_input.bind_value(view.controller.model_interface, 'record_id')
 
 					ui.label('Description')\
 						.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 					description_input = ui.input().classes('text-center text-base font-mono font-semibold')
-					description_input.value = view.model.record_description
-					description_input.bind_value(view.model, 'record_description')
+					description_input.value = view.controller.query_model('record_description')
+					description_input.bind_value(view.controller.model_interface, 'record_description')
 
 				ui.button('ok',
 						  on_click=lambda: view.open_page('options', task_id=kwargs.get('task_id')))\

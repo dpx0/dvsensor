@@ -4,7 +4,7 @@ from ..style import Colors, set_colors
 
 
 def build(view, **kwargs) -> None:
-	view.controller.task_controller.clear_task()
+	view.controller.cancel_task()
 	set_colors()
 	header()
 

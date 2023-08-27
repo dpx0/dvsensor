@@ -16,8 +16,7 @@ from .style import Colors
 
 class WebView:
 
-	def __init__(self, model) -> None:
-		self.model = model
+	def __init__(self) -> None:
 		self.controller = None
 		self.router = Router()
 		self.pages = {}
@@ -31,8 +30,8 @@ class WebView:
 			self.show_error(f"page {page} does not exist")
 
 	def page_allowed(self, page_kwargs: dict) -> bool:
-		if not page_kwargs.get('task_id') or not self.controller.task_controller.current_task_id or \
-				page_kwargs.get('task_id') != self.controller.task_controller.current_task_id:
+		if not page_kwargs.get('task_id') or not self.controller.current_task or \
+				page_kwargs.get('task_id') != self.controller.current_task.id:
 			return False
 		return True
 

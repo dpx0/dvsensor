@@ -1,6 +1,5 @@
 import nicegui as ng
 from view import WebView
-from model.datahandler import RNADataHandler
 from controller import Controller
 import os
 
@@ -8,9 +7,8 @@ import os
 class App:
 
 	def __init__(self) -> None:
-		self.model = RNADataHandler()
-		self.view = WebView(self.model)
-		self.controller = Controller(self.model, self.view)
+		self.view = WebView()
+		self.controller = Controller(self.view)
 		self.view.controller = self.controller
 
 		self.root_path = os.path.abspath(os.path.dirname(__file__))
