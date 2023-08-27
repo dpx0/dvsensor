@@ -8,7 +8,6 @@ def add_rows(ui_connection, row_data: list[dict]) -> None:
 
 
 def update_progress(ui_connection, step: float) -> float:
-	print("update progress")
 	progress_bar = ui_connection.get_element('progress_bar')
 	progress_bar.value += step
 	ui_connection.get_element('progress_label').text = f'{progress_bar.value * 100.0: .0f} %'
@@ -50,23 +49,23 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
 	var ideog_len = ideog_right - ideog_left;
 	
 	if (document.getElementById("sensor_window") == undefined) {{	
-		var div = document.createElement("div");
-		div.id = "sensor_window"
-		div.className = "non-ng"
+		var sensorWindow = document.createElement("div");
+		sensorWindow.id = "sensor_window"
+		sensorWindow.className = "non-ng"
 		
-		div.style = "background-color: rgba(239,68,68,.4)";
-		div.style.border = "medium solid #ef4444"
-		div.style.position = "absolute";
-		div.style.top = ideog_top + 'px';
-		div.style.height = ideog_bottom - ideog_top + 'px';
+		sensorWindow.style = "background-color: rgba(239,68,68,.4)";
+		sensorWindow.style.border = "medium solid #ef4444"
+		sensorWindow.style.position = "absolute";
+		sensorWindow.style.top = ideog_top + 'px';
+		sensorWindow.style.height = ideog_bottom - ideog_top + 'px';
 		
-		document.body.appendChild(div);
+		document.body.appendChild(sensorWindow);
 	}} else {{
-		var div = document.getElementById("sensor_window");
+		var sensorWindow = document.getElementById("sensor_window");
 	}}
 	
-	div.style.left = ideog_left + (ideog_len * ({sensor_start / transcript_len})) + 'px';
-	div.style.width =  (ideog_len * ({(sensor_end - sensor_start) / transcript_len})) + 'px';
+	sensorWindow.style.left = ideog_left + (ideog_len * ({sensor_start / transcript_len})) + 'px';
+	sensorWindow.style.width =  (ideog_len * ({(sensor_end - sensor_start) / transcript_len})) + 'px';
 	''')
 
 
