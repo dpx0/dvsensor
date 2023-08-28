@@ -3,6 +3,7 @@ from tasks import TaskHandler
 from model.taskdata import SingleSeqAnalysisData
 from model.rnadata import RNAData
 import utils
+import asyncio
 
 
 class UIConnection:
@@ -56,10 +57,17 @@ class Controller:
 			return None
 		return attrgetter(item)(self.current_task.data)
 
-	async def query_model(self, item):
+	async def query_model_data(self, items: list | str):
 		if not self.current_task:
 			return None
-		return self.current_task.data.query(item)
+		if type(items) == str:
+			items = [items]
+
+		queries = [self.current_task.data.query(item) for item in items]
+		result = await asyncio.gather(*queries)
+		if len(result) == 1:
+			return result[0]
+		return result
 
 	def reload_model(self) -> None:
 		self.current_task.data.reload()

@@ -21,12 +21,6 @@ async def analyze_single_sequence(task_handler, task_options) -> None:
 	start_pos, stop_pos = transcript_regions['CDS']
 
 	found_triplets = find_triplets(sequence, include_triplets, include_regions, start_pos, stop_pos)
-	pprint(found_triplets)
-
-	# print(sequence[transcript_regions['5UTR'][0] : transcript_regions['5UTR'][1]])
-	# print(sequence[transcript_regions['CDS'][0]: transcript_regions['CDS'][1]])
-	# print(sequence[transcript_regions['3UTR'][0]: transcript_regions['3UTR'][1]])
-
 
 	# row_data = [
 	# 	{'position': '7127',

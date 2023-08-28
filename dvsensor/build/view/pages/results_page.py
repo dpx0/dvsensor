@@ -1,4 +1,4 @@
-from nicegui import ui, background_tasks
+from nicegui import ui
 from ..base_elements import header, footer, home_button
 from ..style import Colors, set_colors
 import asyncio
@@ -71,14 +71,29 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
 
 
 async def create_ideogramm(view, ui_connection):
-	# await ui_connection.initialized(['len_5UTR', 'len_CDS', 'len_3UTR'])
-	len_5UTR = 261
-	len_CDS = 3633
-	len_3UTR = 6011
+	# len_5UTR = 261
+	# len_CDS = 3633
+	# len_3UTR = 6011
 	# len_tot = len_5UTR + len_CDS + len_3UTR
-	# len_5UTR = view.controller.get_model_data('len_5UTR')
-	# len_CDS = view.controller.get_model_data('len_CDS')
-	# len_3UTR = view.controller.get_model_data('len_3UTR')
+
+	# results = await asyncio.gather(
+	# 	view.controller.query_model_data('len_5UTR'),
+	# 	view.controller.query_model_data('len_CDS'),
+	# 	view.controller.query_model_data('len_3UTR')
+	# )
+	# print(results)
+
+	# len_5UTR = await view.controller.query_model_data('len_5UTR')
+	# print("5UTR length: ", len_5UTR)
+	# len_CDS = await view.controller.query_model_data('len_CDS')
+	# print("CDS length: ", len_CDS)
+	# len_3UTR = await view.controller.query_model_data('len_3UTR')
+	# print("3UTR length: ", len_3UTR)
+	# len_tot = len_5UTR + len_CDS + len_3UTR
+
+	len_5UTR, len_CDS, len_3UTR = await view.controller.query_model_data([
+		'len_5UTR', 'len_CDS', 'len_3UTR'
+	])
 	len_tot = len_5UTR + len_CDS + len_3UTR
 
 	percent_5UTR = len_5UTR / len_tot * 100
@@ -207,6 +222,8 @@ async def build(view, **kwargs) -> None:
 				{'headerName': '%GC', 'field': 'percent_gc'},
 				{'headerName': 'In-frame stop codons', 'field': 'n_stop_codons'},
 				{'headerName': 'Off-targets', 'field': 'off_targets'},
+				{'headerName': 'Sensor (5->3)', 'field': 'sensor'},
+				{'headerName': 'Trigger (5->3)', 'field': 'trigger'}
 			],
 			'rowData': [],
 			'rowSelection': 'multiple',
