@@ -1,13 +1,14 @@
-from nicegui import ui
+from nicegui import ui, background_tasks
 from ..base_elements import header, footer, home_button
 from ..style import Colors, set_colors
+import asyncio
 
 
 def add_rows(ui_connection, row_data: list[dict]) -> None:
 	ui_connection.get_element('output_table').call_api_method('applyTransaction', {'add': row_data})
 
 
-def update_progress(ui_connection, step: float) -> float:
+def update_progress(ui_connection, step: float) -> None:
 	progress_bar = ui_connection.get_element('progress_bar')
 	progress_bar.value += step
 	ui_connection.get_element('progress_label').text = f'{progress_bar.value * 100.0: .0f} %'
@@ -24,7 +25,7 @@ def set_status_finished(ui_connection) -> None:
 def set_status_cancelled(ui_connection) -> None:
 	ui_connection.get_element('spinner').visible = False
 	ui_connection.get_element('cancel_button').visible = False
-	ui_connection.get_element('export_button').visible =  True
+	ui_connection.get_element('export_button').visible = True
 	ui_connection.get_element('status_text').text = 'Analysis cancelled'
 	ui_connection.get_element('status_text').style(replace=f'color: {Colors.RED}')
 
@@ -69,7 +70,56 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
 	''')
 
 
-def build(view, **kwargs) -> None:
+async def create_ideogramm(view, ui_connection):
+	# await ui_connection.initialized(['len_5UTR', 'len_CDS', 'len_3UTR'])
+	len_5UTR = 261
+	len_CDS = 3633
+	len_3UTR = 6011
+	# len_tot = len_5UTR + len_CDS + len_3UTR
+	# len_5UTR = view.controller.get_model_data('len_5UTR')
+	# len_CDS = view.controller.get_model_data('len_CDS')
+	# len_3UTR = view.controller.get_model_data('len_3UTR')
+	len_tot = len_5UTR + len_CDS + len_3UTR
+
+	percent_5UTR = len_5UTR / len_tot * 100
+	percent_CDS = len_CDS / len_tot * 100
+	percent_3UTR = 100.0 - (percent_5UTR + percent_CDS)
+
+	with ui.row().classes('w-full gap-0 pt-8'):
+		box_5UTR = ui.column().classes().style(f'width: {percent_5UTR}%')
+		ui_connection.add_ui_element('box_5UTR', box_5UTR)  # NEW!
+		with box_5UTR:
+			with ui.element('div').classes('w-full bg-stone-500'):
+				ui.label(f"""{"5'-UTR" if percent_5UTR >= 10 else '*'}""") \
+					.classes('text-center font-semibold')
+
+		box_CDS = ui.column().classes().style(f'width: {percent_CDS}%')
+		ui_connection.add_ui_element('box_5UTR', box_CDS)  # NEW!
+		with box_CDS:
+			with ui.element('div').classes('w-full bg-yellow-500'):
+				ui.label(f"{'CDS' if percent_CDS >= 10 else '*'}") \
+					.classes('text-center font-semibold')
+
+		box_3UTR = ui.column().classes().style(f'width: {percent_3UTR}%')
+		ui_connection.add_ui_element('box_5UTR', box_3UTR)  # NEW!
+		with box_3UTR:
+			with ui.element('div').classes('w-full bg-indigo-500'):
+				ui.label(f"""{"3'-UTR" if percent_3UTR >= 10 else '*'}""") \
+					.classes('text-center font-semibold')
+
+	with ui.row().classes('w-full justify-center gap-x-28'):
+		ui.label(f"5'-UTR: {len_5UTR} bp") \
+			.classes('text-center text-sm font-mono') \
+			.style(f'color: {Colors.FOREGROUND}')
+		ui.label(f"CDS: {len_CDS} bp") \
+			.classes('text-center text-sm font-mono') \
+			.style(f'color: {Colors.FOREGROUND}')
+		ui.label(f"3'-UTR: {len_3UTR} bp") \
+			.classes('text-center text-sm font-mono') \
+			.style(f'color: {Colors.FOREGROUND}')
+
+
+async def build(view, **kwargs) -> None:
 	set_colors()
 	header()
 	if not view.page_allowed(kwargs):
@@ -90,8 +140,8 @@ def build(view, **kwargs) -> None:
 			with ui.column().classes('grow'):
 
 				# ----- target name
-				ui.label(f'Target: {view.controller.query_model("record_name")}' +
-						 f'({view.controller.query_model("record_id")})')\
+				ui.label(f'Target: {view.controller.get_model_data("rna_data.record_name")}' +
+						 f'({view.controller.get_model_data("rna_data.record_id")})')\
 					.classes('text-center text-lg font-mono font-semibold')\
 					.style(f'color: {Colors.FOREGROUND}')
 
@@ -105,43 +155,11 @@ def build(view, **kwargs) -> None:
 				percent_3UTR = 100.0 - (percent_5UTR + percent_CDS)
 
 				# ----- target ideogram
-				with ui.row().classes('w-full gap-0 pt-8'):
-
-					box_5UTR = ui.column().classes().style(f'width: {percent_5UTR}%')
-					ui_connection.add_ui_element('box_5UTR', box_5UTR)  # NEW!
-					with box_5UTR:
-						with ui.element('div').classes('w-full bg-stone-500'):
-							ui.label(f"""{"5'-UTR" if percent_5UTR >= 10 else '*'}""")\
-								.classes('text-center font-semibold')
-
-					box_CDS = ui.column().classes().style(f'width: {percent_CDS}%')
-					ui_connection.add_ui_element('box_5UTR', box_CDS)  # NEW!
-					with box_CDS:
-						with ui.element('div').classes('w-full bg-yellow-500'):
-							ui.label(f"{'CDS' if percent_CDS >= 10 else '*'}")\
-								.classes('text-center font-semibold')
-
-					box_3UTR = ui.column().classes().style(f'width: {percent_3UTR}%')
-					ui_connection.add_ui_element('box_5UTR', box_3UTR)  # NEW!
-					with box_3UTR:
-						with ui.element('div').classes('w-full bg-indigo-500'):
-							ui.label(f"""{"3'-UTR" if percent_3UTR >= 10 else '*'}""")\
-								.classes('text-center font-semibold')
-
-				with ui.row().classes('w-full justify-center gap-x-28'):
-					ui.label(f"5'-UTR: {len_5UTR} bp")\
-						.classes('text-center text-sm font-mono') \
-						.style(f'color: {Colors.FOREGROUND}')
-					ui.label(f"CDS: {len_CDS} bp")\
-						.classes('text-center text-sm font-mono')\
-						.style(f'color: {Colors.FOREGROUND}')
-					ui.label(f"3'-UTR: {len_3UTR} bp")\
-						.classes('text-center text-sm font-mono')\
-						.style(f'color: {Colors.FOREGROUND}')
+				await create_ideogramm(view, ui_connection)
 
 			# ----- additional information
 			with ui.column().classes('1/4'):
-				ui.label(f'Total transcript length: {view.controller.query_model("sequence_length")} bp')\
+				ui.label(f'Total transcript length: {view.controller.get_model_data("rna_data.sequence_length")} bp')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
 				ui.label(f"Signal Peptide: ")\

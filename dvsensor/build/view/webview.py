@@ -71,8 +71,8 @@ class WebView:
 			self.pages['options'] = build_options_page
 
 			@self.router.add('/results')
-			def build_results_page(**kwargs) -> None:
-				_build_results_page(self, **kwargs)
+			async def build_results_page(**kwargs) -> None:
+				await _build_results_page(self, **kwargs)
 			self.pages['results'] = build_results_page
 
 			self.router.frame().classes('w-full')

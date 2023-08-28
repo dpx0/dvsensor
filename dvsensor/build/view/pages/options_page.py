@@ -9,7 +9,7 @@ def build(view, **kwargs) -> None:
 	if not view.page_allowed(kwargs):
 		view.show_error('page not available')
 		return
-	back_button('metainf', view, on_click=lambda: view.controller.revert_model_changes(),
+	back_button('metainf', view, on_click=view.controller.reload_model,
 				task_id=kwargs.get('task_id'))
 
 	triplet_default_settings = {'CCA': True, 'GCA': True, 'UCA': True,

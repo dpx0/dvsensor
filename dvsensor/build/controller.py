@@ -1,4 +1,6 @@
+from operator import attrgetter
 from tasks import TaskHandler
+from model.taskdata import SingleSeqAnalysisData
 from model.rnadata import RNAData
 import utils
 
@@ -26,36 +28,41 @@ class UIConnection:
 
 class Controller:
 
-	class ModelInterface:
-
-		def __init__(self, controller):
-			self.controller = controller
-
-		def __setattr__(self, key: str, value):
-			if hasattr(self, 'controller'):
-				setattr(self.controller.current_task.model, key, value)
-			else:
-				super().__setattr__(key, value)
-
 	def __init__(self, view) -> None:
 		self.view = view
 		self.current_task = None
-		self.model_interface = self.ModelInterface(self)
-
-	def query_model(self, query):
-		if self.current_task:
-			return getattr(self.current_task.model, query, None)
-		return None
 
 	def handle_fasta_seq_input(self, user_input: str) -> None:
 		seq_record = utils.read_fasta_string(user_input)
-		rna_data = RNAData(seq_record)
-		task = TaskHandler(self, rna_data)
+		task_data = SingleSeqAnalysisData(rna_data=RNAData(seq_record))
+		task = TaskHandler(self, task_data)
 		self.current_task = task
 		self.view.open_page('metainf', task_id=self.current_task.id)
 
-	def revert_model_changes(self) -> None:
-		self.current_task.reload_model()
+	def bind_model_data(self, ui_element, attr):
+		if not self.current_task:
+			return None
+		prefix = '.'.join(attr.split('.')[:-1])
+		attr = attr.split('.')[-1]
+		if prefix:
+			prefix_obj = attrgetter(prefix)(self.current_task.data)
+		else:
+			prefix_obj = self.current_task.data
+		print(prefix_obj, attr)
+		ui_element.bind_value(prefix_obj, attr)
+
+	def get_model_data(self, item):
+		if not self.current_task:
+			return None
+		return attrgetter(item)(self.current_task.data)
+
+	async def query_model(self, item):
+		if not self.current_task:
+			return None
+		return self.current_task.data.query(item)
+
+	def reload_model(self) -> None:
+		self.current_task.data.reload()
 
 	def start_task(self, options) -> None:
 		self.current_task.start(options)
