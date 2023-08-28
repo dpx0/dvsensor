@@ -70,70 +70,6 @@ async def update_ideogram_sensor_window(box_5UTR, box_3UTR, sensor_range: str,
 	''')
 
 
-async def create_ideogramm(view, ui_connection):
-	# len_5UTR = 261
-	# len_CDS = 3633
-	# len_3UTR = 6011
-	# len_tot = len_5UTR + len_CDS + len_3UTR
-
-	# results = await asyncio.gather(
-	# 	view.controller.query_model_data('len_5UTR'),
-	# 	view.controller.query_model_data('len_CDS'),
-	# 	view.controller.query_model_data('len_3UTR')
-	# )
-	# print(results)
-
-	# len_5UTR = await view.controller.query_model_data('len_5UTR')
-	# print("5UTR length: ", len_5UTR)
-	# len_CDS = await view.controller.query_model_data('len_CDS')
-	# print("CDS length: ", len_CDS)
-	# len_3UTR = await view.controller.query_model_data('len_3UTR')
-	# print("3UTR length: ", len_3UTR)
-	# len_tot = len_5UTR + len_CDS + len_3UTR
-
-	len_5UTR, len_CDS, len_3UTR = await view.controller.query_model_data([
-		'len_5UTR', 'len_CDS', 'len_3UTR'
-	])
-	len_tot = len_5UTR + len_CDS + len_3UTR
-
-	percent_5UTR = len_5UTR / len_tot * 100
-	percent_CDS = len_CDS / len_tot * 100
-	percent_3UTR = 100.0 - (percent_5UTR + percent_CDS)
-
-	with ui.row().classes('w-full gap-0 pt-8'):
-		box_5UTR = ui.column().classes().style(f'width: {percent_5UTR}%')
-		ui_connection.add_ui_element('box_5UTR', box_5UTR)  # NEW!
-		with box_5UTR:
-			with ui.element('div').classes('w-full bg-stone-500'):
-				ui.label(f"""{"5'-UTR" if percent_5UTR >= 10 else '*'}""") \
-					.classes('text-center font-semibold')
-
-		box_CDS = ui.column().classes().style(f'width: {percent_CDS}%')
-		ui_connection.add_ui_element('box_5UTR', box_CDS)  # NEW!
-		with box_CDS:
-			with ui.element('div').classes('w-full bg-yellow-500'):
-				ui.label(f"{'CDS' if percent_CDS >= 10 else '*'}") \
-					.classes('text-center font-semibold')
-
-		box_3UTR = ui.column().classes().style(f'width: {percent_3UTR}%')
-		ui_connection.add_ui_element('box_5UTR', box_3UTR)  # NEW!
-		with box_3UTR:
-			with ui.element('div').classes('w-full bg-indigo-500'):
-				ui.label(f"""{"3'-UTR" if percent_3UTR >= 10 else '*'}""") \
-					.classes('text-center font-semibold')
-
-	with ui.row().classes('w-full justify-center gap-x-28'):
-		ui.label(f"5'-UTR: {len_5UTR} bp") \
-			.classes('text-center text-sm font-mono') \
-			.style(f'color: {Colors.FOREGROUND}')
-		ui.label(f"CDS: {len_CDS} bp") \
-			.classes('text-center text-sm font-mono') \
-			.style(f'color: {Colors.FOREGROUND}')
-		ui.label(f"3'-UTR: {len_3UTR} bp") \
-			.classes('text-center text-sm font-mono') \
-			.style(f'color: {Colors.FOREGROUND}')
-
-
 async def build(view, **kwargs) -> None:
 	set_colors()
 	header()
@@ -160,21 +96,50 @@ async def build(view, **kwargs) -> None:
 					.classes('text-center text-lg font-mono font-semibold')\
 					.style(f'color: {Colors.FOREGROUND}')
 
-				len_5UTR = 261
-				len_CDS = 3633
-				len_3UTR = 6011
+				# ----- target ideogram
+				len_5UTR, len_CDS, len_3UTR = await view.controller.query_model_data([
+					'len_5UTR', 'len_CDS', 'len_3UTR'])
 				len_tot = len_5UTR + len_CDS + len_3UTR
-
 				percent_5UTR = len_5UTR / len_tot * 100
 				percent_CDS = len_CDS / len_tot * 100
 				percent_3UTR = 100.0 - (percent_5UTR + percent_CDS)
 
-				# ----- target ideogram
-				await create_ideogramm(view, ui_connection)
+				with ui.row().classes('w-full gap-0 pt-8'):
+					box_5UTR = ui.column().classes().style(f'width: {percent_5UTR}%')
+					ui_connection.add_ui_element('box_5UTR', box_5UTR)
+					with box_5UTR:
+						with ui.element('div').classes('w-full bg-stone-500'):
+							ui.label(f"""{"5'-UTR" if percent_5UTR >= 10 else '*'}""") \
+								.classes('text-center font-semibold')
+
+					box_CDS = ui.column().classes().style(f'width: {percent_CDS}%')
+					ui_connection.add_ui_element('box_5UTR', box_CDS)
+					with box_CDS:
+						with ui.element('div').classes('w-full bg-yellow-500'):
+							ui.label(f"{'CDS' if percent_CDS >= 10 else '*'}") \
+								.classes('text-center font-semibold')
+
+					box_3UTR = ui.column().classes().style(f'width: {percent_3UTR}%')
+					ui_connection.add_ui_element('box_5UTR', box_3UTR)
+					with box_3UTR:
+						with ui.element('div').classes('w-full bg-indigo-500'):
+							ui.label(f"""{"3'-UTR" if percent_3UTR >= 10 else '*'}""") \
+								.classes('text-center font-semibold')
+
+				with ui.row().classes('w-full justify-center gap-x-28'):
+					ui.label(f"5'-UTR: {len_5UTR} bp") \
+						.classes('text-center text-sm font-mono') \
+						.style(f'color: {Colors.FOREGROUND}')
+					ui.label(f"CDS: {len_CDS} bp") \
+						.classes('text-center text-sm font-mono') \
+						.style(f'color: {Colors.FOREGROUND}')
+					ui.label(f"3'-UTR: {len_3UTR} bp") \
+						.classes('text-center text-sm font-mono') \
+						.style(f'color: {Colors.FOREGROUND}')
 
 			# ----- additional information
 			with ui.column().classes('1/4'):
-				ui.label(f'Total transcript length: {view.controller.get_model_data("rna_data.sequence_length")} bp')\
+				ui.label(f'Total transcript length: {len_tot} bp')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
 				ui.label(f"Signal Peptide: ")\
@@ -183,9 +148,6 @@ async def build(view, **kwargs) -> None:
 				ui.label(f'Target sites analyzed: x / y')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
-				#ui.label(f"3'-UTR length: {view.model.sequence_length} bp")\
-					#.classes('text-center text-sm font-mono')\
-					#.style(f'color: {Colors.FOREGROUND}')
 
 			# ----- status + control elements
 			status_box = ui.column().classes('w-1/3 flex justify-between place-content-center')

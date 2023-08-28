@@ -49,7 +49,6 @@ class Controller:
 			prefix_obj = attrgetter(prefix)(self.current_task.data)
 		else:
 			prefix_obj = self.current_task.data
-		print(prefix_obj, attr)
 		ui_element.bind_value(prefix_obj, attr)
 
 	def get_model_data(self, item):
