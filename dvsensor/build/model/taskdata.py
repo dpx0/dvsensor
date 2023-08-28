@@ -21,9 +21,10 @@ class TaskData(ABC):
 @dataclass
 class SingleSeqAnalysisData(TaskData):
 	rna_data: RNAData
-	len_5UTR: Optional[int] = field(init=False)
-	len_CDS: Optional[int] = field(init=False)
-	len_3UTR: Optional[int] = field(init=False)
+	len_5UTR: int = field(init=False)
+	len_CDS: int = field(init=False)
+	len_3UTR: int = field(init=False)
+	num_triplets: int = field(init=False)
 	sensors: list = field(init=False, default_factory=list)
 	initialized: dict = field(init=False)
 

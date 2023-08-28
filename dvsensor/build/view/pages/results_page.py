@@ -1,7 +1,6 @@
 from nicegui import ui
 from ..base_elements import header, footer, home_button
 from ..style import Colors, set_colors
-import asyncio
 
 
 def add_rows(ui_connection, row_data: list[dict]) -> None:
@@ -97,8 +96,8 @@ async def build(view, **kwargs) -> None:
 					.style(f'color: {Colors.FOREGROUND}')
 
 				# ----- target ideogram
-				len_5UTR, len_CDS, len_3UTR = await view.controller.query_model_data([
-					'len_5UTR', 'len_CDS', 'len_3UTR'])
+				len_5UTR, len_CDS, len_3UTR, num_triplets = await view.controller.query_model_data([
+					'len_5UTR', 'len_CDS', 'len_3UTR', 'num_triplets'])
 				len_tot = len_5UTR + len_CDS + len_3UTR
 				percent_5UTR = len_5UTR / len_tot * 100
 				percent_CDS = len_CDS / len_tot * 100
@@ -145,7 +144,7 @@ async def build(view, **kwargs) -> None:
 				ui.label(f"Signal Peptide: ")\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
-				ui.label(f'Target sites analyzed: x / y')\
+				ui.label(f'Target triplets analyzed: 0 / {num_triplets}')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
 
