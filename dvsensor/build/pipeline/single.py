@@ -5,8 +5,8 @@ import time
 
 
 def heavy_computation():
-	time.sleep(3)
-	print("yield")
+	...
+	# time.sleep(1)
 
 
 def analyze_single_sequence(task_handler, task_options: dict) -> None:
@@ -28,9 +28,9 @@ def analyze_single_sequence(task_handler, task_options: dict) -> None:
 	found_triplets = find_triplets(sequence, include_triplets, include_regions, start_pos, stop_pos)
 	data.update('num_triplets', len(found_triplets))
 
+	ui_connection.page_render_complete.wait()
 	progress_step = 1.0 / len(found_triplets)
 	progress_bar = ui_connection.get_element('progress_bar')
-
 	while task_handler.thread:
 		if not found_triplets:
 			ui_connection.call('set_status_finished')
@@ -44,20 +44,21 @@ def analyze_single_sequence(task_handler, task_options: dict) -> None:
 			continue
 		sensor, trigger, edits = result
 		sensor_entry = {
-				'position': position,
-				'triplet': triplet,
-				'region': region,
-				'range': f'{position - 48}-{position + 48}',
-				'percent_gc': '?',
-				'n_edits': edits,
-				'off_targets': '-',
-				'sensor': sensor,
-				'trigger': trigger
+			'position': position + 1,  # nucleotide position counting from 1
+			'triplet': triplet,
+			'region': region,
+			'range': f'{(position + 1) - 48}-{(position + 1) + 50}',
+			'percent_gc': calc_gc_content(sensor),
+			'n_edits': edits,
+			'off_targets': '-',
+			'sensor': sensor,
+			'trigger': trigger
 		}
 		ui_connection.call('add_rows', row_data=[sensor_entry])
 		ui_connection.call('update_progress', step=progress_step)
 		if round(progress_bar.value * 100) >= 100:
 			progress_bar.value = 1.0
+	print("thread finished")
 
 
 def find_transcript_regions(sequence: str) -> dict[str, tuple[int, int]]:
@@ -141,3 +142,15 @@ def generate_sensor(sequence: str, triplet_position: int) -> Optional[tuple[str,
 	sensor = f'{left_part}UAG{right_part}'
 
 	return sensor, trigger_region, (left_edits + right_edits)
+
+
+def calc_gc_content(sequence: str) -> float:
+	sequence = list(sequence)
+	gc_content = (sequence.count('C') + sequence.count('G')) / len(sequence)
+	return round(gc_content * 100, 1)
+
+	# num_gc = 0
+	# for b in sequence:
+	# 	if b == 'C' or b == 'G':
+	# 		num_gc += 1
+	# return round((num_gc / len(sequence)) * 100, 1)

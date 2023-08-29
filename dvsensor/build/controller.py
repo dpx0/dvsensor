@@ -4,6 +4,7 @@ from model.taskdata import SingleSeqAnalysisData
 from model.rnadata import RNAData
 import utils
 import asyncio
+import threading
 
 
 class UIConnection:
@@ -11,7 +12,7 @@ class UIConnection:
 	def __init__(self) -> None:
 		self.functions = {}
 		self.ui_elements = {}
-		self.page_render_complete = asyncio.Event()
+		self.page_render_complete = threading.Event()
 
 	def add_ui_element(self, name, element) -> None:
 		self.ui_elements[name] = element

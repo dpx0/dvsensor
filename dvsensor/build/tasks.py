@@ -34,7 +34,6 @@ class TaskHandler:
 
 	async def _task(self, task_options) -> None:
 		await self.ui_connection_established.wait()
-		await self.ui_connection.page_render_complete.wait()
 
 		if task_options['type'] == 'single':
 			self.thread = asyncio.to_thread(analyze_single_sequence, self, task_options)
