@@ -42,7 +42,6 @@ class SingleSeqAnalysisData(TaskData):
 		setattr(self, key, value)
 
 	async def query(self, key):
-
 		if hasattr(self, key):
 			return getattr(self, key)
 		initialized = asyncio.Event()

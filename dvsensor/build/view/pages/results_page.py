@@ -181,7 +181,7 @@ async def build(view, **kwargs) -> None:
 				{'headerName': 'Region', 'field': 'region'},
 				{'headerName': 'Range', 'field': 'range'},
 				{'headerName': '%GC', 'field': 'percent_gc'},
-				{'headerName': 'In-frame stop codons', 'field': 'n_stop_codons'},
+				{'headerName': 'In-frame start/stop codons', 'field': 'n_edits'},
 				{'headerName': 'Off-targets', 'field': 'off_targets'},
 				{'headerName': 'Sensor (5->3)', 'field': 'sensor'},
 				{'headerName': 'Trigger (5->3)', 'field': 'trigger'}
@@ -211,3 +211,4 @@ async def build(view, **kwargs) -> None:
 
 	home_button(view)
 	footer()
+	ui_connection.page_render_complete.set()

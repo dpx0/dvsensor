@@ -1,9 +1,13 @@
-from functools import reduce
 from typing import Optional
-from operator import add
 from Bio.Seq import Seq
 import re
 import asyncio
+import time
+
+
+def heavy_computation():
+	time.sleep(3)
+	print("yield")
 
 
 async def analyze_single_sequence(task_handler, task_options: dict) -> None:
@@ -16,6 +20,7 @@ async def analyze_single_sequence(task_handler, task_options: dict) -> None:
 	data.update('len_5UTR', transcript_regions['5UTR'][1] - transcript_regions['5UTR'][0])
 	data.update('len_CDS', transcript_regions['CDS'][1] - transcript_regions['CDS'][0])
 	data.update('len_3UTR', transcript_regions['3UTR'][1] - transcript_regions['3UTR'][0])
+	print('DEBUG: data updated')
 
 	include_triplets = tuple(triplet for triplet in task_options['triplet_settings'].keys() if
 				task_options['triplet_settings'][triplet])
@@ -23,50 +28,52 @@ async def analyze_single_sequence(task_handler, task_options: dict) -> None:
 				task_options['regions_settings'][region])
 	start_pos, stop_pos = transcript_regions['CDS']
 	found_triplets = find_triplets(sequence, include_triplets, include_regions, start_pos, stop_pos)
-	data.update('num_triplets', reduce(add, map(len, found_triplets.values())))
+	data.update('num_triplets', len(found_triplets))
 
-	for region in found_triplets:
-		for triplet in found_triplets[region]:
-			result = generate_sensor(sequence, triplet[0])
-			if result:
-				sensor, trigger, edits = result
-				print(len(sensor), sensor[60:63], edits, sensor)
-			#await asyncio.sleep(0.5)
+	await ui_connection.page_render_complete.wait()
+	await asyncio.sleep(0.5)
 
+	def mainloop():
+		buffer = []
+		progress_step = 1.0 / len(found_triplets)
+		progress_bar = ui_connection.get_element('progress_bar')
 
-	# generate_sensor(triplet)
-	# row_data = [
-	# 	{'position': '7127',
-	# 	 'triplet': 'CCA',
-	# 	 'region': '3UTR',
-	# 	 'range': '7079-7178',
-	# 	 'percent_gc': '52,8%',
-	# 	 'n_stop_codons': '0',
-	# 	 'off_targets': '0'},
-	# 	{'position': '5788',
-	# 	 'triplet': 'CCA',
-	# 	 'region': '3UTR',
-	# 	 'range': '5740-5839',
-	# 	 'percent_gc': '51,2%',
-	# 	 'n_stop_codons': '0',
-	# 	 'off_targets': '0'},
-	# ]
-	#
-	# progress_step = 1.0 / len(row_data)
-	# progress_bar = ui_connection.get_element('progress_bar')
-	# while True:
-	# 	await asyncio.sleep(2)
-	# 	if not row_data:
-	# 		break
-	# 	ui_connection.call('add_rows', [row_data.pop()])
-	#
-	# 	ui_connection.call('update_progress', step=progress_step)
-	# 	print(progress_bar.value)
-	# 	if round(progress_bar.value * 100) >= 100:
-	# 		print("FINISHED")
-	# 		ui_connection.call('set_status_finished')
-	# 		task_handler.terminate()
-	# 		break
+		while True:
+			# await asyncio.sleep(0.1)
+			print(len(buffer))
+			if buffer:
+				ui_connection.call('add_rows', row_data=buffer)
+				ui_connection.call('update_progress', step=progress_step*len(buffer))
+				if round(progress_bar.value * 100) >= 100:
+					progress_bar.value = 1.0
+				buffer = []
+
+			if not found_triplets:
+				ui_connection.call('set_status_finished')
+				task_handler.terminate()
+				break
+
+			region, position, triplet = found_triplets.pop()
+			result = generate_sensor(sequence, position)
+			heavy_computation()
+			if not result:
+				continue
+			sensor, trigger, edits = result
+			sensor_entry = {
+					'position': position,
+					'triplet': triplet,
+					'region': region,
+					'range': f'{position - 48}-{position + 48}',
+					'percent_gc': '?',
+					'n_edits': edits,
+					'off_targets': '-',
+					'sensor': sensor,
+					'trigger': trigger
+			}
+			buffer.append(sensor_entry)
+
+	coro = asyncio.to_thread(mainloop)
+	await coro
 
 
 def find_transcript_regions(sequence: str) -> dict[str, tuple[int, int]]:
@@ -86,25 +93,23 @@ def find_transcript_regions(sequence: str) -> dict[str, tuple[int, int]]:
 
 
 def find_triplets(sequence: str, include_triplets: tuple, include_regions: tuple,
-				  start_pos: int, stop_pos: int) -> dict[str: list[tuple[int, str]]]:
+				  start_pos: int, stop_pos: int) -> list[tuple[str, int, str]]:
 
-	results = {region: [] for region in include_regions}
-
+	results = []
 	for triplet in include_triplets:
 		positions = [match.start() for match in re.finditer(triplet, sequence)]
 
 		for pos in positions:
 			if pos < start_pos:
 				if '5UTR' in include_regions:
-					results['5UTR'].append((pos, triplet))
+					results.append(('5UTR', pos, triplet))
 
 			elif pos > stop_pos:
 				if '3UTR' in include_regions:
-					results['3UTR'].append((pos, triplet))
+					results.append(('3UTR', pos, triplet))
 
 			elif 'CDS' in include_regions:
-				results['CDS'].append((pos, triplet))
-
+				results.append(('CDS', pos, triplet))
 	return results
 
 

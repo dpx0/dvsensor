@@ -10,16 +10,17 @@ class UIConnection:
 
 	def __init__(self) -> None:
 		self.functions = {}
-		self.ui_elemets = {}
+		self.ui_elements = {}
+		self.page_render_complete = asyncio.Event()
 
 	def add_ui_element(self, name, element) -> None:
-		self.ui_elemets[name] = element
+		self.ui_elements[name] = element
 
 	def add_function(self, name, function) -> None:
 		self.functions[name] = function
 
 	def get_element(self, ui_element_name):
-		return self.ui_elemets.get(ui_element_name)
+		return self.ui_elements.get(ui_element_name, None)
 
 	def call(self, function_name, *args, **kwargs) -> None:
 		function = self.functions.get(function_name)
