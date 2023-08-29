@@ -1,7 +1,6 @@
 from typing import Optional
 from Bio.Seq import Seq
 import re
-import asyncio
 import time
 
 
@@ -10,7 +9,7 @@ def heavy_computation():
 	print("yield")
 
 
-async def analyze_single_sequence(task_handler, task_options: dict) -> None:
+def analyze_single_sequence(task_handler, task_options: dict) -> None:
 
 	ui_connection = task_handler.ui_connection
 	data = task_handler.data
@@ -20,7 +19,6 @@ async def analyze_single_sequence(task_handler, task_options: dict) -> None:
 	data.update('len_5UTR', transcript_regions['5UTR'][1] - transcript_regions['5UTR'][0])
 	data.update('len_CDS', transcript_regions['CDS'][1] - transcript_regions['CDS'][0])
 	data.update('len_3UTR', transcript_regions['3UTR'][1] - transcript_regions['3UTR'][0])
-	print('DEBUG: data updated')
 
 	include_triplets = tuple(triplet for triplet in task_options['triplet_settings'].keys() if
 				task_options['triplet_settings'][triplet])
@@ -30,50 +28,36 @@ async def analyze_single_sequence(task_handler, task_options: dict) -> None:
 	found_triplets = find_triplets(sequence, include_triplets, include_regions, start_pos, stop_pos)
 	data.update('num_triplets', len(found_triplets))
 
-	await ui_connection.page_render_complete.wait()
-	await asyncio.sleep(0.5)
+	progress_step = 1.0 / len(found_triplets)
+	progress_bar = ui_connection.get_element('progress_bar')
 
-	def mainloop():
-		buffer = []
-		progress_step = 1.0 / len(found_triplets)
-		progress_bar = ui_connection.get_element('progress_bar')
+	while task_handler.thread:
+		if not found_triplets:
+			ui_connection.call('set_status_finished')
+			task_handler.terminate()
+			break
 
-		while True:
-			# await asyncio.sleep(0.1)
-			print(len(buffer))
-			if buffer:
-				ui_connection.call('add_rows', row_data=buffer)
-				ui_connection.call('update_progress', step=progress_step*len(buffer))
-				if round(progress_bar.value * 100) >= 100:
-					progress_bar.value = 1.0
-				buffer = []
-
-			if not found_triplets:
-				ui_connection.call('set_status_finished')
-				task_handler.terminate()
-				break
-
-			region, position, triplet = found_triplets.pop()
-			result = generate_sensor(sequence, position)
-			heavy_computation()
-			if not result:
-				continue
-			sensor, trigger, edits = result
-			sensor_entry = {
-					'position': position,
-					'triplet': triplet,
-					'region': region,
-					'range': f'{position - 48}-{position + 48}',
-					'percent_gc': '?',
-					'n_edits': edits,
-					'off_targets': '-',
-					'sensor': sensor,
-					'trigger': trigger
-			}
-			buffer.append(sensor_entry)
-
-	coro = asyncio.to_thread(mainloop)
-	await coro
+		region, position, triplet = found_triplets.pop()
+		result = generate_sensor(sequence, position)
+		heavy_computation()  # <---------------------- dummy function
+		if not result:
+			continue
+		sensor, trigger, edits = result
+		sensor_entry = {
+				'position': position,
+				'triplet': triplet,
+				'region': region,
+				'range': f'{position - 48}-{position + 48}',
+				'percent_gc': '?',
+				'n_edits': edits,
+				'off_targets': '-',
+				'sensor': sensor,
+				'trigger': trigger
+		}
+		ui_connection.call('add_rows', row_data=[sensor_entry])
+		ui_connection.call('update_progress', step=progress_step)
+		if round(progress_bar.value * 100) >= 100:
+			progress_bar.value = 1.0
 
 
 def find_transcript_regions(sequence: str) -> dict[str, tuple[int, int]]:

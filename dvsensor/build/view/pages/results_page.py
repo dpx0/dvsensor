@@ -96,8 +96,9 @@ async def build(view, **kwargs) -> None:
 					.style(f'color: {Colors.FOREGROUND}')
 
 				# ----- target ideogram
-				len_5UTR, len_CDS, len_3UTR, num_triplets = await view.controller.query_model_data([
-					'len_5UTR', 'len_CDS', 'len_3UTR', 'num_triplets'])
+				len_5UTR, len_CDS, len_3UTR, num_triplets = 1000, 1000, 1000, 500
+				#len_5UTR, len_CDS, len_3UTR, num_triplets = await view.controller.query_model_data([
+				#	'len_5UTR', 'len_CDS', 'len_3UTR', 'num_triplets'])
 				len_tot = len_5UTR + len_CDS + len_3UTR
 				percent_5UTR = len_5UTR / len_tot * 100
 				percent_CDS = len_CDS / len_tot * 100
