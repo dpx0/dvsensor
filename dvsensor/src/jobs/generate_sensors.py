@@ -53,10 +53,11 @@ def generate_sensors_job(job_data: dict[str, Any],
 
 	# TODO: supply these keys in blast_options
 	# ----------------------------------------
-	blast_options['db_name'] = 'refseq_select_rna'
-	blast_options['db_path'] = './test/blastdb'
-	blast_options['taxids'] = '9606'
-	blast_options['blast_variant'] = 'blastn'
+	if blast_options:
+		blast_options['db_name'] = 'refseq_select_rna'
+		blast_options['db_path'] = './test/blastdb'
+		blast_options['taxids'] = '9606'
+		blast_options['blast_variant'] = 'blastn'
 	# ----------------------------------------
 
 	try:

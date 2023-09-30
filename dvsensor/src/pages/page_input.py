@@ -95,3 +95,4 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 				ui.button('continue',
 						  on_click=lambda: process_sequence_input(sequence_input.value, controller))\
 					.classes('w-2/3 self-center h-10 font-mono')
+	ui.query('textarea').style('resize: none').classes('h-24')
