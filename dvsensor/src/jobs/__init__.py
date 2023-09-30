@@ -1,0 +1,1 @@
+from .generate_sensors import generate_sensors_job

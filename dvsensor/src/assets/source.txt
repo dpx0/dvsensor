@@ -1,0 +1,9 @@
+img-book01.png  :  https://www.flaticon.com/free-icon/book_864685
+img-book02.png  :  https://www.flaticon.com/free-icon/open-book_171322
+img-rna01       :  https://www.flaticon.com/free-icon/rna_3352602
+img-dna.png     :  https://www.flaticon.com/free-icon/dna_620401
+img-clipboard   :  https://www.flaticon.com/free-icon/paste_2782958
+img-file        :  https://www.flaticon.com/free-icon/document_2258853
+img-home        :  https://www.flaticon.com/free-icon/home_263115
+img-back01      :  https://www.flaticon.com/free-icon/arrow_507257
+img-home        :  https://www.flaticon.com/free-icon/home_263115
