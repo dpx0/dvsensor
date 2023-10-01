@@ -1,5 +1,5 @@
-import os
-import glob
+import logging
+from pathlib import Path
 from nicegui import ui
 from functools import lru_cache
 from typing import Any
@@ -12,15 +12,11 @@ def add_rows(grid, row_data: list[dict]) -> None:
 	grid.call_api_method('applyTransaction', {'add': row_data})
 
 
-def style_toc(table_of_contents) -> None:
-	pass  # TODO: implement
-
-
-def fill_toc(table_of_contents, docs: dict[dict]) -> None:
+def fill_toc(table_of_contents, docs: dict[int, dict]) -> None:
 	add_rows(table_of_contents, [entry for entry in docs.values()])
 
 
-def open_doc_entry(index: int, docs: dict[dict], text_area) -> None:
+def open_doc_entry(index: int, docs: dict[int, dict], text_area) -> None:
 	text_area.clear()
 	with text_area:
 		if index in docs.keys():
@@ -28,16 +24,14 @@ def open_doc_entry(index: int, docs: dict[dict], text_area) -> None:
 
 
 @lru_cache()
-def read_docfiles() -> dict[dict]:
-	path = os.path.abspath(os.path.dirname(__file__))+'/docs/'
-	# TODO: refactor (Pathlib)
-	docfiles = glob.glob(path + '/*.html')
+def read_docfiles() -> dict[int, dict]:
+	docfiles = (Path(__file__).parent / 'docs').glob('*.html')
 	docs = {}
 
 	for file in docfiles:
-		index = ''
-		title = ''
-		content = []
+		index: int | None = None
+		title: str = ''
+		content: list[str] = []
 
 		with open(file) as f:
 			while True:
@@ -61,7 +55,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 	try:
 		docs = read_docfiles()
 	except (OSError, PermissionError, IndexError, ValueError) as e:
-		print(e)
+		logging.error(f'could not read docfiles: {e}')
 		show_error_page('could not read docfiles', controller)
 		return
 
@@ -83,7 +77,6 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 				lambda event: open_doc_entry(event.args['data']['index'], docs, text_area)
 				if event.args['selected'] else None)
 
-		style_toc(table_of_contents)
 		fill_toc(table_of_contents, docs)
 
 		# ----- text area

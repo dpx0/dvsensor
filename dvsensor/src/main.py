@@ -1,8 +1,8 @@
-import os
 import sys
 import logging
 import importlib
 import nicegui as ng
+from pathlib import Path
 from router import PageRouter
 from signals import SignalHandler
 from controller import AppController
@@ -21,8 +21,7 @@ def import_page_builder(module_name: str) -> PageBuilderFn:
 class Application:
 
 	def __init__(self) -> None:
-		self_path = os.path.abspath(os.path.dirname(__file__))
-		ng.app.add_static_files('/assets', self_path + '/assets')
+		ng.app.add_static_files('/assets', (Path(__file__).parent / 'assets'))
 		ng.app.on_exception(self.on_exception)
 
 		page_builders = {

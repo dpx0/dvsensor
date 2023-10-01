@@ -40,7 +40,7 @@ def set_status_cancelled(spinner: ui.spinner, cancel_button: ui.button,
 
 def show_confirm_cancel_job_dialog(controller: Controller, spinner: ui.spinner, cancel_button: ui.button,
 								   export_button: ui.button, status_label: ui.label) -> None:
-	buttons = show_dialog_box(['Are you sure you want to', 'cancel the analysis?'],
+	buttons = show_dialog_box('Are you sure you want to cancel the analysis?',
 							  ['yes', 'no'])
 	buttons['yes'].on('click', lambda: cancel_job(controller, spinner, cancel_button,
 												  export_button, status_label))
@@ -57,9 +57,10 @@ def show_confirm_home_dialog(controller: Controller, spinner: ui.spinner, cancel
 	if not controller.is_job_running():
 		controller.open_page('/')
 	else:
-		buttons = show_dialog_box(['Are you sure you want to', 'leave the page?',
-								   'This will cancel the', 'running analysis.'],
-								  ['yes', 'no'])
+		buttons = show_dialog_box((
+			'Are you sure you want to leave the page? '
+			'This will cancel the running analysis.')
+			, ['yes', 'no'])
 		buttons['yes'].on('click', lambda: (cancel_job(controller, spinner, cancel_button,
 													  export_button, status_label),
 										   controller.open_page('/')))
