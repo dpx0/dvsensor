@@ -106,17 +106,17 @@ def insert_hairpins(sequence: str, ntleft: int) -> str:
 def blast_analysis(query_sequence: str,
 				   query_accession: str,
 				   only_overlapping: bool,
-				   blast_variant: str,
+				   blast_binary: str,
 				   db_name: str,
 				   word_size: str,
 				   evalue: str,
 				   taxids: str,
 				   perc_identity: str,
 				   qcov_hsp_perc: str,
-				   db_path: str) -> list[BlastHit]:
+				   db_path: str) -> list[BlastHit] | None:
+
 	query_accession = query_accession.split('.')[0]
-	blastcmd = ["blastn",
-				"-task", blast_variant,
+	blastcmd = [blast_binary, "-task", "blastn",
 				"-db", db_name,
 				"-word_size", word_size,
 				"-evalue", evalue,
@@ -128,14 +128,27 @@ def blast_analysis(query_sequence: str,
 	if qcov_hsp_perc:
 		blastcmd.extend(["-qcov_hsp_perc", qcov_hsp_perc])
 
-	blast_result = subprocess.run(blastcmd, input=query_sequence,
-								  capture_output=True, text=True,
-								  env={'BLASTDB': db_path})
+	try:
+		blast_result = subprocess.run(blastcmd, input=query_sequence, check=True,
+									  capture_output=True, text=True,
+									  env={'BLASTDB': db_path,
+										   'BLAST_USAGE_REPORT': 'false',
+										   'NCBI_DONT_USE_LOCAL_CONFIG': 'true'})
+	except subprocess.CalledProcessError:
+		logging.error('blastn returned non-zero exit status')
+		return None
+	except FileNotFoundError:
+		logging.error('blastn executable not found')
+		return None
+	except OSError as e:
+		logging.error(f'blastn call failed: {e}')
+		return None
+
 	try:
 		blast_record = Bio.Blast.NCBIXML.read(io.StringIO(blast_result.stdout))
 	except ValueError:
 		logging.warning("empty blast record")
-		return []
+		return None
 
 	blast_hits = []
 	query_len = len(query_sequence)

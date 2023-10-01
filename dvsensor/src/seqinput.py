@@ -7,7 +7,7 @@ def extract_sequence_data(sequence_record: SeqRecord) -> dict[str, str]:
 	return {
 		'sequence': str(sequence_record.seq.transcribe()),  # transcribe sequence (DNA or RNA) to RNA
 		'name': sequence_record.name,
-		'id': sequence_record.id
+		'accession': sequence_record.id
 	}
 
 
@@ -23,4 +23,3 @@ def read_sequence(sequence: str) -> dict[str, str]:
 			pass  # reading sequence as single-entry FASTA failed, try GenBank format
 
 	raise ValueError  # sequence is neither a (single-entry) FASTA nor GenBank record
-

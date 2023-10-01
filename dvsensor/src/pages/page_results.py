@@ -133,7 +133,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 
 				# ----- target name
 				ui.label(f'Target: {data["sequence_data"]["name"]}' +
-						 f'({data["sequence_data"]["id"]})')\
+						 f'({data["sequence_data"]["accession"]})')\
 					.classes('text-center text-lg font-mono font-semibold')\
 					.style(f'color: {Colors.FOREGROUND}')
 

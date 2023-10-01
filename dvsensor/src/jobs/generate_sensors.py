@@ -17,7 +17,7 @@ def generate_sensors_job(job_data: dict[str, Any],
 						 signals_handler: SignalHandler) -> None:
 	try:
 		sequence: str = job_data['sequence_data']['sequence']
-		sequence_id: str = job_data['sequence_data']['id']
+		sequence_accession: str = job_data['sequence_data']['accession']
 		target_triplets: tuple[str] = job_data['options']['triplets']
 		target_regions: tuple[str] = job_data['options']['regions']
 		blast_options: dict | None = job_data['options']['blast']
@@ -54,16 +54,13 @@ def generate_sensors_job(job_data: dict[str, Any],
 	# TODO: supply these keys in blast_options
 	# ----------------------------------------
 	if blast_options:
-		blast_options['db_name'] = 'refseq_select_rna'
-		blast_options['db_path'] = './test/blastdb'
 		blast_options['taxids'] = '9606'
-		blast_options['blast_variant'] = 'blastn'
 	# ----------------------------------------
 
 	try:
 		if mainloop(stop_event=stop_event,
 					sequence=sequence,
-					sequence_id=sequence_id,
+					sequence_accession=sequence_accession,
 					triplets=triplets,
 					blast_options=blast_options,
 					add_rows=ui_functions['add_rows'],
@@ -76,7 +73,7 @@ def generate_sensors_job(job_data: dict[str, Any],
 		logging.error(f'Job Runtime Error: {e.message}')
 
 
-def mainloop(stop_event: threading.Event, sequence: str, sequence_id: str, triplets: list[pl.Triplet],
+def mainloop(stop_event: threading.Event, sequence: str, sequence_accession: str, triplets: list[pl.Triplet],
 			 blast_options: dict | None, add_rows: Callable, update_progress: Callable) -> bool:
 
 	if not triplets:
@@ -95,12 +92,16 @@ def mainloop(stop_event: threading.Event, sequence: str, sequence_id: str, tripl
 			continue  # sensors with only partial lengths (<123 bp total) are dismissed
 
 		if blast_options:
-			blast_results: list[pl.BlastHit] = pl.blast_analysis(query_sequence=sensor_data.trigger_seq,
-																 query_accession=sequence_id,
-																 **blast_options)
-			potential_off_targets = ";".join([
-				f'{hit.accession}(E:{hit.expect};Score:{hit.score};Cov:{hit.q_coverage * 100:.0f}%)'
-				for hit in blast_results])
+			blast_results: list[pl.BlastHit] | None = pl.blast_analysis(query_sequence=sensor_data.trigger_seq,
+																 		query_accession=sequence_accession,
+																 		**blast_options)
+			if blast_results is None:
+				# something went wrong at calling blastn
+				potential_off_targets: str = 'N.A.'
+			else:
+				potential_off_targets = ";".join([
+					f'{hit.accession}(E:{hit.expect};Score:{hit.score};Cov:{hit.q_coverage * 100:.0f}%)'
+					for hit in blast_results])
 
 		sensor_entry = {
 			'position': triplet.pos + 1,  # first nucleotide position of triplet in transcript, counting from 1

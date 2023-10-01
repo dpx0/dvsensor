@@ -12,31 +12,29 @@ MAX_INPUT_LEN: int = 300_000  # 300 kb (for comparison, the human titin TTN-018 
 
 
 def show_file_size_error() -> None:
-	show_dialog_box([
-		'This file is too large',
+	show_dialog_box((
+		'This file is too large. '
 		f'Maximum file size: {int(MAX_INPUT_LEN / 1000)} KB'
-	])
+	))
 
 
 def show_file_decode_error() -> None:
-	show_dialog_box([
-		'This file could not be read',
-		'Please upload a file in FASTA or Genbank format'
-	])
+	show_dialog_box((
+		'This file could not be read. '
+		'Please upload a file in FASTA or Genbank format.'
+	))
 
 
 def show_invalid_format_error() -> None:
-	show_dialog_box([
-		'This is not a single-record', 'FASTA/GenBank sequence',
-		'Please upload a file in FASTA/Genbank format or',
-		'manually enter a sequence'
-	])
+	show_dialog_box((
+		'This is not a single-record FASTA/GenBank sequence. '
+		'Please upload a file in FASTA/Genbank format or '
+		'manually enter a sequence.'
+	))
 
 
 def show_empty_sequence_error() -> None:
-	show_dialog_box([
-		'This sequence record is empty'
-	])
+	show_dialog_box('This sequence record is empty.')
 
 
 def process_file_upload(upload: UploadEventArguments, controller: Controller) -> None:

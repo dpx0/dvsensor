@@ -50,6 +50,18 @@ class Controller(Protocol):
 	def is_job_running(self) -> bool:
 		...
 
+	@staticmethod
+	def detect_blastn_installation() -> str | None:
+		...
+
+	@staticmethod
+	def detect_blastdbcheck_installation() -> str | None:
+		...
+
+	@staticmethod
+	def check_blast_db(blastdbcheck_binary: str, db_path: str, db_name: str) -> bool:
+		...
+
 
 PageBuilderFn = Callable[[Controller, str, dict[str, Any]], None]
 JobFn = Callable[[dict[str, Any], threading.Event, SignalHandler], None]

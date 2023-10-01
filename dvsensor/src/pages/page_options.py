@@ -1,7 +1,11 @@
+import os
+import logging
+from pathlib import Path
 from nicegui import ui
 from typing import Any, Callable
 from interface import Controller
 from jobs import generate_sensors_job
+from .style import Colors
 from .pagebuilder import page_builder
 from .ui_elements import back_button, show_page_not_available, show_dialog_box
 
@@ -11,6 +15,8 @@ TRIPLET_DEFAULTS = {'CCA': True, 'GCA': True, 'UCA': True,
 REGIONS_DEFAULTS = {'5UTR': False, 'CDS': False, '3UTR': True}
 BLAST_DEFAULTS = {
 	'use_blast': True,
+	'db_path': str(Path.home() / 'blastdb'),
+	'db_name': 'refseq_select_rna',
 	'only_overlapping': False,
 	'e_value': '0.05',
 	'word_size': '7',
@@ -19,16 +25,45 @@ BLAST_DEFAULTS = {
 }
 
 
+# TODO: rename to 'validate...' etc etc or something
 def on_run_analysis(controller: Controller, sequence_data: dict[str, str],
 					options: dict[str, dict[str, str]]) -> None:
 	# TODO: rename 'options' to something more meaningfull
 	job_options = compile_job_options(options)
 	job_data = {'sequence_data': sequence_data,
 				'options': job_options}
-	if validate_job_options(job_options):
+
+	if not validate_job_options(job_options):
+		return
+
+	if not job_options['blast']['use_blast']:
 		controller.start_job(source='/options',
 							 job_fn=generate_sensors_job,
 							 job_data=job_data)
+		return
+
+	blast_db_path = job_options['blast']['db_path']
+	blast_db_name = job_options['blast']['db_name']
+	blastdbcheck_binary = controller.detect_blastdbcheck_installation()
+
+	if not blastdbcheck_binary:
+		logging.warning('blastdbcheck executable not found')
+		show_dialog_box(f'could not validate blast database: blastdbcheck missing')
+		return
+
+	if not os.path.exists(blast_db_path) or not os.path.isdir(blast_db_path):
+		show_dialog_box(f'directory {blast_db_path} not found')
+		return
+
+	if not controller.check_blast_db(blastdbcheck_binary=blastdbcheck_binary,
+									 db_path=blast_db_path,
+									 db_name=blast_db_name):
+		show_dialog_box(f"invalid blast database '{blast_db_name}'")
+		return
+
+	controller.start_job(source='/options',
+						 job_fn=generate_sensors_job,
+						 job_data=job_data)
 
 
 def compile_job_options(options: dict[str, dict[str, str]]) -> dict:
@@ -71,7 +106,7 @@ def validate_job_options(job_options: dict) -> bool:
 		except ValueError:
 			success = False
 		if not success:
-			show_dialog_box([err_msg])
+			show_dialog_box(err_msg)
 			return False
 	return True
 
@@ -88,6 +123,12 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 	options = {'triplets': {},
 			   'regions': {},
 			   'blast': {}}
+
+	blast_binary = controller.detect_blastn_installation()
+	if not blast_binary:
+		options['blast']['use_blast'] = False
+	else:
+		options['blast']['blast_binary'] = blast_binary
 
 	with ui.row().classes('w-full justify-center'):
 		with ui.card().classes('no-shadow border-[1px] rounded-xl p-8 w-5/6 h-auto w-full'):
@@ -109,7 +150,8 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 						checkbox.value = REGIONS_DEFAULTS[region]
 						checkbox.bind_value(options['regions'], region)
 
-				with ui.column().classes('place-content-center'):
+				blast_options_column = ui.column()
+				with blast_options_column.classes('place-content-center'):
 					ui.label('BLAST').classes('text-center text-lg font-mono font-semibold')
 
 					use_blast = ui.checkbox('run blast').classes('text-base font-mono')
@@ -149,6 +191,26 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 												placeholder=BLAST_DEFAULTS['qcov_hsp_perc'])\
 							.classes('text-center text-base font-mono font-semibold')
 						qcov_hsp_perc_input.bind_value(options['blast'], 'qcov_hsp_perc')
+
+						ui.label('Path to BLAST database directory') \
+							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
+						db_path_input = ui.input(value=BLAST_DEFAULTS['db_path'])\
+							.classes('text-center text-base font-mono font-semibold')
+						db_path_input.bind_value(options['blast'], 'db_path')
+
+						ui.label('BLAST database name') \
+							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
+						db_name_input = ui.input(value=BLAST_DEFAULTS['db_name'])\
+							.classes('text-center text-base font-mono font-semibold')
+						db_name_input.bind_value(options['blast'], 'db_name')
+
+			if not blast_binary:
+				blast_options_column.clear()
+				with blast_options_column:
+					ui.label('BLAST').classes('text-center text-lg font-mono font-semibold')
+					ui.label('no blast installation detected') \
+						.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')\
+						.style(f'color: {Colors.RED}')
 
 			ui.button('run analysis',
 					  on_click=lambda: on_run_analysis(controller, data['sequence_data'], options))\

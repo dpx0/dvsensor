@@ -1,7 +1,9 @@
 import asyncio
 import logging
+import shutil
 import nicegui as ng
 import threading
+import subprocess
 from typing import Any, Awaitable
 from interface import PageRouter, SignalHandler, JobFn
 
@@ -61,3 +63,30 @@ class AppController:
 	def is_job_running(self) -> bool:
 		return bool(self._job_thread or (self._stop_job_thread_event and
 										 not self._stop_job_thread_event.is_set()))
+
+	@staticmethod
+	def detect_blastn_installation() -> str | None:
+		return shutil.which('blastn')
+
+	@staticmethod
+	def detect_blastdbcheck_installation() -> str | None:
+		return shutil.which('blastdbcheck')
+
+	@staticmethod
+	def check_blast_db(blastdbcheck_binary: str, db_path: str, db_name: str) -> bool:
+		logging.debug(f'running blastdbcheck -db {db_name} in {db_path}')
+		try:
+			out = subprocess.run([blastdbcheck_binary, '-db', db_name], cwd=db_path,
+								 text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+		except FileNotFoundError:
+			logging.error('blastdbcheck executable not found')
+			return False
+		except OSError as e:
+			logging.error(f'blastdbcheck call failed: {e}')
+			return False
+		logging.debug(out.stdout)
+		if not out.returncode == 0:
+			logging.warning(f'blast database check failed')
+			return False
+		return True
+

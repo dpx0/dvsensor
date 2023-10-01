@@ -27,11 +27,11 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 					name_input.value = data['sequence_data'].get('name', '')
 					name_input.bind_value(data['sequence_data'], 'name')
 
-					ui.label('ID')\
+					ui.label('Accession Number')\
 						.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
-					id_input = ui.input().classes('text-center text-base font-mono font-semibold')
-					id_input.value = data['sequence_data'].get('id', '')
-					id_input.bind_value(data['sequence_data'], 'id')
+					accession_input = ui.input().classes('text-center text-base font-mono font-semibold')
+					accession_input.value = data['sequence_data'].get('accession', '')
+					accession_input.bind_value(data['sequence_data'], 'accession')
 
 				ui.button('ok',
 						  on_click=lambda: controller.open_page(
