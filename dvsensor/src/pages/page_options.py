@@ -27,11 +27,8 @@ BLAST_DEFAULTS = {
 }
 
 
-# TODO: rename to 'validate...' etc etc or something
 def on_run_analysis(controller: Controller, sequence_data: dict[str, str],
-					options: dict[str, dict[str, str]]) -> None:
-	# TODO: rename 'options' to something more meaningfull
-	job_options = compile_job_options(options)
+					job_options: dict[str, dict[str, str]]) -> None:
 	job_data = {'sequence_data': sequence_data,
 				'options': job_options}
 
@@ -68,21 +65,11 @@ def on_run_analysis(controller: Controller, sequence_data: dict[str, str],
 						 job_data=job_data)
 
 
-def compile_job_options(options: dict[str, dict[str, str]]) -> dict:
-	# TODO: rename 'options' to something more meaningfull
-	job_options = {
-		'triplets': tuple(triplet for triplet, checked in options['triplets'].items() if checked),
-		'regions': tuple(region for region, checked in options['regions'].items() if checked),
-		'blast': options['blast']
-	}
-	return job_options
-
-
 def validate_job_options(job_options: dict) -> bool:
 	options_to_validate: list[tuple[str, Callable, str]] = [
-		(job_options['triplets'], any,
+		(job_options['triplets'].values(), any,
 		 'at least one triplet required'),
-		(job_options['regions'], any,
+		(job_options['regions'].values(), any,
 		 'at least one region required')
 	]
 
@@ -118,19 +105,16 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 	if not data.get('sequence_data'):
 		show_page_not_available(controller)
 		return
-
 	back_button(controller, route='/metainf', source='/options', data=data)
 
-	# TODO: rename 'options' to something more meaningfull
-	options = {'triplets': {},
-			   'regions': {},
-			   'blast': {}}
-
+	job_options = {'triplets': {},
+				   'regions': {},
+				   'blast': {}}
 	blast_binary = controller.detect_blastn_installation()
 	if not blast_binary:
-		options['blast']['use_blast'] = False
+		job_options['blast']['use_blast'] = False
 	else:
-		options['blast']['blast_binary'] = blast_binary
+		job_options['blast']['blast_binary'] = blast_binary
 
 	with ui.row().classes('w-full justify-center'):
 		with ui.card().classes('no-shadow border-[1px] rounded-xl p-6 w-5/6 h-auto w-full'):
@@ -142,7 +126,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 					for triplet in TRIPLET_DEFAULTS.keys():
 						checkbox = ui.checkbox(triplet).classes('text-base font-mono')
 						checkbox.value = TRIPLET_DEFAULTS[triplet]
-						checkbox.bind_value(options['triplets'], triplet)
+						checkbox.bind_value(job_options['triplets'], triplet)
 
 				with ui.column().classes('place-content-center'):
 					ui.label('Target regions')\
@@ -150,7 +134,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 					for region in REGIONS_DEFAULTS.keys():
 						checkbox = ui.checkbox(region).classes('text-base font-mono')
 						checkbox.value = REGIONS_DEFAULTS[region]
-						checkbox.bind_value(options['regions'], region)
+						checkbox.bind_value(job_options['regions'], region)
 
 				blast_options_column = ui.column()
 				with blast_options_column.classes('place-content-center'):
@@ -158,12 +142,12 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 
 					use_blast = ui.checkbox('run blast').classes('text-base font-mono')
 					use_blast.value = BLAST_DEFAULTS['use_blast']
-					use_blast.bind_value(options['blast'], 'use_blast')
+					use_blast.bind_value(job_options['blast'], 'use_blast')
 
 					only_include_overlapping = ui.checkbox('only include hits overlapping with'
 														   ' target triplet').classes('text-base font-mono')
 					only_include_overlapping.value = BLAST_DEFAULTS['only_overlapping']
-					only_include_overlapping.bind_value(options['blast'], 'only_overlapping')
+					only_include_overlapping.bind_value(job_options['blast'], 'only_overlapping')
 
 					with ui.grid(columns=2):
 						ui.label('word size') \
@@ -171,47 +155,47 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 						word_size_input = ui.input(value=BLAST_DEFAULTS['word_size'],
 												   placeholder=BLAST_DEFAULTS['word_size'])\
 							.classes('text-center text-base font-mono font-semibold')
-						word_size_input.bind_value(options['blast'], 'word_size')
+						word_size_input.bind_value(job_options['blast'], 'word_size')
 
 						ui.label('E-value threshold') \
 							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 						e_value_input = ui.input(value=BLAST_DEFAULTS['e_value'],
 												 placeholder=BLAST_DEFAULTS['e_value'])\
 							.classes('text-center text-base font-mono font-semibold')
-						e_value_input.bind_value(options['blast'], 'evalue')
+						e_value_input.bind_value(job_options['blast'], 'evalue')
 
 						ui.label('Min. percent identity') \
 							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 						perc_identity_input = ui.input(value=BLAST_DEFAULTS['perc_identity'],
 												placeholder=BLAST_DEFAULTS['perc_identity'])\
 							.classes('text-center text-base font-mono font-semibold')
-						perc_identity_input.bind_value(options['blast'], 'perc_identity')
+						perc_identity_input.bind_value(job_options['blast'], 'perc_identity')
 
 						ui.label('Min. percent query coverage') \
 							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 						qcov_hsp_perc_input = ui.input(value=BLAST_DEFAULTS['qcov_hsp_perc'],
 												placeholder=BLAST_DEFAULTS['qcov_hsp_perc'])\
 							.classes('text-center text-base font-mono font-semibold')
-						qcov_hsp_perc_input.bind_value(options['blast'], 'qcov_hsp_perc')
+						qcov_hsp_perc_input.bind_value(job_options['blast'], 'qcov_hsp_perc')
 
 						ui.label('Filter restults by taxonomic ID:') \
 							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 						taxids_input = ui.input(value=BLAST_DEFAULTS['taxids'],
 												placeholder=BLAST_DEFAULTS['taxids_placeholder'])\
 							.classes('text-center text-base font-mono font-semibold')
-						taxids_input.bind_value(options['blast'], 'taxids')
+						taxids_input.bind_value(job_options['blast'], 'taxids')
 
 						ui.label('Path to BLAST database directory') \
 							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 						db_path_input = ui.input(value=BLAST_DEFAULTS['db_path'])\
 							.classes('text-center text-base font-mono font-semibold')
-						db_path_input.bind_value(options['blast'], 'db_path')
+						db_path_input.bind_value(job_options['blast'], 'db_path')
 
 						ui.label('BLAST database name') \
 							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
 						db_name_input = ui.input(value=BLAST_DEFAULTS['db_name'])\
 							.classes('text-center text-base font-mono font-semibold')
-						db_name_input.bind_value(options['blast'], 'db_name')
+						db_name_input.bind_value(job_options['blast'], 'db_name')
 
 			if not blast_binary:
 				blast_options_column.clear()
@@ -222,5 +206,5 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 						.style(f'color: {Colors.RED}')
 
 			ui.button('run analysis',
-					  on_click=lambda: on_run_analysis(controller, data['sequence_data'], options))\
+					  on_click=lambda: on_run_analysis(controller, data['sequence_data'], job_options))\
 				.classes('w-2/3 self-center h-10 font-mono mt-6')

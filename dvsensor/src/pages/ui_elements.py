@@ -38,28 +38,6 @@ def show_page_not_available(controller: Controller):
 	show_error_page("page not available", controller)
 
 
-# def show_dialog_box(message_lines: str | list[str],
-# 					button_texts: str | list[str] = 'OK') -> dict[str, ui.button]:
-#
-# 	if type(message_lines) == str:
-# 		message_lines = [message_lines]
-#
-# 	if type(button_texts) == str:
-# 		button_texts = [button_texts]
-#
-# 	buttons = {}
-# 	with ui.dialog() as dialog, ui.card():
-# 		for msg in message_lines:
-# 			ui.label(msg).classes('text-lg self-center font-mono')
-# 		with ui.row().classes('w-full'):
-# 			for bt in button_texts:
-# 				button = ui.button(bt, on_click=dialog.close)\
-# 					.classes('w-full self-center text-sm font-mono')
-# 				buttons[bt] = button
-# 	dialog.open()
-#
-# 	return buttons
-
 def show_dialog_box(message: str,
 					button_texts: str | list[str] = 'OK') -> dict[str, ui.button]:
 

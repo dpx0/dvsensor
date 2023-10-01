@@ -18,13 +18,21 @@ def generate_sensors_job(job_data: dict[str, Any],
 	try:
 		sequence: str = job_data['sequence_data']['sequence']
 		sequence_accession: str = job_data['sequence_data']['accession']
-		target_triplets: tuple[str] = job_data['options']['triplets']
-		target_regions: tuple[str] = job_data['options']['regions']
+
+		target_triplets_options: dict[str, bool] = job_data['options']['triplets']
+		target_triplets: tuple[str] = tuple(triplet for triplet, checked in
+											target_triplets_options.items() if checked)
+
+		target_regions_options: dict[str, bool] = job_data['options']['regions']
+		target_regions = tuple(region for region, checked in
+							   target_regions_options.items() if checked)
+
 		blast_options: dict | None = job_data['options']['blast']
 		if not blast_options['use_blast']:
 			blast_options = None
 		else:
 			del blast_options['use_blast']
+
 	except KeyError as e:
 		logging.error(f"Job Error: missing key {e} in job_data")
 		return
@@ -90,7 +98,7 @@ def mainloop(stop_event: threading.Event, sequence: str, sequence_accession: str
 																 		query_accession=sequence_accession,
 																 		**blast_options)
 			if blast_results is None:
-				# something went wrong at calling blastn
+				# something went wrong when calling blastn
 				potential_off_targets: str = 'N.A.'
 			else:
 				potential_off_targets = ";".join([
