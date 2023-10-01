@@ -89,4 +89,3 @@ class AppController:
 			logging.warning(f'blast database check failed')
 			return False
 		return True
-

@@ -30,6 +30,7 @@ def open_doc_entry(index: int, docs: dict[dict], text_area) -> None:
 @lru_cache()
 def read_docfiles() -> dict[dict]:
 	path = os.path.abspath(os.path.dirname(__file__))+'/docs/'
+	# TODO: refactor (Pathlib)
 	docfiles = glob.glob(path + '/*.html')
 	docs = {}
 

@@ -18,6 +18,8 @@ BLAST_DEFAULTS = {
 	'db_path': str(Path.home() / 'blastdb'),
 	'db_name': 'refseq_select_rna',
 	'only_overlapping': False,
+	'taxids': '9606',
+	'taxids_placeholder': '9606 (homo sapiens)',
 	'e_value': '0.05',
 	'word_size': '7',
 	'perc_identity': '',
@@ -131,7 +133,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 		options['blast']['blast_binary'] = blast_binary
 
 	with ui.row().classes('w-full justify-center'):
-		with ui.card().classes('no-shadow border-[1px] rounded-xl p-8 w-5/6 h-auto w-full'):
+		with ui.card().classes('no-shadow border-[1px] rounded-xl p-6 w-5/6 h-auto w-full'):
 			with ui.row().classes('w-full place-content-center justify-around'):
 
 				with ui.column().classes('place-content-center'):
@@ -191,6 +193,13 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 												placeholder=BLAST_DEFAULTS['qcov_hsp_perc'])\
 							.classes('text-center text-base font-mono font-semibold')
 						qcov_hsp_perc_input.bind_value(options['blast'], 'qcov_hsp_perc')
+
+						ui.label('Filter restults by taxonomic ID:') \
+							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')
+						taxids_input = ui.input(value=BLAST_DEFAULTS['taxids'],
+												placeholder=BLAST_DEFAULTS['taxids_placeholder'])\
+							.classes('text-center text-base font-mono font-semibold')
+						taxids_input.bind_value(options['blast'], 'taxids')
 
 						ui.label('Path to BLAST database directory') \
 							.classes('justify-self-end text-base font-mono font-semibold place-self-center mr-5')

@@ -51,12 +51,6 @@ def generate_sensors_job(job_data: dict[str, Any],
 		logging.error(f'Job Error: {e.message}')
 		return
 
-	# TODO: supply these keys in blast_options
-	# ----------------------------------------
-	if blast_options:
-		blast_options['taxids'] = '9606'
-	# ----------------------------------------
-
 	try:
 		if mainloop(stop_event=stop_event,
 					sequence=sequence,
