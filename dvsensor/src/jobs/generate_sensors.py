@@ -2,7 +2,6 @@ import threading
 import logging
 import jobs.pipeline as pl
 from typing import Any, Callable
-from Bio.SeqUtils import gc_fraction
 from interface import SignalHandler, Signal
 
 
@@ -110,7 +109,7 @@ def mainloop(stop_event: threading.Event, sequence: str, sequence_accession: str
 			'triplet': triplet.kind,
 			'region': triplet.region,
 			'range': f'{(triplet.pos + 1) - 48}-{(triplet.pos + 1) + 50}',
-			'percent_gc': f'{gc_fraction(sensor_data.sensor_seq) * 100:.1f}',
+			'percent_gc': f'{pl.gc_fraction(sensor_data.sensor_seq) * 100:.1f}',
 			'n_edits': sensor_data.num_edits,
 			'pot_off_targets': potential_off_targets,
 			'sensor': sensor_data.sensor_seq,
@@ -150,3 +149,4 @@ def provide_ideogram_data(ideogram_data: dict[str, int | float],
 						  signals_handler: SignalHandler) -> None:
 	signals_handler.register_signal('ideogram_data_ready')
 	signals_handler.send_signal('ideogram_data_ready', args=ideogram_data)
+

@@ -77,6 +77,13 @@ def generate_sensor(sequence: str, triplet_pos: int) -> SensorData | None:
 					  num_edits=(left_edits + right_edits))
 
 
+def gc_fraction(sequence: str) -> float:
+	# can't use gc_fraction from Bio.SeqUtils, because the import causes unexplainable issues with pyinstaller
+	sequence = list(sequence)
+	gc_content = (sequence.count('C') + sequence.count('G')) / len(sequence)
+	return round(gc_content * 100, 1)
+
+
 def edit_in_frame_codons(sequence: str) -> tuple[str, int]:
 	num_edits = 0
 	substitutions = {'UAG': 'CAG', 'UGA': 'GGA',

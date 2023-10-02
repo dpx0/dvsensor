@@ -4,7 +4,7 @@ from pathlib import Path
 from nicegui import ui
 from typing import Any, Callable
 from interface import Controller
-from jobs import generate_sensors_job
+from jobs.generate_sensors import generate_sensors_job
 from .style import Colors
 from .pagebuilder import page_builder
 from .ui_elements import back_button, show_page_not_available, show_dialog_box

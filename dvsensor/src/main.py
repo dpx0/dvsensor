@@ -23,6 +23,7 @@ class Application:
 	def __init__(self) -> None:
 		ng.app.add_static_files('/assets', (Path(__file__).parent / 'assets'))
 		ng.app.on_exception(self.on_exception)
+		ng.app.on_disconnect(ng.app.shutdown)
 
 		page_builders = {
 			'/': import_page_builder('page_start'),
