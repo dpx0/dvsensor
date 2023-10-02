@@ -38,7 +38,7 @@ class Application:
 
 	@staticmethod
 	def run() -> None:
-		ng.ui.run(show=False, title='DVSensor v1.0', reload=False)
+		ng.ui.run(show=False, title='DVSensor', reload=False)
 
 	@staticmethod
 	def on_exception() -> None:

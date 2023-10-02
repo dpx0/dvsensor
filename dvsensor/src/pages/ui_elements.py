@@ -10,7 +10,7 @@ def header() -> None:
 		.classes('items-center justify-between')
 
 	with _header:
-		ui.label('DVSensor v1.0')\
+		ui.label('DVSensor')\
 			.classes('text-2xl font-semibold tracking-wide font-mono')\
 			.style(f'color: {Colors.ACCENT}')
 
