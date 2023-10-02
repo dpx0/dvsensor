@@ -26,7 +26,7 @@ def back_button(controller: Controller, route: str, source: str | None = None,
 	with ui.button('', on_click=lambda: controller.open_page(route=route, source=source, data=data),
 				   color=f'{Colors.ACCENT}')\
 			.props(f'no-caps flat round size=md'):
-		ui.image('/assets/img-back01.png').classes('m-1')
+		ui.image('/assets/img-back.png').classes('m-1')
 
 
 def show_error_page(message: str, controller: Controller):

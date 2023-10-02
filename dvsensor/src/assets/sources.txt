@@ -1,0 +1,6 @@
+img-back.png        :  https://www.flaticon.com/free-icon/arrow_507257
+img-book.png        :  https://www.flaticon.com/free-icon/book_864685
+img-clipboard.png   :  https://www.flaticon.com/free-icon/paste_2782958
+img-file.png        :  https://www.flaticon.com/free-icon/document_2258853
+img-home.png        :  https://www.flaticon.com/free-icon/home_263115
+img-rna.png         :  https://www.flaticon.com/free-icon/rna_3352602
