@@ -1,4 +1,4 @@
 .idea/
 test/
 venv/
-bundle/
+bundle_build/
