@@ -14,6 +14,7 @@ class JobRuntimeError(Exception):
 def generate_sensors_job(job_data: dict[str, Any],
 						 stop_event: threading.Event,
 						 signals_handler: SignalHandler) -> None:
+	# this function will be run in a separate thread
 	try:
 		sequence: str = job_data['sequence_data']['sequence']
 		sequence_accession: str = job_data['sequence_data']['accession']

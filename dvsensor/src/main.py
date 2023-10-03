@@ -23,7 +23,7 @@ class Application:
 	def __init__(self) -> None:
 		ng.app.add_static_files('/assets', (Path(__file__).parent / 'assets'))
 		ng.app.on_exception(self.on_exception)
-		ng.app.on_disconnect(ng.app.shutdown)
+		ng.app.on_disconnect(self.on_disconnect)
 
 		page_builders = {
 			'/': import_page_builder('page_start'),
@@ -40,8 +40,12 @@ class Application:
 	def run() -> None:
 		ng.ui.run(show=False, title='DVSensor', reload=False)
 
-	@staticmethod
-	def on_exception() -> None:
+	def on_exception(self) -> None:
+		self.controller.terminate_job()
+		ng.app.shutdown()
+
+	def on_disconnect(self) -> None:
+		self.controller.terminate_job()
 		ng.app.shutdown()
 
 
