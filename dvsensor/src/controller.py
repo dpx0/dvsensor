@@ -37,7 +37,7 @@ class AppController:
 		job_data['job_started'] = True
 		self.open_page(route="/results", source=source, data=job_data)
 
-	async def execute_job_fn(self, job_fn, job_data) -> None:
+	async def execute_job_fn(self, job_fn: JobFn, job_data: dict[str, Any]) -> None:
 		self._stop_job_thread_event = threading.Event()
 		self._job_thread = asyncio.to_thread(job_fn,
 											 job_data,

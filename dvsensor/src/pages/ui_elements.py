@@ -29,12 +29,12 @@ def back_button(controller: Controller, route: str, source: str | None = None,
 		ui.image('/assets/img-back.png').classes('m-1')
 
 
-def show_error_page(message: str, controller: Controller):
+def show_error_page(message: str, controller: Controller) -> None:
 	ui.label(f"error: {message}").style(f'color: {Colors.RED}')
 	ui.button('go to main menu', on_click=lambda: controller.open_page('/'))
 
 
-def show_page_not_available(controller: Controller):
+def show_page_not_available(controller: Controller) -> None:
 	show_error_page("page not available", controller)
 
 

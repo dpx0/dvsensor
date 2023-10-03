@@ -41,7 +41,12 @@ class Controller(Protocol):
 	def on_page_open(self, data: dict[str, Any] | None) -> None:
 		...
 
-	def start_job(self, source: str, job_fn: Callable[[dict[str, Any]], None], job_data: dict[str, Any]):
+	# typing of job_fn not possible because of circular referencing
+	def start_job(self, source: str, job_fn, job_data: dict[str, Any]):
+		...
+
+	# typing of job_fn not possible because of circular referencing
+	async def execute_job_fn(self, job_fn, job_data: dict[str, Any]) -> None:
 		...
 
 	def terminate_job(self) -> None:
