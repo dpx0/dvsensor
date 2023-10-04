@@ -8,7 +8,7 @@ from .ui_elements import show_dialog_box, back_button
 import seqinput
 
 
-MAX_INPUT_LEN: int = 300_000  # 300 kb (for comparison, the human titin TTN-018 transcript is ~109 kb long)
+MAX_INPUT_LEN: int = 500_000  # 500 kb (for comparison, the human titin TTN-018 transcript is ~109 kb long)
 
 
 def show_file_size_error() -> None:

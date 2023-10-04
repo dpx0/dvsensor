@@ -19,9 +19,14 @@ def update_progress(progress_bar: ui.linear_progress, progress_label: ui.label, 
 	progress_label.text = f'{progress_bar.value * 100.0: .0f} %'
 
 
+def increment_sensor_counter(sensor_counter: ui.label) -> None:
+	state = int(sensor_counter.text.split('Target triplets analyzed:')[1].strip())
+	state += 1
+	sensor_counter.text = f'Target triplets analyzed: {state}'
+
+
 def set_status_finished(spinner: ui.spinner, cancel_button: ui.button,
 						export_button: ui.button, status_label: ui.label) -> None:
-	print("set status finished")
 	spinner.visible = False
 	cancel_button.visible = False
 	export_button.visible = True
@@ -115,12 +120,12 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 
 	ideogram_data_ready_signal: Signal = controller.signal_handler.request_signal('ideogram_data_ready')
 	ideogram_data: dict[str, int | float] = ideogram_data_ready_signal.wait()
-	len_5UTR = ideogram_data['len_5UTR']
-	len_CDS = ideogram_data['len_CDS']
-	len_3UTR = ideogram_data['len_3UTR']
-	percent_5UTR = ideogram_data['percent_5UTR']
-	percent_CDS = ideogram_data['percent_CDS']
-	percent_3UTR = ideogram_data['percent_3UTR']
+	len_5UTR: int = ideogram_data['len_5UTR']
+	len_CDS: int = ideogram_data['len_CDS']
+	len_3UTR: int = ideogram_data['len_3UTR']
+	percent_5UTR: float = ideogram_data['percent_5UTR']
+	percent_CDS: float = ideogram_data['percent_CDS']
+	percent_3UTR: float = ideogram_data['percent_3UTR']
 
 	controller.signal_handler.register_signal('ui_ready')
 
@@ -174,7 +179,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 				ui.label(f'Total transcript length: {len_3UTR + len_CDS + len_5UTR} bp')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
-				ui.label(f'Target triplets analyzed:')\
+				sensor_counter = ui.label('Target triplets analyzed: 0')\
 					.classes('text-center text-sm font-mono')\
 					.style(f'color: {Colors.FOREGROUND}')
 
@@ -247,6 +252,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 
 	ui_functions = {
 		'update_progress': partial(update_progress, progress_bar, progress_label),
+		'increment_sensor_counter': partial(increment_sensor_counter, sensor_counter),
 		'set_status_finished': partial(set_status_finished, spinner, cancel_button, export_button, status_label),
 		'add_rows': partial(add_rows, output_table)
 	}

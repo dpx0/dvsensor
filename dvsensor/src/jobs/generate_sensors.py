@@ -38,6 +38,7 @@ def generate_sensors_job(job_data: dict[str, Any],
 		return
 
 	required_ui_fn = ['update_progress',
+					  'increment_sensor_counter',
 					  'set_status_finished',
 					  'add_rows']
 	try:
@@ -65,8 +66,7 @@ def generate_sensors_job(job_data: dict[str, Any],
 					sequence_accession=sequence_accession,
 					triplets=triplets,
 					blast_options=blast_options,
-					add_rows=ui_functions['add_rows'],
-					update_progress=ui_functions['update_progress']):
+					ui_functions=ui_functions):
 			ui_functions['set_status_finished']()
 			logging.debug("job finished")
 		else:
@@ -76,14 +76,15 @@ def generate_sensors_job(job_data: dict[str, Any],
 
 
 def mainloop(stop_event: threading.Event, sequence: str, sequence_accession: str, triplets: list[pl.Triplet],
-			 blast_options: dict | None, add_rows: Callable, update_progress: Callable) -> bool:
+			 blast_options: dict | None, ui_functions: dict[str, Callable]) -> bool:
 
 	if not triplets:
-		update_progress(100.0)
+		ui_functions['update_progress'](100.0)
 		return True
 
 	progress_step: float = 1.0 / len(triplets)
 	potential_off_targets: str = 'N.A.'
+	ui_functions['increment_sensor_counter']()
 	while stop_event and not stop_event.is_set():
 		if not triplets:
 			return True
@@ -116,8 +117,9 @@ def mainloop(stop_event: threading.Event, sequence: str, sequence_accession: str
 			'sensor': sensor_data.sensor_seq,
 			'trigger': sensor_data.trigger_seq
 		}
-		add_rows([sensor_entry])
-		update_progress(progress_step)
+		ui_functions['add_rows']([sensor_entry])
+		ui_functions['update_progress'](progress_step)
+		ui_functions['increment_sensor_counter']()
 	return False
 
 
