@@ -44,7 +44,12 @@ more information. Also,
 on the askubuntu forum may be helpful.  
 
 The source code of the application can be found inside the dvsensor/src directory. Download the src directory and 
-launch the application by running the main.py file inside a terminal / command line: "python main.py"  
+launch the application by running the main.py file inside a terminal / command line: "python main.py"
+
+In order to use the BLAST feature of DVSensor, a working system installation of BLAST as well as a BLAST mRNA
+database are required. These can be obtained from the 
+[NCBI website](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html). An installation guide can 
+be found on the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software).
 
 Additionally, there is a build.py file which you can use to create bundled executables with 
 [PyInstaller](https://pyinstaller.org/en/stable/). 
