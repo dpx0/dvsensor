@@ -20,7 +20,7 @@ a web server.
 
 This README only gives a brief summary over the installation and usage. For a thorough documentation including
 a troubleshooting guideline, visit the
-[Software](https://2023.igem.wiki/bielefeld-cebitec/software) page of the iGEM Bielefeld-CeBiTec 2023 Team.
+[Software](https://2023.igem.wiki/bielefeld-cebitec/software) page on the iGEM Bielefeld-CeBiTec 2023 team wiki.
 
 ## Installation
 See the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software) for more information on installing
@@ -67,6 +67,11 @@ name gets interpreted as the accession number, which may not be desired. Therefo
 name and accession number. Changing the name has no effect on the computation or the results, but the 
 accession number has to be correct in order for BLAST queries to work properly. Click "OK" when you are done.  
 ![Sequence Info](images/04.png "Sequence Info")
+
+6. The next menu provides different options for controlling how the sensors are generated and for controlling the BLAST 
+queries. The different options are explained on the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software). 
+Click "Run Analysis" when the desired options have been set
+![Options](images/05.png "Options")
 
 
 ## Contributing
