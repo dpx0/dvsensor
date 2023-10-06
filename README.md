@@ -50,13 +50,18 @@ window to navigate between pages, and not the back/forward buttons of your brows
 3. You are presented with two large buttons which allow you to generate new sensors or read the documentation, 
 respectively. Click on the right button to open the documentation, or the left button to upload an mRNA target
 sequence.
-![Main Menu](images/01.png "Main Menu")
+![Main Menu](images/01.png "Main Menu")  
 4. Upload your target mRNA sequence, either as a FASTA or GenBank record. You can upload a file or paste the
 sequence record manually. A maximum record size of 500MB can be uploaded.  
-![Sequence Upload](images/02.png "Sequence Upload")
+![Sequence Upload](images/02.png "Sequence Upload")  
 To upload a file, click on the plus button in the right corner. Select a file and click the upload button. 
 To manually enter a sequence, paste the sequence into the text field and click "continue".  
-![File Upload](images/03.png "File Upload")
+![File Upload](images/03.png "File Upload")  
+5. The sequence name and NCBI accession number are extracted from the uploaded sequence record. Usually, the sequence 
+name gets interpreted as the accession number, which may not be desired. Therefore, you can change both the sequence 
+name and accession number. Changing the name has no effect on the computation or the results, but the 
+accession number has to be correct in order for BLAST queries to work properly. Click "OK" when you are done.  
+![Sequence Info](images/04.png "Sequence Info")
 
 ## Contributing
 This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.  
