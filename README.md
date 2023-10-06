@@ -1,5 +1,7 @@
 # DVSensor – a tool for creating DART VADAR Sensors
 
+This software tool was created by the Bielefeld-CeBiTec team for the [2023 iGEM competition](https://igem.org/).
+
 ## Description
 DVSensor is a software tool which allows you to create DART VADAR sensors for any mRNA targets. DART VADAR sensors, 
 first described by Gayet et al. (Gayet, R.V., Ilia, K., Razavi, S. et al. Autocatalytic base editing for RNA-responsive 
@@ -49,6 +51,12 @@ window to navigate between pages, and not the back/forward buttons of your brows
 respectively. Click on the right button to open the documentation, or the left button to upload an mRNA target
 sequence.
 ![Main Menu](images/01.png "Main Menu")
+4. Upload your target mRNA sequence, either as a FASTA or GenBank record. You can upload a file or paste the
+sequence record manually. A maximum record size of 500MB can be uploaded.
+![Sequence Upload](images/02.png, "Sequence Upload")
+To upload a file, click on the plus button in the right corner. Select a file and click the upload button. 
+To manually enter a sequence, paste the sequence into the text field and click "continue".
+![File Upload](images/03.png, "File Upload")
 
 ## Contributing
 This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.  
