@@ -10,12 +10,13 @@ which facilitate conditional mRNA translation based on the
 detection of target mRNA molecules. The DART VADAR mRNA can only be translated after it hybridizes with its target 
 mRNA, which activates the sensor and allows the translation of an encoded payload gene. DVSensor takes a target mRNA 
 sequence as input, either in FASTA or GenBank format, and generates possible DART VADAR sensor sequences as output. 
-The sensor sequences can then be cloned into a suitable DART VADAR expression vector, such as our pASTERISK. The 
-software offers a variety of settings for controlling how the sensors are generated. In addition, it comes with a 
+The sensor sequences can then be cloned into a suitable DART VADAR expression vector, such as pASTERISK.  
+
+The software offers a variety of settings for controlling how the sensors are generated. In addition, it comes with a 
 built-in feature for evaluating the specificity of the generated sensor sequences. By querying mRNA databases using 
 BLAST, it can identify potential off-target mRNA transcripts other than the intended target that may also be able to 
 activate the sensor. A menu for documentation and help is available in the software as well. DVSensor runs locally as 
-a web app inside the browser and is available for both Linux and Windows. Alternatively, it could also be hosted on 
+a web app inside the browser and is available cross-platform. Alternatively, it could also be hosted on 
 a web server.  
 
 This README only gives a brief summary over the installation and usage. For a thorough documentation including
@@ -28,12 +29,12 @@ To use this application, the following software is required:
 * Python package: nicegui (version 1.3.9 or higher)
 * Python package: Biopython (version 1.81 or higher)  
 
-To install python for your operating system, follow the guides on the official 
+To install python, follow the guides on the official 
 [Python website](https://www.python.org/downloads/). Python comes with a 
 package manager called pip, which you can use to install python packages. Run the following commands in a 
 terminal / command line (cmd.exe on Windows) to install the required packages:  
-	* pip install nicegui
-	* pip install biopython  
+* pip install nicegui
+* pip install biopython  
 
 On Linux systems, installing python packages using pip may not work, and requires either an installation with the 
 systems package manager, or the use of virtual environments. The official
