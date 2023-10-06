@@ -101,13 +101,13 @@ or if it was cancelled, a new button appears, which allows you to download the o
 Clicking the "home" button in the lower left corner brings you back to the start page.
 
 ## Contributing
-This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.  
-A clone of this repository can be found on github (...), which may or may not be maintained in the future.  
-Since this software is licensed under the MIT license, you are free to copy, modify, and distribute
-it without restriction. 
+Since this software was developed for the 2023 iGEM competition, it will not be maintained on this GitLab repository 
+beyond the duration of the competition. A clone of this repository can be found on github (https://github.com/dpx0) 
+where it may be maintained in the future. Since this software is licensed under the MIT license, you are free to copy, 
+modify, and distribute it without restriction. 
 
 ## Authors and acknowledgment
-The software was developed by Daniel Prib (contact: dpx0@mailbox.org, github: https://github.com/dpx0).  
+This software was developed by Daniel Prib (contact: dpx0@mailbox.org, github: https://github.com/dpx0).  
 The following image assets used in the software were obtained from [flaticon.com](https://www.flaticon.com/)
 under a free-to-use license:  
 [Arrow icon created by Kirill Kazachek - Flaticon](https://www.flaticon.com/free-icons/arrow)  
