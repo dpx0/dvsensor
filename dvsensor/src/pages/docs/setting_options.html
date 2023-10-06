@@ -66,8 +66,8 @@
     <tr>
         <td>only include hits overlapping with target triplet</td>
         <td>
-            Only include a blast hit if the hit sequence overlaps with the central triplet of the original query
-            sequence. This reduces the amount of off-targets reported that have a low chance of activating the sensor,
+            Only include a blast hit if the alignment overlaps with the central triplet of the query sequence.
+            This reduces the amount of off-targets reported that have a low chance of activating the sensor,
             but may increase the risk of false-negatives. <br>
             (default: False)
         </td>
@@ -79,7 +79,7 @@
                 BLAST-internal parameter.
             </a>  <br>
             Number of exact-matching nucleotides that the BLAST algorithm uses to find matches. <br>
-            (default: 11)
+            (default: 7)
         </td>
     </tr>
     <tr>
@@ -114,7 +114,7 @@
             </a> <br>
             Only report blast hits associated with the specified taxonomic ID. This limits the reported BLAST hits to
             a given organism, which is most likely the desired behavior. The taxonomic ID has to be represented in the
-            BLAST database, otherwise this will produce an error. Taxonomic IDs are integer numbers an can be
+            BLAST database, otherwise this will produce an error. Taxonomic IDs are integer numbers and can be
             obtained <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi">here.</a> <br>
             (default: 9606 (Homo Sapiens))
         </td>
