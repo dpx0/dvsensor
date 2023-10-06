@@ -21,16 +21,22 @@ a troubleshooting guideline, visit the
 [Software](https://2023.igem.wiki/bielefeld-cebitec/software) page of the iGEM Bielefeld-CeBiTec 2023 Team.
 
 ## Installation
-See the [team wiki]((https://2023.igem.wiki/bielefeld-cebitec/software)) for more information on installing
+See the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software) for more information on installing
 the software.   
 
 There are two options for downloading and running the software. The easiest way is to download a bundled
-version of the app, which comes with all the dependencies and libraries needed so they don't have to be installed.  
-You can find archives in the "dvsensor/bundle" directory for Linux (x86_64) or Windows (x86_64). 
-Extract the archive and run the executable "dvsensor" file within the directory.  
+version of the app, which comes with all the dependencies and libraries needed so they don't have to be installed.
+You can find archives in the "dvsensor/bundle" directory for Linux (x86_64) or Windows (x86_64).
+Extract the archive and run the executable "dvsensor" file within the directory.
+
 You can alternatively download the source code (located in "dvsensor/src") and run it with the command
 "python main.py". A working Python installation (>= 3.11) and the nicegui (>= 1.3.9) and biopython (>= 1.81)
 packages are required as dependencies.
+
+In order to use the BLAST feature of DVSensor, a working system installation of BLAST as well as a BLAST mRNA
+database are required. These can be obtained from the 
+[NCBI website](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html). An installation guide can 
+be found on the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software).
 
 
 ## Usage
