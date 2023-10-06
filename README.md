@@ -29,19 +29,24 @@ usage that you can demonstrate, while providing links to more sophisticated exam
 include in the README.
 
 ## Contributing
-This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition. 
+This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.
+
 A clone of this repository can be found on github (...), which may or may not be maintained in the future. 
+
 Since this software is licensed under the MIT license, you are free to copy, modify, and distribute 
 it without restriction. 
 
 ## Authors and acknowledgment
 The software was developed by Daniel Prib (contact: dpx0@mailbox.org, github: https://github.com/dpx0).
+
 The following image assets used in the software were obtained from [flaticon.com](https://www.flaticon.com/)
 under a free-to-use license:
-[Arrow icon created by Kirill Kazachek - Flaticon](https://www.flaticon.com/free-icons/arrow)
-[Book icon created by Good Ware – Flaticon](https://www.flaticon.com/free-icons/book)
-[Duplicate icon created by Phoenix Group – Flaticon](https://www.flaticon.com/free-icons/duplicate)
-[Document icon created by Freepik – Flaticon](https://www.flaticon.com/free-icons/document)
-[Home button icon created by Freepik – Flaticon](https://www.flaticon.com/free-icons/home-button)
-[Rna icon created by Freepik - Flaticon](https://www.flaticon.com/free-icons/rna)
-[Rna icon created by Rakib Hassan Rahim - Flaticon](https://www.flaticon.com/free-icons/rna)
+
+[Arrow icon created by Kirill Kazachek - Flaticon](https://www.flaticon.com/free-icons/arrow)  
+[Book icon created by Good Ware – Flaticon](https://www.flaticon.com/free-icons/book)  
+[Duplicate icon created by Phoenix Group – Flaticon](https://www.flaticon.com/free-icons/duplicate)  
+[Document icon created by Freepik – Flaticon](https://www.flaticon.com/free-icons/document)  
+[Home button icon created by Freepik – Flaticon](https://www.flaticon.com/free-icons/home-button)  
+[Rna icon created by Freepik - Flaticon](https://www.flaticon.com/free-icons/rna)  
+[Rna icon created by Rakib Hassan Rahim - Flaticon](https://www.flaticon.com/free-icons/rna)  
+
