@@ -52,10 +52,10 @@ respectively. Click on the right button to open the documentation, or the left b
 sequence.
 ![Main Menu](images/01.png "Main Menu")
 4. Upload your target mRNA sequence, either as a FASTA or GenBank record. You can upload a file or paste the
-sequence record manually. A maximum record size of 500MB can be uploaded.
+sequence record manually. A maximum record size of 500MB can be uploaded.  
 ![Sequence Upload](images/02.png "Sequence Upload")
 To upload a file, click on the plus button in the right corner. Select a file and click the upload button. 
-To manually enter a sequence, paste the sequence into the text field and click "continue".
+To manually enter a sequence, paste the sequence into the text field and click "continue".  
 ![File Upload](images/03.png "File Upload")
 
 ## Contributing
