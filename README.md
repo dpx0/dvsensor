@@ -40,9 +40,11 @@ be found on the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software).
 
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of
-usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably
-include in the README.
+1. Start the application
+2. Open a web browser of your choice and enter this url: http://localhost:8080. You should now see the start page of 
+the web app (see image below). Note: closing or reloading the browser window will shut down the application. This is 
+3. intended behavior, but requires a restart of the application. You should only use the buttons inside the application 
+window to navigate between pages, and not the back/forward buttons of your browser.
 
 ## Contributing
 This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.  
