@@ -1,0 +1,108 @@
+<-- Index: 6 -->
+<-- Title: Results -->
+
+<style>
+    h2 {
+        text-align: center;
+    }
+    p {
+        font-size: 180%;
+    }
+    img {
+        margin-top: 3%;
+        margin-bottom: 3%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    th {
+        font-size: 170%;
+    }
+    td {
+        font-size: 170%;
+    }
+</style>
+
+<div style="background-color: white; text-align: justify; padding: 2% 4%">
+<h2> Results </h2>
+
+<p>
+    The application will locate the selected triplets inside the selected transcript regions, and generate 123 bp
+    sensors centered on those triplets. If the "run blast" option was selected, the trigger sequences (the segments
+    of the target mRNA that are centered around a given triplet) will be queried against the specified database using
+    BLAST to identify potential mRNA transcripts that may produce an off-target sensor activation. The results are
+    reported in a table.
+</p>
+<img src="/assets/img-presults.png">
+<p>
+    In the upper left corner, the target mRNA is depicted as a simplified ideogram, with the sizes of the different
+    regions corresponding to their relative lengths. Selecting an entry in the table displays a red window in the
+    ideogram, which indicates the region in the mRNA that is targeted by that particular sensor.
+</p>
+<img src="/assets/img-ideogram.png">
+<p>
+    The "cancel" button in the upper right corner allows you to cancel the running analysis. When the analysis is
+    finished or if it was cancelled, a new button appears, which allows you to download the output table as a CSV file.
+</p>
+<img src="/assets/img-analysis.png">
+<p>
+    Clicking the "home" button in the lower left corner brings you back to the start page.
+</p>
+<br>
+<table>
+    <caption style="font-size: 180%">Output Table Content</caption>
+    <tr>
+        <th style="width: 20%">Column</th>
+        <th>Explanation</th>
+    </tr>
+    <tr>
+        <td>Position</td>
+        <td>Position of the targeted triplet (first nucleotide) in the target mRNA.</td>
+    </tr>
+    <tr>
+        <td>Triplet</td>
+        <td>Triplet type (e.g. "CCA")</td>
+    </tr>
+    <tr>
+        <td>Region</td>
+        <td>Transcript region in which the triplet is located (e.g. "3UTR") </td>
+    </tr>
+    <tr>
+        <td>Range</td>
+        <td>Start- and end-positions of the target mRNA segment targeted by the sensor.</td>
+    </tr>
+    <tr>
+        <td>%GC</td>
+        <td>GC-fraction of the sensor sequence.</td>
+    </tr>
+    <tr>
+        <td>In-frame start/stop codons</td>
+        <td>Number of start- and stop-codons in the sensor which are in-frame with the central stop codon that had
+            to be edited (otherwise the sensor would not work as intended, see
+            <a href="https://www.nature.com/articles/s41467-023-36851-z">[1]</a>).
+        </td>
+    </tr>
+    <tr>
+        <td>Potential off-targets</td>
+        <td>List of potential off-target mRNA sequences identified by the BLAST search. The results are reported in
+            the following format (or specified as "N.A." if the BLAST feature was deselected): <br>
+            &ltaccession number>(E: &lte-value&gt; Score: &ltalignment score&gt; Cov: &ltquery coverage %&gt); ...
+            <br><br>
+            Note that the reported BLAST hits are not decisively identified as being able to activate the sensor, but
+            only as potential off-targets which warrant closer examination.</td>
+    </tr>
+    <tr>
+        <td>Sensor (5->3)</td>
+        <td>RNA-sequence of the sensor, 5'-to-3' orientation (123 bp)</td>
+    </tr>
+    <tr>
+        <td>Trigger (5->3)</td>
+        <td>RNA-sequence of the target mRNA segment targeted by the sensor, 5'-to-3' orientation (123 bp)</td>
+    </tr>
+</table>
+<br>
+<p style="font-size: 150%">
+    [1]	R. V. Gayet et al., “Autocatalytic base editing for RNA-responsive translational control,” Nat Commun, vol. 14,
+    no. 1, p. 1339, Mar. 2023, doi: 10.1038/s41467-023-36851-z.
+</p>
+</div>
