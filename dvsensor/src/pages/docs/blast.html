@@ -1,0 +1,35 @@
+<-- Index: 2 -->
+<-- Title: Setting up a local BLAST database -->
+
+<style>
+    h2 {
+        text-align: center;
+    }
+    p {
+        font-size: 180%;
+    }
+</style>
+
+<div style="background-color: white; text-align: justify; padding: 2% 4%">
+<h2> Setting up a local BLAST database </h2>
+
+<p>
+    In order to use the BLAST feature of DVSensor, a working system installation of BLAST is required. The latest BLAST
+    installers can be downloaded from the
+    <a href="https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/" >NCBI website</a> or using the package
+    manager on Linux systems. To check if the installation was successful, run "blastn -version" in a terminal
+    (cmd.exe on Windows) and see if it returns the BLAST version number.
+</p>
+<p>
+    In addition to the BLAST executables, a BLAST database is required. These can be downloaded
+    from the <a href="https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html" >NCBI website</a> as well.
+    A useful mRNA database is the <a href="https://www.ncbi.nlm.nih.gov/refseq/refseq_select/">RefSeq Select RNA</a>
+    database. Download the <a href="https://ftp.ncbi.nlm.nih.gov/blast/db/" >archive</a>
+    (refseq_select_rna.tar.gz) from the NCBI website and extract it. The extracted directory contains different files
+    which should not be renamed, deleted or changed. You should also not add any new files to this directory.
+    The database path refers to the path of this directory, and the database name refers to the stem of the filenames
+    inside the directory (e.g. "refseq_select_rna" for the RefSeq Select RNA database). Both the database path and the
+    database name have to be supplied to the application in order to run BLAST queries (see usage).
+</p>
+
+</div>

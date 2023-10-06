@@ -1,0 +1,141 @@
+<-- Index: 5 -->
+<-- Title: Setting options -->
+
+<style>
+    h2 {
+        text-align: center;
+    }
+    p {
+        font-size: 200%;
+    }
+    img {
+        margin-top: 3%;
+        margin-bottom: 3%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    th {
+        font-size: 170%;
+    }
+    td {
+        font-size: 170%;
+    }
+</style>
+
+<div style="background-color: white; text-align: justify; padding: 2% 4%">
+<h2> Setting options </h2>
+
+<p>
+    You can choose different options for controlling how the sensors are generated and for controlling the
+    BLAST queries (see below). Click "Run Analysis" when the desired options have been set.
+</p>
+<img src="/assets/img-poptions.png">
+
+<table>
+    <tr>
+        <th style="width: 20%">Option</th>
+        <th>Explanation</th>
+    </tr>
+    <tr>
+        <td>Target triplets</td>
+        <td>Select the triplets which should be located in the target mRNA and used for generating sensors. The triplet
+            types differ in their efficiency for evoking a sensor activation (A-to-I editing). A rough ranking
+            (higher to lower efficiency) would be: <br>
+            CCA≈GCA>UCA≫CAA≫CUA>ACA>CCU≈CGA>CCC. <br>
+            See <a href="https://www.nature.com/articles/s41467-023-36851-z">[1]</a> for more information. <br>
+            (default: CCA,GCA, UCA, CAA)
+        </td>
+    </tr>
+    <tr>
+        <td>Target regions</td>
+        <td>
+            Select the transcript regions in which targetable triplets should be located. Sensors in the 3'UTR are more
+            efficient than sensors in the CDS or 5'UTR. <br>
+            See <a href="https://www.nature.com/articles/s41467-023-36851-z">[1]</a> for more information. <br>
+            (default: 3'UTR)
+        </td>
+    </tr>
+    <tr>
+        <td>run blast</td>
+        <td>
+            Choose wether or not BLAST queries should be run to identify potential off-target transcripts. <br>
+            (default: True)
+        </td>
+    </tr>
+    <tr>
+        <td>only include hits overlapping with target triplet</td>
+        <td>
+            Only include a blast hit if the hit sequence overlaps with the central triplet of the original query
+            sequence. This reduces the amount of off-targets reported that have a low chance of activating the sensor,
+            but may increase the risk of false-negatives. <br>
+            (default: False)
+        </td>
+    </tr>
+    <tr>
+        <td>word size</td>
+        <td>
+            <a href="https://blast.ncbi.nlm.nih.gov/doc/blast-topics/blastsearchparams.html#word-size">
+                BLAST-internal parameter.
+            </a>  <br>
+            Number of exact-matching nucleotides that the BLAST algorithm uses to find matches. <br>
+            (default: 11)
+        </td>
+    </tr>
+    <tr>
+        <td>E-value threshold</td>
+        <td>
+            <a href="https://blast.ncbi.nlm.nih.gov/doc/blast-topics/blastsearchparams.html#expect">
+                BLAST-internal parameter.
+            </a> <br>
+            Significance threshold for an alignment. <br>
+            (default: 0.05)
+        </td>
+    </tr>
+    <tr>
+        <td>Min. percent identity</td>
+        <td>
+            Minimum required fraction of exactly-matching nucleotides in the alignment. <br>
+            (default: None)
+        </td>
+    </tr>
+    <tr>
+        <td>Min. percent query coverage</td>
+        <td>
+            Minimum required fraction of the query sequence covered by the alignment. <br>
+            (default: None)
+        </td>
+    </tr>
+    <tr>
+        <td>Filter results by taxonomic ID</td>
+        <td>
+            <a href="https://www.ncbi.nlm.nih.gov/books/NBK569846/">
+                BLAST-internal parameter.
+            </a> <br>
+            Only report blast hits associated with the specified taxonomic ID. This limits the reported BLAST hits to
+            a given organism, which is most likely the desired behavior. The taxonomic ID has to be represented in the
+            BLAST database, otherwise this will produce an error. Taxonomic IDs are integer numbers an can be
+            obtained <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi">here.</a> <br>
+            (default: 9606 (Homo Sapiens))
+        </td>
+    </tr>
+    <tr>
+        <td>Path to BLAST database directory</td>
+        <td>
+            Full path to the directory containing the BLAST database files.
+        </td>
+    </tr>
+    <tr>
+        <td>BLAST database name</td>
+        <td>
+            Name of the BLAST database - the name usually corresponds to the filename stem of the database files,
+            e.g. "refseq_select_rna" for the RefSeq Select RNA database.
+        </td>
+    </tr>
+</table>
+<br>
+<p style="font-size: 150%">
+    [1]	R. V. Gayet et al., “Autocatalytic base editing for RNA-responsive translational control,” Nat Commun, vol. 14,
+    no. 1, p. 1339, Mar. 2023, doi: 10.1038/s41467-023-36851-z.
+</p>
+</div>

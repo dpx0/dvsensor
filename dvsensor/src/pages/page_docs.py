@@ -13,7 +13,8 @@ def add_rows(grid, row_data: list[dict]) -> None:
 
 
 def fill_toc(table_of_contents, docs: dict[int, dict]) -> None:
-	add_rows(table_of_contents, [entry for entry in docs.values()])
+	entries = sorted([entry for entry in docs.values()], key=lambda entry: entry['index'])
+	add_rows(table_of_contents, entries)
 
 
 def open_doc_entry(index: int, docs: dict[int, dict], text_area) -> None:
@@ -66,7 +67,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 		table_of_contents = ui.aggrid({
 			'defaultColDef': {'flex': 1},
 			'columnDefs': [
-				{'headerName': 'Title', 'field': 'title'},
+				{'headerName': 'Table of content', 'field': 'title'},
 				{'headerName': 'index', 'field': 'index', 'hide': True}
 			],
 			'rowData': [],
@@ -80,7 +81,7 @@ def build(controller: Controller, data: dict[str, Any] | None) -> None:
 		fill_toc(table_of_contents, docs)
 
 		# ----- text area
-		text_area = ui.scroll_area().classes('w-0 pl-14 grow h-full')
+		text_area = ui.scroll_area().classes('w-0 grow h-full')
 		open_doc_entry(1, docs, text_area)
 
 	ui.separator().props('dark')

@@ -1,0 +1,100 @@
+<-- Index: 7 -->
+<-- Title: Troubleshooting -->
+
+<style>
+    h2 {
+        text-align: center;
+    }
+    p {
+        font-size: 180%;
+    }
+</style>
+
+<div style="background-color: white; text-align: justify; padding: 2% 4%">
+<h2> Troubleshooting </h2>
+
+<p>
+    <i>The webpage only displays a white screen.</i> <br>
+    <b>Solution:</b> Restart the application and wait a few seconds, it may take a while for the page to
+    load the first time.
+</p> <br>
+<p>
+    <i>The content of the page doesn't properly fit the screen.</i> <br>
+    <b>Solution:</b> The pages may look different depending on the screen size of your device. Use the zoom-in/out
+    feature of your browser to adjust the content size.
+</p> <br>
+<p>
+    <i>I receive the notification "Windows firewall has blocked some features of this app". </i> <br>
+    <b>Solution:</b> Click the "Allow" button. The application does not send any data over the internet, but needs
+    to open a locally running web server on your computer (which only you have access to). This is why the firewall
+    might block the application.
+</p> <br>
+<p>
+    <i>I see a notification "Connection Lost. Trying to reconnect...".</i> <br>
+    <b>Solution:</b> You most likely have accidentally reloaded the page, used your browsers navigation buttons or
+    have otherwise shut down the app. Restart the application as usual.
+</p> <br>
+<p>
+    <i>I see a page saying: "error: page not available".</i> <br>
+    <b>Solution:</b> Click the "go to main menu" button.
+</p> <br>
+<p>
+    <i>When I upload a file, I see this error: "This file could not be read. Please upload a file in FASTA or
+        Genbank format."
+    </i> <br>
+    <b>Solution:</b> Make sure that the file you are uploading is a valid FASTA or GenBank record. This error usually
+    indicates an error with the file encoding.
+</p> <br>
+<p>
+    <i>When I upload a file, I see this error: "This file is too large. Maximum file size: 500 KB".</i> <br>
+    <b>Solution:</b> The file / sequence size for sequence record uploads is limited to 500KB, which is more than
+    enough for mRNA records. Make sure that your file does not contain more than one sequence record.
+</p> <br>
+<p>
+    <i>When I upload a file or enter a sequence, I see this error: "This is not a single-record FASTA/GenBank sequence.
+        Please upload a file in FASTA/GenBank format or manually enter a sequence."</i> <br>
+    <b>Solution:</b> Make sure that the file you are uploading / the sequence record you are entering is a valid
+    FASTA or GenBank record. Also make sure that only one sequence record is contained within the file, as FASTA
+    files can have multiple sequence records.
+</p> <br>
+<p>
+    <i>On the options page, I see the error "no blast installation detected".</i> <br>
+    <b>Solution:</b> Make sure you have a working system installation of BLAST, in particular the blastn program
+    which comes bundled with the NCBI BLAST+ executables. Run "blastn -version" in a terminal / command line and see
+    if it returns the blastn version number. Note that you can use DVSensor without the BLAST feature, but you won't
+    receive a report on potential off-targets.
+</p> <br>
+<p>
+    <i>When I click "run analysis", I get the error "invalid blast database".</i> <br>
+    <b>Solution:</b> This could have several reasons, all indicating a problem with the specified BLAST database.
+    One reason could be that you entered the wrong database name. Make sure the name matches the filename stem of
+    the files inside the database directory. You should never rename, delete or add new files in the database
+    directory. If you still get an error, your blast database may be corrupted or there may be another issue. Use the
+    blastdbcheck tool to test the database integrity by running this command inside the database directory:
+    "blastdbcheck -db &ltdatabase name&gt".
+</p> <br>
+<p>
+    <i>When I click "run analysis", I get the error "could not validate blast database: blastdbcheck missing".</i> <br>
+    <b>Solution:</b> Make sure you have a working system installation of BLAST, in particular the blastdbcheck program
+    which comes bundled with the NCBI BLAST+ executables. Run "blastdbcheck -version" in a terminal / command line
+    and see if it returns the blastdbcheck version number.
+</p> <br>
+<p>
+    <i>When I click "run analysis", I get the error "directory ... not found".</i> <br>
+    <b>Solution:</b> Make sure you have entered a correct path to the directory containing the BLAST database files.
+</p> <br>
+<p>
+    <i>The potential off-targets are reported as "N.A.", even though I selected the "run BLAST" option.</i> <br>
+    <b>Solution:</b> Make sure you entered a correct taxonomic ID and that the database contains sequences associated
+    with that taxonomic ID. If this wasn't the error, check if your blast setup works correctly by running a test
+    query against your database: "blastn -db &ltdatabase_name&gt -query &ltquery.fasta&gt ‑taxids &lttaxonomic ID&gt"
+    (for the RefSeq Select RNA database, &ltdatabase_name&gt=refseq_select_rna). This command should be run in a
+    terminal / command line inside the database directory. Choose a FASTA file for &ltquery.fasta&gt with a record
+    that you are sure is contained in the database.
+</p> <br>
+<p>
+    <i>Nothing happens when I click "export table as CSV".</i> <br>
+    <b>Solution:</b> On Chromium-based browsers (such as Google Chrome or Brave), you may need to allow automatic
+    downloads for that page. Click the icon in the URL bar that indicates a blocked download and select "Always allow".
+</p> <br>
+</div>

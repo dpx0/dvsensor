@@ -4,3 +4,4 @@ img-clipboard.png   :  https://www.flaticon.com/free-icon/paste_2782958
 img-file.png        :  https://www.flaticon.com/free-icon/document_2258853
 img-home.png        :  https://www.flaticon.com/free-icon/home_263115
 img-rna.png         :  https://www.flaticon.com/free-icon/rna_3352602
+img-rna-icon.png    :  https://www.flaticon.com/free-icon/rna_11810932
