@@ -83,7 +83,7 @@ in a table. The content of the output table is explained in more detail on the
 
 In the upper left corner, the target mRNA is depicted as a simplified ideogram, with the sizes of the different 
 regions corresponding to their relative lengths. Selecting an entry in the table displays a red window in the 
-ideogram, which indicates the region in the mRNA that is targeted by that particular sensor.
+ideogram, which indicates the region in the mRNA that is targeted by that particular sensor.  
 ![mRNA Ideogram](images/07.png "mRNA Ideogram")  
 
 The "cancel" button in the upper right corner allows you to cancel the running analysis. When the analysis is finished 
