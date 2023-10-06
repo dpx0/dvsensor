@@ -1,13 +1,22 @@
-# Team Bielefeld-CeBiTec 2023 Software Tool
+# DVSensor – a tool for creating DART VADAR Sensors
 
-If you team competes in the [**Software & AI** village](https://competition.igem.org/participation/villages) or wants to
-apply for the [**Best Software Tool** prize](https://competition.igem.org/judging/awards), you **MUST** host all the
-code of your team's software tool in this repository, `main` branch. By the **Wiki Freeze**, a
-[release](https://docs.gitlab.com/ee/user/project/releases/) will be automatically created as the judging artifact of
-this software tool. You will be able to keep working on your software after the Grand Jamboree.
+DVSensor is a software tool which allows you to create DART VADAR sensors for any mRNA targets. DART VADAR sensors, 
+first described by Gayet et al. (Gayet, R.V., Ilia, K., Razavi, S. et al. Autocatalytic base editing for RNA-responsive 
+translational control. Nat Commun 14, 1339 (2023). https://doi.org/10.1038/s41467-023-36851-z), are mRNA constructs 
+which facilitate conditional mRNA translation based on the 
+detection of target mRNA molecules. The DART VADAR mRNA can only be translated after it hybridizes with its target 
+mRNA, which activates the sensor and allows the translation of an encoded payload gene. DVSensor takes a target mRNA 
+sequence as input, either in FASTA or GenBank format, and generates possible DART VADAR sensor sequences as output. 
+The sensor sequences can then be cloned into a suitable DART VADAR expression vector, such as our pASTERISK. The 
+software offers a variety of settings for controlling how the sensors are generated. In addition, it comes with a 
+built-in feature for evaluating the specificity of the generated sensor sequences. By querying mRNA databases using 
+BLAST, it can identify potential off-target mRNA transcripts other than the intended target that may also be able to 
+activate the sensor. A menu for documentation and help is available in the software as well. DVSensor runs locally as 
+a web app inside the browser and is available for both Linux and Windows. Alternatively, it could also be hosted on 
+a web server.  
 
-> If your team does not have any software tool, you can totally ignore this repository. If left unchanged, this
-repository will be automatically deleted by the end of the season.
+This README only gives a brief overview over the installation and usage. For a thorough documentation, visit the
+[Software](https://2023.igem.wiki/bielefeld-cebitec/software) page of the iGEM Bielefeld-CeBiTec 2023 Team.
 
 
 
@@ -29,19 +38,15 @@ usage that you can demonstrate, while providing links to more sophisticated exam
 include in the README.
 
 ## Contributing
-This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.
-
-A clone of this repository can be found on github (...), which may or may not be maintained in the future. 
-
-Since this software is licensed under the MIT license, you are free to copy, modify, and distribute 
+This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.  
+A clone of this repository can be found on github (...), which may or may not be maintained in the future.  
+Since this software is licensed under the MIT license, you are free to copy, modify, and distribute
 it without restriction. 
 
 ## Authors and acknowledgment
-The software was developed by Daniel Prib (contact: dpx0@mailbox.org, github: https://github.com/dpx0).
-
+The software was developed by Daniel Prib (contact: dpx0@mailbox.org, github: https://github.com/dpx0).  
 The following image assets used in the software were obtained from [flaticon.com](https://www.flaticon.com/)
-under a free-to-use license:
-
+under a free-to-use license:  
 [Arrow icon created by Kirill Kazachek - Flaticon](https://www.flaticon.com/free-icons/arrow)  
 [Book icon created by Good Ware – Flaticon](https://www.flaticon.com/free-icons/book)  
 [Duplicate icon created by Phoenix Group – Flaticon](https://www.flaticon.com/free-icons/duplicate)  
