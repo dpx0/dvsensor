@@ -1,5 +1,6 @@
 # DVSensor – a tool for creating DART VADAR Sensors
 
+## Description
 DVSensor is a software tool which allows you to create DART VADAR sensors for any mRNA targets. DART VADAR sensors, 
 first described by Gayet et al. (Gayet, R.V., Ilia, K., Razavi, S. et al. Autocatalytic base editing for RNA-responsive 
 translational control. Nat Commun 14, 1339 (2023). https://doi.org/10.1038/s41467-023-36851-z), are mRNA constructs 
@@ -15,22 +16,22 @@ activate the sensor. A menu for documentation and help is available in the softw
 a web app inside the browser and is available for both Linux and Windows. Alternatively, it could also be hosted on 
 a web server.  
 
-This README only gives a brief overview over the installation and usage. For a thorough documentation, visit the
+This README only gives a brief summary over the installation and usage. For a thorough documentation including
+a troubleshooting guideline, visit the
 [Software](https://2023.igem.wiki/bielefeld-cebitec/software) page of the iGEM Bielefeld-CeBiTec 2023 Team.
 
-
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might
-be unfamiliar with (for example your team wiki). A list of Features or a Background subsection can also be added here.
-If there are alternatives to your project, this is a good place to list differentiating factors.
-
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew.
-However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing
-specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a
-specific context like a particular programming language version or operating system or has dependencies that have to be
-installed manually, also add a Requirements subsection.
+See the [team wiki]((https://2023.igem.wiki/bielefeld-cebitec/software)) for more information on installing
+the software.   
+
+There are two options for downloading and running the software. The easiest way is to download a bundled
+version of the app, which comes with all the dependencies and libraries needed so they don't have to be installed.  
+You can find archives in the "dvsensor/bundle" directory for Linux (x86_64) or Windows (x86_64). 
+Extract the archive and run the executable "dvsensor" file within the directory.  
+You can alternatively download the source code (located in "dvsensor/src") and run it with the command
+"python main.py". A working Python installation (>= 3.11) and the nicegui (>= 1.3.9) and biopython (>= 1.81)
+packages are required as dependencies.
+
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of
