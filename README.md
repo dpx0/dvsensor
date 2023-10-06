@@ -40,11 +40,15 @@ be found on the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software).
 
 
 ## Usage
-1. Start the application
+1. Start the application (...)
 2. Open a web browser of your choice and enter this url: http://localhost:8080. You should now see the start page of 
-the web app (see image below). Note: closing or reloading the browser window will shut down the application. This is 
-3. intended behavior, but requires a restart of the application. You should only use the buttons inside the application 
+the web app (see image below). **Note:** closing or reloading the browser window will shut down the application. This is 
+intended behavior, but requires a restart of the application. You should only use the buttons inside the application 
 window to navigate between pages, and not the back/forward buttons of your browser.
+3. You are presented with two large buttons which allow you to generate new sensors or read the documentation, 
+respectively. Click on the right button to open the documentation, or the left button to upload an mRNA target
+sequence.
+![Main Menu](images/01.png "Main Menu")
 
 ## Contributing
 This software will not be maintained on this GitLab repository beyond the duration of the iGEM 2023 competition.  
