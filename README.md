@@ -46,7 +46,8 @@ on the askubuntu forum may be helpful.
 The source code of the application can be found inside the dvsensor/src directory. Download the src directory and 
 launch the application by running the main.py file inside a terminal / command line: "python main.py"  
 
-Additionally, there is a build.py file which you can use to create bundled executables with PyInstaller. 
+Additionally, there is a build.py file which you can use to create bundled executables with 
+[PyInstaller](https://pyinstaller.org/en/stable/). 
 These bundled executables can then be run on any machine without the need for installing python or any packages. 
 In order to use this file, install the latest version of the PyInstaller package and run the file in the 
 terminal / command line. Unfortunately, we could not provide pre-bundled executables in this repository, 
@@ -56,7 +57,7 @@ you run the build.py file.
 
 
 ## Usage
-1. Start the application (...)
+1. Start the application by running the main.py file in a terminal / command line: "python main.py"
 
 2. Open a web browser of your choice and enter this url: http://localhost:8080. You should now see the start page of 
 the web app (see image below). **Note:** closing or reloading the browser window will shut down the application. This is 
