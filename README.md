@@ -23,22 +23,35 @@ a troubleshooting guideline, visit the
 [Software](https://2023.igem.wiki/bielefeld-cebitec/software) page on the iGEM Bielefeld-CeBiTec 2023 team wiki.
 
 ## Installation
-See the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software) for more information on installing
-the software.   
+To use this application, the following software is required:
+* Python (version 3.11 or higher)
+* Python package: nicegui (version 1.3.9 or higher)
+* Python package: Biopython (version 1.81 or higher)  
 
-There are two options for downloading and running the software. The easiest way is to download a bundled
-version of the app, which comes with all the dependencies and libraries needed so they don't have to be installed.
-You can find archives in the "dvsensor/bundle" directory for Linux (x86_64) or Windows (x86_64).
-Extract the archive and run the executable "dvsensor" file within the directory.
+To install python for your operating system, follow the guides on the official 
+[Python website](https://www.python.org/downloads/). Python comes with a 
+package manager called pip, which you can use to install python packages. Run the following commands in a 
+terminal / command line (cmd.exe on Windows) to install the required packages:  
+	* pip install nicegui
+	* pip install biopython  
 
-You can alternatively download the source code (located in "dvsensor/src") and run it with the command
-"python main.py". A working Python installation (>= 3.11) and the nicegui (>= 1.3.9) and biopython (>= 1.81)
-packages are required as dependencies.
+On Linux systems, installing python packages using pip may not work, and requires either an installation with the 
+systems package manager, or the use of virtual environments. The official
+[Python website](https://packaging.python.org/en/latest/tutorials/installing-packages/) provides 
+more information. Also, 
+[this thread](https://askubuntu.com/questions/1465218/pip-error-on-ubuntu-externally-managed-environment-×-this-environment-is-extern) 
+on the askubuntu forum may be helpful.  
 
-In order to use the BLAST feature of DVSensor, a working system installation of BLAST as well as a BLAST mRNA
-database are required. These can be obtained from the 
-[NCBI website](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html). An installation guide can 
-be found on the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software).
+The source code of the application can be found inside the dvsensor/src directory. Download the src directory and 
+launch the application by running the main.py file inside a terminal / command line: "python main.py"  
+
+Additionally, there is a build.py file which you can use to create bundled executables with PyInstaller. 
+These bundled executables can then be run on any machine without the need for installing python or any packages. 
+In order to use this file, install the latest version of the PyInstaller package and run the file in the 
+terminal / command line. Unfortunately, we could not provide pre-bundled executables in this repository, 
+since the project storage space is limited. If you decide to create a bundled version, you can simply start the 
+app by launching the dvsensor.exe file on windows or the dvsensor binary on Linux that is created when 
+you run the build.py file.  
 
 
 ## Usage
