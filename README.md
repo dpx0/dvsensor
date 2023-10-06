@@ -52,7 +52,7 @@ window to navigate between pages, and not the back/forward buttons of your brows
 3. You are presented with two large buttons which allow you to generate new sensors or read the documentation, 
 respectively. Click on the right button to open the documentation, or the left button to upload an mRNA target
 sequence.
-![Main Menu](images/01.png "Main Menu")
+![Main Menu](images/01.png "Main Menu")  
 
 4. Upload your target mRNA sequence, either as a FASTA or GenBank record. You can upload a file or paste the
 sequence record manually. A maximum record size of 500MB can be uploaded.  
@@ -60,18 +60,38 @@ sequence record manually. A maximum record size of 500MB can be uploaded.
 
 To upload a file, click on the plus button in the right corner. Select a file and click the upload button. 
 To manually enter a sequence, paste the sequence into the text field and click "continue".  
-![File Upload](images/03.png "File Upload")
+![File Upload](images/03.png "File Upload")  
 
 5. The sequence name and NCBI accession number are extracted from the uploaded sequence record. Usually, the sequence 
 name gets interpreted as the accession number, which may not be desired. Therefore, you can change both the sequence 
 name and accession number. Changing the name has no effect on the computation or the results, but the 
 accession number has to be correct in order for BLAST queries to work properly. Click "OK" when you are done.  
-![Sequence Info](images/04.png "Sequence Info")
+![Sequence Info](images/04.png "Sequence Info")  
 
 6. The next menu provides different options for controlling how the sensors are generated and for controlling the BLAST 
 queries. The different options are explained on the [team wiki](https://2023.igem.wiki/bielefeld-cebitec/software). 
 Click "Run Analysis" when the desired options have been set
-![Options](images/05.png "Options")
+![Options](images/05.png "Options")  
+
+7. The application will locate the selected triplets inside the selected transcript regions, and generate 123 bp 
+sensors centered on those triplets. If the "run blast" option was selected, the trigger sequences (the segments of 
+the target mRNA that are centered around a given triplet) will be queried against the specified database using BLAST 
+to identify potential mRNA transcripts that may produce an off-target sensor activation. The results are reported 
+in a table. The content of the output table is explained in more detail on the 
+[team wiki](https://2023.igem.wiki/bielefeld-cebitec/software).
+![Results](images/06.png "Results")  
+
+In the upper left corner, the target mRNA is depicted as a simplified ideogram, with the sizes of the different 
+regions corresponding to their relative lengths. Selecting an entry in the table displays a red window in the 
+ideogram, which indicates the region in the mRNA that is targeted by that particular sensor.
+![mRNA Ideogram](images/07.png "mRNA Ideogram")  
+
+The "cancel" button in the upper right corner allows you to cancel the running analysis. When the analysis is finished 
+or if it was cancelled, a new button appears, which allows you to download the output table as a CSV file.  
+![Export table](images/08.png "Export table")  
+
+Clicking the "home" button in the lower left corner brings you back to the start page.  
+
 
 
 ## Contributing
