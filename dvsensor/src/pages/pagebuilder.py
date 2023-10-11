@@ -1,7 +1,7 @@
 from typing import Callable, Any
 from interface import Controller, PageBuilderFn
 from .style import set_colors
-from .ui_elements import header, footer, show_page_not_available
+from .ui_elements import header, show_page_not_available
 
 
 def page_builder(allow_from: str | list[str] | None = None) -> Callable[[Callable], PageBuilderFn]:
@@ -19,7 +19,6 @@ def page_builder(allow_from: str | list[str] | None = None) -> Callable[[Callabl
 				build_fn(controller, data)
 			else:
 				show_page_not_available(controller)
-			footer()
 		return _build
 
 	return _decorator

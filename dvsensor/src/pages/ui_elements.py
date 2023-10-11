@@ -15,11 +15,6 @@ def header() -> None:
 			.style(f'color: {Colors.ACCENT}')
 
 
-def footer() -> None:
-	with ui.footer().style(f'background-color: {Colors.BACKGROUND}'):
-		...  # TODO: implement
-
-
 def back_button(controller: Controller, route: str, source: str | None = None,
 				data: dict[str, Any] | None = None) -> None:
 

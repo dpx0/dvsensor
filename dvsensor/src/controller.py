@@ -32,7 +32,7 @@ class AppController:
 		self.terminate_job()
 
 		self._job_async_task = ng.background_tasks.create(self.execute_job_fn(job_fn, job_data))
-		logging.debug(f'job started: {job_fn}({job_data})')
+		logging.debug(f'job started)')
 
 		job_data['job_started'] = True
 		self.open_page(route="/results", source=source, data=job_data)
@@ -45,7 +45,7 @@ class AppController:
 											 self.signal_handler)
 		await self._job_thread
 		self.terminate_job()
-		logging.debug(f"job ended: {job_fn}({job_data})")
+		logging.debug(f"job ended)")
 
 	def terminate_job(self) -> None:
 		actions = [
