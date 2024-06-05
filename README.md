@@ -118,14 +118,7 @@ or if it was cancelled, a new button appears, which allows you to download the o
 
 ![Export table](images/08.png "Export table")  
 
-Clicking the "home" button in the lower left corner brings you back to the start page.
-
-## Contributing
-Since this software was developed for the 2023 iGEM competition, it will not be maintained on this GitLab repository 
-beyond the duration of the competition. A clone of this repository can be found on github (https://github.com/dpx0) 
-where it may be maintained in the future. This software is licensed under the 
-[MIT license](https://opensource.org/license/MIT/), so you are free to copy, modify, and distribute it 
-without restriction. 
+Clicking the "home" button in the lower left corner brings you back to the start page. 
 
 ## Authors and acknowledgment
 This software was developed by Daniel Prib (contact: dpx0@mailbox.org, github: https://github.com/dpx0).  
